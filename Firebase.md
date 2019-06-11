@@ -21,7 +21,7 @@ pipelines:
           - cd ./client
           - npm install
           - npm run build
-        artifacts:
+        artifacts: # cache for next steps
           - client/dist/**
     - step:
         name: Client: Deploy to firebase

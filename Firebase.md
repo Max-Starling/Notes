@@ -1,3 +1,38 @@
+# Firebase Deployment
+
+## Get Started
+* Install Firebase tools:
+```yarn
+npm i -g firebase-tools
+```
+* Init hosting project:
+```yarn
+firebase init hosting
+```
+* Select a default Firebase project for the directory.
+
+## Basic commands
+* Show all your firebase projects:
+```js
+  firebase list
+```
+* Serve locally
+```js
+  firebase serve --only functions, hosting
+```
+* Deploy
+```js
+  firebase deploy
+```
+* Deploy by using token
+```yml
+firebase deploy --token "$FIREBASE_TOKEN"
+```
+
+## Deploy React App (frontend)
+
+## Deploy Node.js App (backend)
+
 ## Bitbucket Integration
 * Get deployment token:
 ```yml
@@ -5,10 +40,6 @@ firebase login:ci
 ```
 * Visit shown URL to confirm your request.
 * Copy generated token.
-* Now you can deploy app by using this command:
-```yml
-firebase deploy --token "$FIREBASE_TOKEN"
-```
 * Create *bitbucket-pipelines.yml* file in the root directory:
 ```yml
 pipelines:
@@ -28,7 +59,7 @@ pipelines:
         script:
           - pipe: atlassian/firebase-deploy:0.2.4
             variables:
-              FIREBASE_TOKEN: "FIREBASE_TOKEN" # use generated token
+              FIREBASE_TOKEN: "FIREBASE_TOKEN" # paste generated token
               PROJECT_ID: "PROJECT_ID" # you can find projectId in firebase config
               DEBUG: 'true'
 ```

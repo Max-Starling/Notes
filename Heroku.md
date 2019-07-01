@@ -17,7 +17,12 @@ heroku create
 ```yarn
 heroku git:remote -a <app_id>
 ```
-* Now you can deploy your app via
+* Make changes and commit them:
+```git
+  git add -A
+  git commit -m "<commit_message>"
+```
+* Now you can deploy the app via:
 ```git
 git push heroku master
 ```

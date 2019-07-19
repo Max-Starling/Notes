@@ -143,7 +143,7 @@ a[href$=".com"] {} /* ...заканчивающимся подстрокой '.c
 </style>
 ```
 
-![adjacent sibling examples](/assets/Hzb_FIGWrqs.jpg)
+![adjacent sibling examples](/assets/Hzb_FIGWrqs.jpg){:height="700px" width="400px"}
 
 *Рис.1*: Каждое поле, следующее за белым, — чёрное.  
 *Рис.2*: Каждое поле, следующее за другим полем, — чёрное (все, кроме первой).  

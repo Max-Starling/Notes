@@ -1,3 +1,4 @@
+
 # Основы CSS
 **Cascading Style Sheets (каскадные таблицы стилей)** -- язык таблиц стилей (stylesheet), используемый для представления внешнего вида HTML-документа. 
 
@@ -84,8 +85,6 @@ a[href~="qq" i] {} /* ...содержащим целое слово 'qq' (зна
 a[href$=".com"] {} /* ...заканчивающимся подстрокой '.com' */
 ```
 
-The **descendant combinator** — typically represented by a single space (  ) character — combines two selectors such that elements matched by the second selector are selected if they have an ancestor element matching the first selector. Selectors that utilize a descendant combinator are called descendant selectors.
-
 ### Комбинаторы (составные селекторы)
 Комбинатор состоит из двух или более простых селекторов и различных комбинирующих операторов между ними, определяющими отношение между этими селекторами. 
 
@@ -144,11 +143,16 @@ The **descendant combinator** — typically represented by a single space (  ) c
 </style>
 ```
 
-Рис.1: Каждое поле после белого -- чёрное.
-Рис.2: Каждое поле, не считая первого, -- чёрное.
-Рис.3: Не найдено белых клеток, следующих за белыми.
+![adjacent sibling examples](/assets/Hzb_FIGWrqs.jpg)
 
-Если между селекторами *ничего не стоит* **AB**, то происходит их *объединение*: выбираются элементы, соответствующие *обоим* селекторам одновременно.
+*Рис.1*: Каждое поле, следующее за белым, — чёрное.  
+*Рис.2*: Каждое поле, следующее за другим полем, — чёрное (все, кроме первой).  
+*Рис.3*: Не найдено белых полей, следующих за белыми.
+
+Это работает так, потому что все клетки имеют один класс .cell и у них нет соседних элементов другого класса.  
+
+
+Если между селекторами *ничего не стоит* **AB**, то происходит их **объединение**: выбираются элементы, соответствующие *обоим* селекторам одновременно.
 
 Если между селекторами *стоит запятая* **A, B** то они *не связаны* между собой *выбором элементов* (в этом случае выборка осуществляется для каждого селектора в отдельности), но ко всем найденным элементам применется *один набор стилей*. Такой тип связи называется **группой селекторов**.
 
@@ -162,6 +166,6 @@ const element = parentNode.querySelector('selectors');
 const elementList = parentNode.querySelectorAll('selectors'); 
 
 const root = document.querySelector('#root');
-const articleTitles = root.querySelector('.article > .title');
+const articleTitles = root.querySelectorAll('.article > .title');
 ```
 Параметр *selectors*  всегда  должен быть *валидной строкой CSS-селекторов*, в противном случае выдаётся исключение *SyntaxError*.

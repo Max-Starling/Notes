@@ -2,11 +2,7 @@
 
 ## Типы ошибок в JavaScript
 
-**EvalError** — ошибка в глобальной функции eval() .
-
-**RangeError** — ошибка, когда значение находятся за пределами допустимого диапазона.
-
-**ReferenceError** — ошибка при разыменовании недопустимой ссылки.
+**ReferenceError** — ошибка при обращении к *несуществующей переменной*.
 ```js
 obj.field; // ReferenceError: obj is not defined
 ```
@@ -15,17 +11,35 @@ console.log(obj2); // ReferenceError: Cannot access 'obj3' before initialization
 const obj2 = {};
 ```
 
-**SyntaxError** - ошибка при попытке интерпретировать синтаксически неправильный код.
-
-**TypeError** - ошибка при наличии значения неожидаемого (несовместимого) типа.
+**SyntaxError** - ошибка при попытке интерпретировать *синтаксически неправильный* код.
+```js
+function(){ /* ... */ }() // SyntaxError: Function statements require a function name
+```
+```js
+function a(){ /* ... */ }() // SyntaxError: Unexpected token )
+```
+**TypeError** - ошибка при наличии *значения несовместимого* (неожидаемого) *типа*.
 ```js
 const obj = {};
 obj.method(); // TypeError: obj.method is not a function
 ```
 
-**URIError** - ошибка при передаче недопустимых параметров в encodeURI() или decodeURI().
+**RangeError** — ошибка в случае нахождения *значения за пределами допустимого диапазона*.
+```js
+const arr = new Array(-1); // RangeError: Invalid array length
+```
+```js
+(function f() { f() })() // RangeError: Maximum call stack size exceeded  (везде, кроме Firefox)
+```
 
-**InternalError** - внутренняя ошибка в движке JavaScript. Например, переполнение стэка рекурсии. (только Firefox)
+**EvalError** — ошибка в *глобальной функции eval()*.
+
+**URIError** - ошибка при передаче *недопустимых параметров* в *encodeURI()* или *decodeURI()*.
+
+**InternalError** - *внутренняя* ошибка в *движке JavaScript*. (только *Firefox*)
+```js
+(function f() { f() })() // InternalError: too much recursion
+```
 
 ## Оператор void
 

@@ -1,5 +1,32 @@
 # Основы JavaScript
 
+## Типы ошибок в JavaScript
+
+**EvalError** — ошибка в глобальной функции eval() .
+
+**RangeError** — ошибка, когда значение находятся за пределами допустимого диапазона.
+
+**ReferenceError** — ошибка при разыменовании недопустимой ссылки.
+```js
+obj.field; // ReferenceError: obj is not defined
+```
+```js
+console.log(obj2); // ReferenceError: Cannot access 'obj3' before initialization
+const obj2 = {};
+```
+
+**SyntaxError** - ошибка при попытке интерпретировать синтаксически неправильный код.
+
+**TypeError** - ошибка при наличии значения неожидаемого (несовместимого) типа.
+```js
+const obj = {};
+obj.method(); // TypeError: obj.method is not a function
+```
+
+**URIError** - ошибка при передаче недопустимых параметров в encodeURI() или decodeURI().
+
+**InternalError** - внутренняя ошибка в движке JavaScript. Например, переполнение стэка рекурсии. (только Firefox)
+
 ## Оператор void
 
 **Оператор void** — *унарный* оператор, *выполнящий принимаемое выражение* и *возвращающий undefined*.  
@@ -15,7 +42,7 @@ void 3 == '3';   // undefined == '3' --> false
 (function() { /* ... */ })()
 // эквивалентно
 void function(){ /* ... */ }()
-// не сработает, если
+// дважды SyntaxError (название функции и круглые скобки), если
 function(){ /* ... */ }()
 ```
 *Избегание явного* использования *undefined*, а также *краткий способ* его записать (иногда можно встретить в *минифицированном* коде):

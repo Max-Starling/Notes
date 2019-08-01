@@ -4,44 +4,67 @@
 
 **ReferenceError** — ошибка при обращении к *несуществующей переменной*.
 ```js
-obj.field; // ReferenceError: obj is not defined
+foo.field; // ReferenceError: foo is not defined
 ```
 ```js
-console.log(obj2); // ReferenceError: Cannot access 'obj3' before initialization
-const obj2 = {};
+console.log(bar); // ReferenceError: Cannot access 'bar' before initialization
+const bar = {};
 ```
 
 **SyntaxError** - ошибка при попытке интерпретировать *синтаксически неправильный* код.
 ```js
-const a; // SyntaxError: Missing initializer in const declaration
+const foo; // SyntaxError: Missing initializer in const declaration
 ```
 ```js
 function(){ /* ... */ }() // SyntaxError: Function statements require a function name
 ```
 ```js
-function a(){ /* ... */ }() // SyntaxError: Unexpected token )
+function foo(){ /* ... */ }() // SyntaxError: Unexpected token )
+```
+```js
+JSON.parse('{ "field":"value", }'); // SyntaxError: Unexpected token } in JSON at position 19
 ```
 **TypeError** - ошибка при наличии *значения несовместимого* (неожидаемого) *типа*.
 ```js
-const obj = {};
-obj.method(); // TypeError: obj.method is not a function
+const foo = {};
+foo.method(); // TypeError: foo.method is not a function
 ```
 
 **RangeError** — ошибка в случае нахождения *значения за пределами допустимого диапазона*.
 ```js
-const arr = new Array(-1); // RangeError: Invalid array length
+const foo = new Array(-1); // RangeError: Invalid array length
 ```
 ```js
-(function f() { f() })() // RangeError: Maximum call stack size exceeded  (везде, кроме Firefox)
+const foo = 3;
+foo.toFixed(101); // RangeError: toFixed() digits argument must be between 0 and 100
+```
+```js
+function foo() { foo() }
+foo(); // RangeError: Maximum call stack size exceeded (везде, кроме Firefox)
 ```
 
-**EvalError** — ошибка в *глобальной функции eval()*.
+**EvalError** — ошибка в *глобальной функции eval()*. В *текущей* спецификации *не используется* и остаётся лишь для *совместимости*.
 
+Ошибка ниже связана с проведением браузерами *политики безопастности контента* (Content Security Policy), которая помогает *избежать* многих *потенциальных XSS* (cross-site scripting) *атак*.  
+Ранее её тип был *EvalError*, сейчас он просто *опускается*:
+```js
+window.setInterval("alert('hi')", 10); // Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src github.githubassets.com".
+```
 **URIError** - ошибка при передаче *недопустимых параметров* в *encodeURI()* или *decodeURI()*.
-
+```js
+encodeURI('\uD900'); // URIError: malformed URI sequence (Firefox)
+encodeURI('\uD900'); // URIError: The URI to be encoded contains an invalid character (Edge)
+encodeURI('\uD900'); // URIError: URI malformed (Chrome and others)
+```
 **InternalError** - *внутренняя* ошибка в *движке JavaScript*. (только *Firefox*)
 ```js
-(function f() { f() })() // InternalError: too much recursion
+function foo() { foo() }
+foo(); // InternalError: too much recursion
+```
+
+*Все* рассмотренные *типы ошибок* можно *сгенерировать* так же, как и *Error*, *наследниками* которого они являются:
+```js
+throw new Error(/* ... */);
 ```
 
 ## Оператор void

@@ -7,8 +7,8 @@
 foo.field; // ReferenceError: foo is not defined
 ```
 ```js
-console.log(bar); // ReferenceError: Cannot access 'bar' before initialization
-const bar = {};
+console.log(foo) // ReferenceError: Cannot access 'foo' before initialization
+const foo = {};
 ```
 
 **SyntaxError** - ошибка при попытке интерпретировать *синтаксически неправильный* код.
@@ -48,7 +48,7 @@ foo(); // RangeError: Maximum call stack size exceeded (везде, кроме F
 Ошибка ниже связана с проведением браузерами *политики безопастности контента* (Content Security Policy), которая помогает *избежать* многих *потенциальных XSS* (cross-site scripting) *атак*.  
 Ранее её тип был *EvalError*, сейчас он просто *опускается*:
 ```js
-window.setInterval("alert('hi')", 10); // Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src github.githubassets.com".
+window.setInterval("alert('notes')", 25); // Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src github.githubassets.com".
 ```
 **URIError** - ошибка при передаче *недопустимых параметров* в *encodeURI()* или *decodeURI()*.
 ```js

@@ -13,6 +13,9 @@ const obj2 = {};
 
 **SyntaxError** - ошибка при попытке интерпретировать *синтаксически неправильный* код.
 ```js
+const a; // SyntaxError: Missing initializer in const declaration
+```
+```js
 function(){ /* ... */ }() // SyntaxError: Function statements require a function name
 ```
 ```js

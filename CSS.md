@@ -390,6 +390,7 @@ div /* 1 */
 
 ### Скорость выполнения селекторов браузерами
 
+
 # Подходы к написанию CSS
 
 ## БЭМ
@@ -409,20 +410,20 @@ div /* 1 */
 
 ### БЭМ в CSS
 ```css
-.page {} // блок
-.page__content {} // элемент
+.page {} /* блок */
+.page__content {} /* элемент */
 
-.content {} // блок
+.content {} /* блок */
 
-.articles {} // блок
+.articles {} /* блок */
 
-.article {} // блок
-.article__title {} // элемент
-.article__title--bold {} // модификатор
-.article__title--red {} // модификатор
-.article__image {} // элемент
-.article__image--small {} // модификатор
-.article__image--large {} // модификатор
+.article {} /* блок */
+.article__title {} /* элемент */
+.article__title--bold {} /* модификатор */
+.article__title--red {} /* модификатор */
+.article__image {} /* элемент */
+.article__image--small {} /* модификатор */
+.article__image--large {} /* модификатор */
 ```
 ### БЭМ в SCSS
 ```scss
@@ -465,8 +466,18 @@ div /* 1 */
 </div>
 ```
 
+### Преимущества и недостатки БЭМ
+*Преимущества БЭМ*
+* *Модульность* кода и *изолированность модулей* друг от друга.  
+* *Простая специфичность*.  
+
+*Недостатки БЭМ*
+* Слишком *длинные названия классов*.
+
 ### Пример использования *БЭМ* с *React*
 ```js
+import React from 'react';
+
 const articles = [{ title: 'BEM' }, { title: 'React' }];
 
 const renderArticle = (item, index) => (
@@ -493,6 +504,160 @@ const render = () => (
   </div>
 );
 ```
+
+## OOCSS
+
+**Объектно-Ориентированный CSS** (Object Oriented CSS, OOCSS) — *подход*, использующий *преимущества ООП* в *CSS*.  
+
+Основная *идея* заключается в *переиспользуемости кода*: *принцип Don't Repeat Yourself* (DRY).
+
+**Объектом** в этом подходе выступает *любой визуально повторяющийся шаблон*, который можно выделить как *фрагмент кода*.
+
+*Элементы* страницы задаются *объектными классами*, являющиеся *отдельными объектами* в таблицах стилей.
+
+В отличие от многих, подход *OOCSS не устанавливает правил наименования* классов; *не запрещает* использовать тэги, id и прочее, что позволяет *сочетать* его с *другими подходами*.
+
+### Первое правило подхода OOCSS: разделение Структуры и Оформления
+
+**Структура** (Structure) — совокупность *невидимых* для пользователя *свойств* элемента.  
+Пример *структурных свойств*: height, width, margin, padding, overflow (размер, позиционирование и прочее).
+
+**Оформление** (Skin) — совокупность *видимых свойств* элемента.  
+Пример *свойств оформления*: color, font, shadow, gradient.  
+
+Другими словами: *структура* состоит из инструкций о том, *как* все *расположено*, а *оформление* определяет, *как выглядит* макет.
+
+### Второе правило подхода OOCSS: разделение Контейнера и Контента
+
+**Контентом** является любой элемент, расположенный в каком-то другом элементе.  
+**Контейнер** — этот другой элемент.
+```css
+.container .content
+```
+Суть заключается в том, чтобы *использовать комбинатор потомков* как можно *реже*.  
+Если *контент не зависит* от конкретного *контейнера*, мы можем *переиспользовать код чаще*.
+
+Например, вместо
+```css
+.sidebar {}
+.sidebar .menu {}
+.sidebar .menu .menu-item {}
+```
+можно *разделить контейнер и контент* следующим образом
+```css
+.sidebar {}
+.menu {}
+.menu-item {}
+```
+что даёт возможность использовать *меню* где-нибудь ещё.
+
+### OOCSS в CSS
+Ищем *повторяющиеся блоки кода*:
+```css
+.button {
+  width: 100px;
+  height: 40px;
+  padding: 4px 8px;
+  background-color: #000;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.button-wide {
+  width: 200px;
+  height: 40px;
+  padding: 4px 8px;
+  background-color: #000;
+  border-radius: 5px;
+  color: #fff;
+}
+```
+```html
+<div class="button"></div>
+<div class="button-wide"></div>
+```
+*Выносим* их в *классы*:
+```css
+.skin-button {
+  background-color: #000;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.structure-button {
+  height: 40px;
+  padding: 4px 8px;
+}
+
+.button {
+  width: 100px;
+}
+
+.button-wide {
+  width: 200px;
+}
+```
+```html
+<div class="button skin-button structure-button"></div>
+<div class="button-wide skin-button structure-button"></div>
+```
+### OOCSS в SCSS
+При использовании *OOCSS* с *чистым CSS*, *атрибут class* у DOM-элементов сильно *разрастается*, но что, если...
+```scss
+@mixin skin-button {
+  background-color: #000;
+  border-radius: 4px;
+  color: #fff;
+}
+
+@mixin structure-button {
+  height: 40px;
+  padding: 4px 8px;
+}
+
+.button {
+  @include skin-button;
+  @include structure-button;
+  width: 100px;
+}
+
+.button-wide {
+  @include skin-button;
+  @include structure-button;
+  width: 200px;
+}
+```
+```html
+<div class="button"></div>
+<div class="button-wide"></div>
+```
+Хотя, имея в арсенале *миксины*, можно сделать *ещё лучше* (не совсем OOCSS) в этом примере:
+```scss
+@mixin button-defaults {
+  background-color: #000;
+  border-radius: 4px;
+  color: #fff;
+  height: 40px;
+  padding: 4px 8px;
+}
+
+.button {
+  @include button-defaults;
+  width: 100px;
+}
+
+.button {
+  @include button-defaults;
+  width: 200px;
+}
+```
+
+### Преимущества и недостатки OOCSS
+*Преимущества OOCSS*
+* Хорошая *переиспользуемость кода*.  
+
+*Недостатки OOCSS*
+* *Сильная связанность кода ухудшает* его *поддержку*: *классы* достаточно *общие*, могут использоваться *повсеместно* (нельзя просто изменить их, скорее всего придётся менять разметку).
 
 ## Динамический CSS
 

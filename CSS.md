@@ -1057,7 +1057,26 @@ article :--heading {}
 }
 ```
 
-**Pre CSS** — пак PostCSS плагинов, позволяющий использовать SASS подобный синтаксис в CSS.  
+*Плагин* **cssnano** позволяет значительно оптимизировать css код (иногда в несколько раз).
+До работы плагина
+```css
+h1::before, h1:before { /* normalize selectors */
+    margin: 10px 20px 10px 20px; /* reduce shorthand even further */
+    color: #ff0000; /* reduce color values */
+    font-weight: 400;
+    font-weight: 400; /* remove duplicated properties */
+    background-position: bottom right; /* reduce position values */
+    background: linear-gradient(to bottom, #ffe500 0%, #ffe500 50%, #121 50%, #121 100%); /* reduce gradient parameters */
+    min-width: initial; /* replace initial values */
+}
+@charset "utf-8"; /* correct invalid placement */
+```
+После
+```css
+@charset "utf-8";h1:before{margin:10px 20px;color:red;font-weight:400;background-position:100% 100%;background:linear-gradient(180deg,#ffe500,#ffe500 50%,#121 0,#121);min-width:0}
+```
+
+*Плагин* **Pre CSS** — пак PostCSS плагинов, позволяющий использовать SASS подобный синтаксис.  
 ```scss
 $gray: #24292e;
 
@@ -1067,6 +1086,9 @@ $gray: #24292e;
   }
 }
 ```
+
+**Stylelint** — мощный CSS линтер, который предупреждает об ошибках в CSS, делает замечания о том, что можно сделать лучше, вносит соглашения по стилю кода внутри проекта.  
+Данный линтер использует под капотом PostCSS для парсинга кода и существует в виде PostCSS плагина.  
 
 Таким образом, PostCSS изначально ближе к чистому CSS, но с помощью определённых плагинов может обладать той же функциональностью, что и препроцессоры.
 

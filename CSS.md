@@ -38,6 +38,54 @@ selector1 {}
 }
 ```
 
+### At-rules 
+
+**At-правило** (at-rule) — *CSS-заявление* (statement), *указывающее CSS*, *как себя вести*.  
+Начинается с *символа @* (at, at sign) и *включает* в себя *весь следующий блок объявлений* или *весь код до* `;`.
+```scss
+@charset "utf-8"; // определение набора символов
+@import 'custom.css'; // импорт таблицы стилей (дополнительный запрос к серверу)
+
+/* медиазапросы, объявление CSS-правил в зависимости от девайса */
+@media screen and (max-width: 1080px) {
+  /* ... */
+} 
+
+/* объявление CSS-правил в зависимости от поддержки браузером */
+@supports (display: grid) {
+  /* ... */
+} 
+
+/* объявление и использование шрифта */
+@font-face { 
+  font-family: "Open Sans";
+  src: url("/* ... */") format("/* ... */");
+}
+.className {
+  font-family: "Open Sans";
+}
+
+/* объявление и использование анимации */
+@keyframes fadeIn { 
+  from {
+    opacity: 0;
+  }
+  to {
+     opacity: 1;
+  }
+}
+.className {
+  animation-name: fadeIn;
+  animation-duration: 200ms;
+}
+```
+*At-правила* могут быть *вложенны друг в друга*.
+```scss
+@supports (display: grid) {
+  @media screen { /* ... */ }
+}
+```
+
 ## Основные типы элементов в CSS
 
 ### Блочные и строчные элементы

@@ -1,9 +1,10 @@
 # PostCSS Setup
+## NPM
 ```
 npm install postcss-cli stylelint stylelint-config-standard postcss-cssnext precss postcss-cssnext cssnano --save-dev
 npm install stylelint -g
 ```
-package.json
+## package.json
 ```json
 {
   "scripts": {
@@ -11,7 +12,7 @@ package.json
   },
 }
 ```
-postcss.config.js
+## postcss.config.js
 ```js
 module.exports = () => ({
   plugins: {
@@ -24,7 +25,7 @@ module.exports = () => ({
   }
 });
 ```
-.stylelintrc
+## .stylelintrc
 ```json
 {
   "extends": "stylelint-config-standard",
@@ -33,7 +34,7 @@ module.exports = () => ({
   }
 }
 ```
-VS Code settings: settings.json
+## VSCode Settings (settings.json)
 ```json
 {
   "emmet.includeLanguages":{
@@ -54,21 +55,62 @@ VS Code settings: settings.json
   }
 }
 ```
-Webpack
+
+## VSCode extensions
+* postcss-sugarss-language
+* Prettier - Code formatter (format document with Alt + Shift + F)
+* stylelint
+
+## PostCSS Setup (Webpack)
 ```js
+{
+  test: /\.css$/,
+  use: [
+    'style-loader',
+    'css-loader',
+     {
+       loader: 'postcss-loader',
+       options: {
+         ident: 'postcss',
+         plugins: [
+           require('stylelint')(),
+           /* ... */,
+         ],
+       },
+     },
+  ],
+}
 {
   loader: 'postcss-loader',
   options: {
     ident: 'postcss',
     plugins: [
+      require('postcss-preset-env')(),
       require('stylelint')(),
-      /* ... */,
+      /* ... */
     ]
   }
 }
 ```
 
-VS Code extensions
-* postcss-sugarss-language
-* Prettier - Code formatter (format document with Alt + Shift + F)
-* stylelint
+## CSS Modules Setup (Webpack)
+```js
+{
+  test: /\.css$/,
+  use: [
+    'style-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        modules: true,
+        importLoaders: 1,
+        localIdentName: '[name]__[local]___[hash:base64:4]',
+      },
+     },
+     {
+       loader: 'postcss-loader',
+       options: { /* ... */ },
+     },
+  ],
+}
+```

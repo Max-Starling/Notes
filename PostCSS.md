@@ -85,7 +85,7 @@ module.exports = () => ({
   options: {
     ident: 'postcss',
     plugins: [
-      require('postcss-preset-env')(),
+      require('autoprefixer')(),
       require('stylelint')(),
       /* ... */
     ]

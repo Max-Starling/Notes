@@ -1135,40 +1135,61 @@ CSS изначально создан для стилизации докумен
 Одна глоабльная область видимости (scope): любой класс на сайте может быть применён к любому элементу.  
 По мере роста приложения это приводит к проблемам, поэтому и появились методологии.
 
-Замечание: в JavaScript можно вызвать функцию следующим образом:
+Замечание: в JavaScript есть возможность вызвать функцию следующим образом:
 ```js
 const css = (str = '') => `.${str}`;
 css`magic` // вернёт '.magic'
 ```
 
-```js
-import generateRandomHash from '/* ... */';
+Как выглядит функция css:
+```jsx
+// произвольная функция генерации хэша
+const generateRandomHash = () => Math.random().toString(36).substring(7).slice(0, 5); 
 
-const generateClassName = name => `${name}__${generateRandomHash()}`;
-
-const getRuleset = (className, styles) => `
+// функция создания правила
+const createRuleset = (className = '', styles = '') => `
   .${className} {
     ${styles}
   }
 `;
 
-const css = (styles = '', name = '') => {
-  const className = generateClassName(name);
-  const ruleset = getRuleset(className, styles);
+// создаётся хэш и берётся в качестве названия класса, обеспечивая уникальность правила,
+// создаётся DOM-элемент style, помещающийся в <head>.
+// возвращается хэш
+const css = (styles = '') => {
+  const className = `css-${generateRandomHash()}`;
+  const ruleset = createRuleset(className, styles);
 
   const styleElement = document.createElement('style');
   styleElement.textContent = ruleset;
   document.head.appendChild(styleElement);
 
-  console.log(
   return className;
 };
 
+// пример использования функции css
 const className = css`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+const renderBlock = () => (<div className={className} />);
+```
+Как выглядит функция styled (простейший случай):
+```jsx
+const styled = {
+  div: styles => props => (<div className={css(styles)} {...props} />),
+  span: styles => props => (<span className={css(styles)} {...props} />),
+  /* ... */
+};
+
+// пример использования функции styled.div
+const Button = styled.div`
+  width: 50px;
+  height: 50px;
+  background: red;
+`;
+const renderRedButton = props => (<Button {...props} />);
 ```
 
 # Препроцессоры и постпроцессоры CSS

@@ -75,7 +75,7 @@ const articleCallback = (action) => {
 
 **Dispatcher** — это модуль, который позволяет регистировать Callbacks и отравлять в каждый них Action каждый раз, когда вызывается Dispatch. 
 
-Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscribe). 
+Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription). 
 
 Реализация Dispatcher от Facebook имеет следующий функционал:
 - **register(callback)** — регистрирует Callback, чтобы он вызывался при каждом отправленном (dispatched) Actions; возвращает идентификатор id для Callback.

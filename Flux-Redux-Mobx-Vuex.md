@@ -3,9 +3,12 @@
 **Flux** — архитетура построения пользовательских интерфейсов, основанная на *шаблоне "Наблюдатель"* (observer pattern).  
 Изначально разработанна компанией Facebook для *React* и *React Native* приложений.  
 
-На данных момент есть несколько реализаций архитектуры, её видоизменённых форм, а также конкурентов:
-* [Flux](https://github.com/facebook/flux) (реализация самого подхода от самих Facebook).
-* [Redux]( 
+На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
+* [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).
+* Redux
+
+Конкурентные технологии: 
+* Mobx
 
 ## Основные особенности Flux
 
@@ -20,7 +23,7 @@
 
 **Action** — объект, описывающий происходящее в приложении действие.  
 
-*Action обязательно* должен иметь **тип** (type), может иметь *дополнительную информацию* (если полей несколько, то можно их объединить один объект payload).
+*Action обязательно* должен иметь **тип** (type), может иметь *дополнительную информацию* (если полей несколько, то можно их объединить в один объект, например payload).
 ```js
 const CHANGE_FETCH_STATUS = 'CHANGE_FETCH_STATUS';
 const FETCH_ARTICLES = 'FETCH_ARTICLES';
@@ -38,7 +41,7 @@ const FETCH_END = ({
 });
 ```
 
-**Action Creator** — *функция-строитель*, которая создаёт *Action* в зависимости от переданных ей параметров.
+**Action Creator** — *функция-строитель*, которая создаёт *Action* в зависимости от переданных ей аргументов.
 ```js
 const fetchStart = () => FETCH_START;
 const fetchEnd = () => FETCH_END;
@@ -68,8 +71,13 @@ const articleCallback = (action) => {
   }
 } 
 ```
+Каждый Callback должен быть зарегистрирован при помощи Dispatcher.
 
-**Dispatcher** — это модуль, который имеет следующий функционал:
+**Dispatcher** — это модуль, который позволяет регистировать Callbacks и отравлять в каждый них Action каждый раз, когда вызывается Dispatch. 
+
+Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscribe). 
+
+Реализация Dispatcher от Facebook имеет следующий функционал:
 - **register(callback)** — регистрирует Callback, чтобы он вызывался при каждом отправленном (dispatched) Actions; возвращает идентификатор id для Callback.
 - **dispatch(action)** — отправляет Action во все зарегистрированные Callbacks.
 - **isDispatching()** — возвщатает true, если происходит отправка (dispatching) в данный момент, false иначе.
@@ -93,7 +101,7 @@ dispatcher.dispatch(FETCH_END);
 dispatcher.dispatch({ type: 'INCORRECT_ACTION' }); 
 // store: { articles: [1, 3], isFetching: false }
 
-// если Callback был разрегистрирован, то его обрабатываемые им Actions не должны менять Store
+// если Callback был разрегистрирован, то обрабатываемые им Actions не должны менять что-либо в Store
 dispatcher.unregister(articleCallbackId);
 dispatcher.dispatch(fetchArticles([2, 4]));
 // store: { articles: [1, 3], isFetching: false } 

@@ -51,7 +51,8 @@ const fetchArticles = articles => ({
 });
 ```
 
-**Store** — объект, в котором хранятся данные.
+**Store** — место, где хранятся данные.  
+В простейшем случае — объект, в более сложном — класс или модуль.
 ```js
 const store = {
   articles: [],
@@ -60,7 +61,14 @@ const store = {
 ```
 Flux допускает наличие нескольких Stores.  
 
-**Callback** (в контексте Flux) — функция, которая принимает Action и в зависимости от него обновляет или не обновляет данные какого-то Store.
+Реализация Store от Facebook имеет следующий функционал:
+* getState(): T — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
+* getInitialState(): T — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
+* reduce(state: T, action: object) — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
+* areEqual(one: T, two: T): boolean — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
+
+
+**Callback** (в контексте Flux) — функция, которая принимает Action и в зависимости от него обновляет или не обновляет часть данных, лежащих в Stores.
 ```js
 const articleCallback = (action) => {
   if (action.type === CHANGE_FETCH_STATUS) {
@@ -72,16 +80,16 @@ const articleCallback = (action) => {
 ```
 Каждый Callback должен быть зарегистрирован при помощи Dispatcher.
 
-**Dispatcher** — это модуль, который позволяет регистировать Callbacks и отравлять в каждый них Action каждый раз, когда вызывается Dispatch. 
+**Dispatcher** — это модуль, который позволяет регистировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
 
-Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription). 
+Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription).  
 
 Реализация Dispatcher от Facebook имеет следующий функционал:
-- **register(callback)** — регистрирует Callback, чтобы он вызывался при каждом отправленном (dispatched) Actions; возвращает идентификатор id для Callback.
-- **dispatch(action)** — отправляет Action во все зарегистрированные Callbacks.
-- **isDispatching()** — возвщатает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- **waitFor(ids)** — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
-- **unregister(id)** — разрегистрирует Callback по токену.
+- **register(callback: function): string** — регистрирует Callback, возвращает его идентификатор id.
+- **dispatch(action: object): void** — отправляет Action во все зарегистрированные Callbacks.
+- **isDispatching(): boolean** — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
+- **waitFor(ids: \[string\]): void** — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- **unregister(id): void** — разрегистрирует Callback по id.
 
 ```js
 const dispatcher = new Dispatcher();
@@ -105,6 +113,4 @@ dispatcher.unregister(articleCallbackId);
 dispatcher.dispatch(fetchArticles([2, 4]));
 // store: { articles: [1, 3], isFetching: false } 
 ```
-
-
 

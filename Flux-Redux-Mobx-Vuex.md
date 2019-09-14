@@ -101,18 +101,36 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 * `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
 * `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
 * `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
-```js
+```ts
 import { ReduceStore } from 'flux/utils';
-class CounterStore extends ReduceStore<number> {
-  getInitialState(): number {
-    return 0;
+
+interface IArticleStore {
+  articles: number[];
+  isFetching: boolean;
+}
+
+class ArticleStore extends ReduceStore<IArticleStore> {
+  getInitialState(): IArticleStore {
+    return ({
+      articles: [],
+      isFetching: false,
+    });
   }
-  reduce(state: number, action: Object): number {
+
+  reduce(state: IArticleStore, action: object): IArticleStore {
     switch (action.type) {
-      case 'increment':
-        return state + 1;
-      case 'square':
-        return state * state;
+      case 'CHANGE_FETCH_STATUS':
+        return ({
+          ...state,
+          isFetching: action.isFetching,
+        });
+    
+      case 'FETCH_ARTICLES':
+        return ({
+          ...state,
+          articles: [...action.articles],
+        });
+    
       default:
         return state;
     }
@@ -124,5 +142,5 @@ class CounterStore extends ReduceStore<number> {
 - `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
 - `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
 - `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- `waitFor(ids: [string]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
 - `unregister(id): void` — разрегистрирует Callback по id.

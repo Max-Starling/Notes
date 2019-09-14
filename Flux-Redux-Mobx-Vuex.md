@@ -198,7 +198,7 @@ export default new ItemStore();
 
 ## Структура Redux
 
-Части **Action**, **Action Creator** и **Store** определяются аналогично подходу Flux за исключением того, что Action Creator в Redux не может вызывать функцию dispatch, при необходимости за него это делает **Bound Action Creator**:
+Части **Action**, **Action Creator** и **Store** определяются аналогично подходу Flux за исключением того, что в Redux может быть только один Store, а Action Creator не может вызывать функцию dispatch, при необходимости за него это делает **Bound Action Creator**:
 ```js
 const ADD_ITEM = 'ADD_ITEM';
 
@@ -220,7 +220,7 @@ const reduce = (accumulator, currentValue) => accumulator + currentValue;
 ```js
 const initialState = {
   items: [],
-}
+};
 
 const itemReducer = (state = initialState, action) => {
   switch (action) {
@@ -245,8 +245,28 @@ const itemReducer = (state = initialState, action) => {
 Когда Action не обрабатывается в текущем Reducer, то он попадает в блок default.  
 Состояние должно остаться без изменений, поэтому оно возвращается без деструктуризации.  
 
-Reducer напоминает Callback во Flux, но есть существенное отличие.  
-Callback не принимает и не возвращает state: вместо этого он изменяет state напрямую.  
+В Redux может быть несколько Reducers, каждый из которых отвечает за какую-то часть State.  
+Reducers комбинируются в главный Reducer, который передаётся в Store при создании:
+```js
+import { createStore, combineReducers } from 'redux';
+
+const reducer = combineReducers({
+  item: itemReducer,
+  another: anotherReducer,
+});
+
+const store = createStore(reducer);
+/*
+const store = {
+  item: { ... },
+  another: { ... },
+};
+*/
+```
+
+Как и в случае Callbacks из Flux, все Reducers получают приходящий Action.  
+Тем не менее между Reducer и Callback есть существенное отличие:  
+Callback не принимает и не возвращает state, вместо этого он изменяет state напрямую.  
 ```js
 const itemState = {
   items: [],

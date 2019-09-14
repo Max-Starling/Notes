@@ -3,21 +3,23 @@
 **Flux** — архитетура построения пользовательских интерфейсов, основанная на *шаблоне "Наблюдатель"* (observer pattern, EventEmitter).  
 Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
 
-*Особенности Flux*:
+
+<!-- На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
+* [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).
+* Redux
+* Vuex -->
+
+<!-- Главные *конкурентные* технологии: 
+* Mobx  -->
+
+ 
+## Особенности Flux
 * *Однонаправленный поток данных*:  
 **Action Creator -> Action -> Dispatcher -> Callbacks -> Stores -> View**.  
 Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
 * Может быть *несколько Stores*.
 * *Store* может быть как *изменяемым* (mutable), так и *неизменяемым* (immutable).
 * В приложении может быть только *один Dispatcher*, *региструющий все Callbacks*.
-
-На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
-* [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).
-* Redux
-* Vuex
-
-Главные *конкурентные* технологии: 
-* Mobx
 
 ## Структура Flux
 
@@ -98,7 +100,7 @@ const fetchItems = () => dispatcher.dispatch({
 });
 ```
 
-**View** — UI-компоненты (обычно React-компоненты).
+**View** — UI-компонента (обычно React-компонента).
 ```jsx
 const Button = (<button onClick={fetchItems}>Fetch items</button>);
 ```
@@ -180,15 +182,38 @@ export default new ItemStore();
 
 # Redux
 
-*Три принципа Redux*:
+**Redux** — библиотека, основанная на подходе Flux и вносящая в него некоторые правки.
+
+## Три основных принципа Redux
 * Только *один источник правды* (single source of truth) — *Store*.  
 * *Состояние* доступно *только для чтения* (state is read-only). Его можно *изменить* лишь с помощью *Actions*.
 * *Изменение состояния* происходит только с использованием *чистых* (pure) *функций* — *Reducers*.
 
-*Другие особенности Redux*:
+## Другие особенности Redux
 * *Однонаправленный поток данных*:  
 **Action Creator -> Action -> dispatch -> Reducers -> Store -> View**.  
-Reducer отвечает за какую-то часть Store.  
+* *Store* только один, но он может разбиваться на части, за каждую из которых отвечает отдельный Reducer.
 * *Store* должен быть *неизменяемым* (immutable).
-* В приложении отсутствует *Dispatcher*, вместо него используется функция `store.dispatch()`.
+* *Отсутствует Dispatcher*, вместо него используется функция `store.dispatch()`.
 
+## Структура Redux
+
+Части **Action**, **Action Creator** и **Store** определяются аналогично подходу Flux за исключением того, что Action Creator в Redux не может вызывать функцию dispatch, при необходимости за него это делает **Bound Action Creator**:
+```js
+const ADD_ITEM = 'ADD_ITEM';
+
+/* Action Creator */
+const addItem = item => ({ type: ADD_ITEM, item });
+dispatch(addItem(5)); // dispatch action ADD_ITEM
+
+/* Bound Action Creator */
+const boundAddItem = item => dispatch(addItem(item));
+boundAddItem(5) // dispatch action ADD_ITEM
+```
+
+**Reducer** — чистая (pure) функцией вида `(previousState, action) => newState`.  
+Reducer определяет, как изменинтся состояние приложения (state) в ответ на Action.  
+Называется так потому, что похож на функцию `reduce`:
+```js
+const reduce = (accumulator, currentValue) => accumulator + currentValue;
+```

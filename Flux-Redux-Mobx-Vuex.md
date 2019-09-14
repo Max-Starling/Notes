@@ -24,7 +24,7 @@ Action Creator -> Action -> Dispatcher -> Callback -> Store -> View.
 *Action обязательно* должен иметь **тип** (type), может иметь *дополнительную информацию* (если полей несколько, то можно их объединить в один объект, например payload).
 ```js
 const CHANGE_FETCH_STATUS = 'CHANGE_FETCH_STATUS';
-const FETCH_ARTICLES = 'FETCH_ARTICLES';
+const FETCH_ITEMS = 'FETCH_ITEMS';
 ```
 Пример Actions.
 ```js
@@ -44,9 +44,9 @@ const FETCH_END = ({
 const fetchStart = () => FETCH_START;
 const fetchEnd = () => FETCH_END;
 
-const fetchArticles = articles => ({
-  type: FETCH_ARTICLES,
-  payload: articles,
+const fetchItems = items => ({
+  type: FETCH_ITEMS,
+  payload: items,
 });
 ```
 
@@ -54,7 +54,7 @@ const fetchArticles = articles => ({
 В простейшем случае — объект, в более сложном — класс или модуль.
 ```js
 const store = {
-  articles: [],
+  items: [],
   isFetching: false,
 };
 ```
@@ -62,11 +62,11 @@ Flux допускает наличие нескольких Stores.
 
 **Callback** (в контексте Flux) — функция, которая принимает Action и в зависимости от него обновляет или не обновляет часть данных, лежащих в Stores.
 ```js
-const articleCallback = (action) => {
+const itemCallback = (action) => {
   if (action.type === CHANGE_FETCH_STATUS) {
     store.isFetching = action.isFetching;
-  } else if (action.type === FETCH_ARTICLES) {
-    store.articles = action.articles;
+  } else if (action.type === FETCH_ITEMS) {
+    store.items = action.items;
   }
 } 
 ```
@@ -79,19 +79,19 @@ const articleCallback = (action) => {
 ```js
 const dispatcher = new Dispatcher();
 
-dispatcher.register(articleCallback);
+dispatcher.register(itemCallback);
 
-// store: { articles: [], isFetching: false }
+// store: { items: [], isFetching: false }
 dispatcher.dispatch(FETCH_START); 
-// store: { articles: [], isFetching: true }
-dispatcher.dispatch(fetchArticles([1, 3])); 
-// store: { articles: [1, 3], isFetching: true }
+// store: { items: [], isFetching: true }
+dispatcher.dispatch(fetchItems([1, 3])); 
+// store: { items: [1, 3], isFetching: true }
 dispatcher.dispatch(FETCH_END); 
-// store: { articles: [1, 3], isFetching: false }
+// store: { items: [1, 3], isFetching: false }
 
 // если Action не обрабатывается ни в одном Callback, то Store должен остаться без изменений
 dispatcher.dispatch({ type: 'INCORRECT_ACTION' }); 
-// store: { articles: [1, 3], isFetching: false }
+// store: { items: [1, 3], isFetching: false }
 ```
 
 ## Реализация Flux от Facebook
@@ -104,20 +104,20 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 ```ts
 import { ReduceStore } from 'flux/utils';
 
-interface IArticleStore {
-  articles: number[];
+interface IItemStore {
+  items: any[];
   isFetching: boolean;
 }
 
-class ArticleStore extends ReduceStore<IArticleStore> {
-  getInitialState(): IArticleStore {
+class ItemStore extends ReduceStore<IItemStore> {
+  getInitialState(): IItemStore {
     return ({
-      articles: [],
+      items: [],
       isFetching: false,
     });
   }
 
-  reduce(state: IArticleStore, action: object): IArticleStore {
+  reduce(state: IItemStore, action: object): IItemStore {
     switch (action.type) {
       case 'CHANGE_FETCH_STATUS':
         return ({
@@ -125,10 +125,10 @@ class ArticleStore extends ReduceStore<IArticleStore> {
           isFetching: action.isFetching,
         });
     
-      case 'FETCH_ARTICLES':
+      case 'FETCH_ITEMS':
         return ({
           ...state,
-          articles: [...action.articles],
+          items: [...action.items],
         });
     
       default:

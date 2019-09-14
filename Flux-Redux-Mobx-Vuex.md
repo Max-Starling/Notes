@@ -95,6 +95,12 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 ```
 
 ## Реализация Flux от Facebook
+*Функционал Dispatcher*:
+- `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
+- `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
+- `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
+- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `unregister(id): void` — разрегистрирует Callback по id.
 
 *Функционал ReduceStore*:
 * `getState(): T` — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
@@ -102,7 +108,20 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 * `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
 * `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
 ```ts
+import { Dispatcher } from 'flux';
 import { ReduceStore } from 'flux/utils';
+
+const ItemDispatcher = new Dispatcher();
+
+export const changeFetchStatus = isFetching => ItemDispatcher.dispatch({
+  type: 'CHANGE_FETCH_STATUS',
+  isFetching,
+});
+
+export const fetchItems = items => ItemDispatcher.dispatch({
+  type: 'FETCH_ITEMS',
+  items,
+});
 
 interface IItemStore {
   items: any[];
@@ -110,6 +129,10 @@ interface IItemStore {
 }
 
 class ItemStore extends ReduceStore<IItemStore> {
+  constructor() {
+    super(ItemDispatcher);
+  }
+
   getInitialState(): IItemStore {
     return ({
       items: [],
@@ -142,11 +165,6 @@ class ItemStore extends ReduceStore<IItemStore> {
     }
   }
 }
-```
 
-*Функционал Dispatcher*:
-- `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
-- `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
-- `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
-- `unregister(id): void` — разрегистрирует Callback по id.
+export default new ItemStore();
+```

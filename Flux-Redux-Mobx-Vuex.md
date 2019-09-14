@@ -60,13 +60,6 @@ const store = {
 ```
 Flux допускает наличие нескольких Stores.  
 
-Реализация Store от Facebook имеет следующий функционал:
-* getState(): T — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
-* getInitialState(): T — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
-* reduce(state: T, action: object) — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
-* areEqual(one: T, two: T): boolean — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
-
-
 **Callback** (в контексте Flux) — функция, которая принимает Action и в зависимости от него обновляет или не обновляет часть данных, лежащих в Stores.
 ```js
 const articleCallback = (action) => {
@@ -79,21 +72,14 @@ const articleCallback = (action) => {
 ```
 Каждый Callback должен быть зарегистрирован при помощи Dispatcher.
 
-**Dispatcher** — это модуль, который позволяет регистировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
+**Dispatcher** — это модуль или класс, который позволяет регистировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
 
 Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription).  
-
-Реализация Dispatcher от Facebook имеет следующий функционал:
-- **register(callback: function): string** — регистрирует Callback, возвращает его идентификатор id.
-- **dispatch(action: object): void** — отправляет Action во все зарегистрированные Callbacks.
-- **isDispatching(): boolean** — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- **waitFor(ids: \[string\]): void** — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
-- **unregister(id): void** — разрегистрирует Callback по id.
 
 ```js
 const dispatcher = new Dispatcher();
 
-const articleCallbackId = dispatcher.register(articleCallback);
+dispatcher.register(articleCallback);
 
 // store: { articles: [], isFetching: false }
 dispatcher.dispatch(FETCH_START); 
@@ -106,10 +92,37 @@ dispatcher.dispatch(FETCH_END);
 // если Action не обрабатывается ни в одном Callback, то Store должен остаться без изменений
 dispatcher.dispatch({ type: 'INCORRECT_ACTION' }); 
 // store: { articles: [1, 3], isFetching: false }
-
-// если Callback был разрегистрирован, то обрабатываемые им Actions не должны менять что-либо в Store
-dispatcher.unregister(articleCallbackId);
-dispatcher.dispatch(fetchArticles([2, 4]));
-// store: { articles: [1, 3], isFetching: false } 
 ```
 
+## Реализация Flux от Facebook
+
+Store имеет следующий функционал:
+* `getState(): T` — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
+* `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
+* `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
+* `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
+```js
+import { ReduceStore } from 'flux/utils';
+class CounterStore extends ReduceStore<number> {
+  getInitialState(): number {
+    return 0;
+  }
+  reduce(state: number, action: Object): number {
+    switch (action.type) {
+      case 'increment':
+        return state + 1;
+      case 'square':
+        return state * state;
+      default:
+        return state;
+    }
+  }
+}
+```
+
+Dispatcher имеет следующий функционал:
+- `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
+- `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
+- `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
+- `waitFor(ids: \[string\]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `unregister(id): void` — разрегистрирует Callback по id.

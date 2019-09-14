@@ -1,7 +1,7 @@
 # Flux
 
-**Flux** — архитетура построения пользовательских интерфейсов, основанная на *шаблоне "Наблюдатель"* (observer pattern).  
-Изначально разработанна компанией *Facebook* для *React* и *React Native* приложений.  
+**Flux** — архитетура построения пользовательских интерфейсов, основанная на *шаблоне "Наблюдатель"* (observer pattern, EventEmitter).  
+Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
 
 *Особенности Flux*:
 * *Однонаправленный поток данных*:  
@@ -70,7 +70,7 @@ const itemCallback = (action) => {
 
 **Dispatcher** — это модуль или класс, который позволяет регистировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
 
-Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription).  
+<!-- Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription). -->
 
 ```js
 const dispatcher = new Dispatcher();
@@ -121,6 +121,7 @@ import { ReduceStore } from 'flux/utils';
 
 const ItemDispatcher = new Dispatcher();
 
+/* Action Creators */
 export const changeFetchStatus = isFetching => ItemDispatcher.dispatch({
   type: 'CHANGE_FETCH_STATUS',
   isFetching,
@@ -178,4 +179,16 @@ export default new ItemStore();
 ```
 
 # Redux
+
+*Три принципа Redux*:
+* Только *один источник правды* (single source of truth) — *Store*.  
+* *Состояние* доступно *только для чтения* (state is read-only). Его можно *изменить* лишь с помощью *Actions*.
+* *Изменение состояния* происходит только с использованием *чистых* (pure) *функций* — *Reducers*.
+
+*Другие особенности Redux*:
+* *Однонаправленный поток данных*:  
+Action Creator -> Action -> dispatch -> Reducer -> Store -> View.  
+Reducer отвечает за какую-то часть Store.  
+* *Store* должен быть *неизменяемым* (immutable).
+* В приложении отсутствует *Dispatcher*, вместо него используется функция `store.dispatch()`.
 

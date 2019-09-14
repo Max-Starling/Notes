@@ -5,7 +5,7 @@
 
 *Особенности Flux*:
 * *Однонаправленный поток данных*:  
-Action Creator -> Action -> Dispatcher -> Callback -> Store -> View.  
+**Action Creator -> Action -> Dispatcher -> Callbacks -> Stores -> View**.  
 Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
 * Может быть *несколько Stores*.
 * *Store* может быть как *изменяемым* (mutable), так и *неизменяемым* (immutable).
@@ -187,7 +187,7 @@ export default new ItemStore();
 
 *Другие особенности Redux*:
 * *Однонаправленный поток данных*:  
-Action Creator -> Action -> dispatch -> Reducer -> Store -> View.  
+**Action Creator -> Action -> dispatch -> Reducers -> Store -> View**.  
 Reducer отвечает за какую-то часть Store.  
 * *Store* должен быть *неизменяемым* (immutable).
 * В приложении отсутствует *Dispatcher*, вместо него используется функция `store.dispatch()`.

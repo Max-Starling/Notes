@@ -266,7 +266,7 @@ const store = {
 
 Как и в случае Callbacks из Flux, все Reducers получают приходящий Action.  
 Тем не менее между Reducer и Callback есть существенное отличие:  
-Callback не принимает и не возвращает state, вместо этого он изменяет state напрямую.  
+Callback не принимает в параметрах и не возвращает state (как это делает Reducer), вместо этого он изменяет state напрямую.  
 ```js
 const itemState = {
   items: [],

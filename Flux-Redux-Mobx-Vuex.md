@@ -117,6 +117,12 @@ class ItemStore extends ReduceStore<IItemStore> {
     });
   }
 
+  getState(): IItemStore {
+    return ({
+      ...this._state,
+    });
+  }
+
   reduce(state: IItemStore, action: object): IItemStore {
     switch (action.type) {
       case 'CHANGE_FETCH_STATUS':

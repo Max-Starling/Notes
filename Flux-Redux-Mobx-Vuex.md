@@ -7,9 +7,8 @@
 * *Однонаправленный поток данных*:  
 Action Creator -> Action -> Dispatcher -> Callback -> Store -> View.
 * Может быть *несколько Stores*.
+* *Store* может быть как *изменяемым* (mutable), так и *неизменяемым* (immutable).
 * В приложении только *один Dispatcher*, *региструющий все Callbacks*.
-
-
 
 На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
 * [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).

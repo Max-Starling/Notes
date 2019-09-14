@@ -92,15 +92,15 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 
 Во *Flux* разрешено, чтобы *Action Creator* *вызывал dispatch* сразу *при создании Action* (так можно упростить код выше):
 ```js
-const changeFetchStatus = isFetching => dispatcher.dispatch({
-  type: CHANGE_FETCH_STATUS,
-  isFetching,
+const fetchItems = () => dispatcher.dispatch({
+  type: FETCH_ITEMS,
+  items: [1, 3],
 });
 ```
 
 **View** — UI-компоненты (обычно React-компоненты).
 ```jsx
-const Button = <button>Fetch</button>
+const Button = (<button onClick={fetchItems}>Fetch items</button>);
 ```
 ## Реализация Flux от Facebook
 *Функционал Dispatcher*:

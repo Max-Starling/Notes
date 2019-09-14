@@ -5,14 +5,16 @@
 
 *Особенности Flux*:
 * *Однонаправленный поток данных*:  
-Action Creator -> Action -> Dispatcher -> Callback -> Store -> View.
+Action Creator -> Action -> Dispatcher -> Callback -> Store -> View.  
+Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
 * Может быть *несколько Stores*.
 * *Store* может быть как *изменяемым* (mutable), так и *неизменяемым* (immutable).
-* В приложении только *один Dispatcher*, *региструющий все Callbacks*.
+* В приложении может быть только *один Dispatcher*, *региструющий все Callbacks*.
 
 На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
 * [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).
 * Redux
+* Vuex
 
 Главные *конкурентные* технологии: 
 * Mobx
@@ -28,26 +30,20 @@ const FETCH_ITEMS = 'FETCH_ITEMS';
 ```
 Пример Actions.
 ```js
-const FETCH_START = ({
-  type: CHANGE_FETCH_STATUS,
-  isFetching: true, 
-});
-
-const FETCH_END = ({
-  type: CHANGE_FETCH_STATUS,
-  isFetching: false,
+const FETCH_ITEMS_ACTION = ({
+  type: FETCH_ITEMS,
+  items: [1, 3],
 });
 ```
 
 **Action Creator** — *функция-строитель*, которая создаёт *Action* в зависимости от переданных ей аргументов.
 ```js
-const fetchStart = () => FETCH_START;
-const fetchEnd = () => FETCH_END;
-
-const fetchItems = items => ({
-  type: FETCH_ITEMS,
-  payload: items,
+const changeFetchStatus = isFetching => ({
+  type: CHANGE_FETCH_STATUS,
+  isFetching,
 });
+
+const fetchItems = () => FETCH_ITEMS_ACTION;
 ```
 
 **Store** — место, где хранятся данные.  
@@ -82,11 +78,11 @@ const dispatcher = new Dispatcher();
 dispatcher.register(itemCallback);
 
 // store: { items: [], isFetching: false }
-dispatcher.dispatch(FETCH_START); 
+dispatcher.dispatch(changeFetchStatus(true)); 
 // store: { items: [], isFetching: true }
-dispatcher.dispatch(fetchItems([1, 3])); 
+dispatcher.dispatch(fetchItems()); 
 // store: { items: [1, 3], isFetching: true }
-dispatcher.dispatch(FETCH_END); 
+dispatcher.dispatch(changeFetchStatus(false)); 
 // store: { items: [1, 3], isFetching: false }
 
 // если Action не обрабатывается ни в одном Callback, то Store должен остаться без изменений
@@ -94,6 +90,18 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 // store: { items: [1, 3], isFetching: false }
 ```
 
+Во *Flux* разрешено, чтобы *Action Creator* *вызывал dispatch* сразу *при создании Action* (так можно упростить код выше):
+```js
+const changeFetchStatus = isFetching => dispatcher.dispatch({
+  type: CHANGE_FETCH_STATUS,
+  isFetching,
+});
+```
+
+**View** — UI-компоненты (обычно React-компоненты).
+```jsx
+const Button = <button>Fetch</button>
+```
 ## Реализация Flux от Facebook
 *Функционал Dispatcher*:
 - `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
@@ -118,9 +126,9 @@ export const changeFetchStatus = isFetching => ItemDispatcher.dispatch({
   isFetching,
 });
 
-export const fetchItems = items => ItemDispatcher.dispatch({
+export const fetchItems = () => ItemDispatcher.dispatch({
   type: 'FETCH_ITEMS',
-  items,
+  items: [1, 3],
 });
 
 interface IItemStore {
@@ -168,3 +176,6 @@ class ItemStore extends ReduceStore<IItemStore> {
 
 export default new ItemStore();
 ```
+
+# Redux
+

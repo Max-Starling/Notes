@@ -96,7 +96,7 @@ dispatcher.dispatch({ type: 'INCORRECT_ACTION' });
 
 ## Реализация Flux от Facebook
 
-Store имеет следующий функционал:
+*Функционал ReduceStore*:
 * `getState(): T` — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
 * `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
 * `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
@@ -120,9 +120,9 @@ class CounterStore extends ReduceStore<number> {
 }
 ```
 
-Dispatcher имеет следующий функционал:
+*Функционал Dispatcher*:
 - `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
 - `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
 - `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- `waitFor(ids: \[string\]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `waitFor(ids: [string]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
 - `unregister(id): void` — разрегистрирует Callback по id.

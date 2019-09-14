@@ -187,7 +187,7 @@ export default new ItemStore();
 ## Три основных принципа Redux
 * Только *один источник правды* (single source of truth) — *Store*.  
 * *Состояние* доступно *только для чтения* (state is read-only). Его можно *изменить* лишь с помощью *Actions*.
-* *Изменение состояния* происходит только с использованием *чистых* (pure) *функций* — *Reducers*.
+* *Изменение состояния* происходит только с использованием *чистых функций* (pure functions) — *Reducers*.
 
 ## Другие особенности Redux
 * *Однонаправленный поток данных*:  
@@ -211,9 +211,53 @@ const boundAddItem = item => dispatch(addItem(item));
 boundAddItem(5) // dispatch action ADD_ITEM
 ```
 
-**Reducer** — чистая (pure) функцией вида `(previousState, action) => newState`.  
-Reducer определяет, как изменинтся состояние приложения (state) в ответ на Action.  
-Называется так потому, что похож на функцию `reduce`:
+**Reducer** — *чистая функция*, определяющая, как изменится состояние приложения (state) в ответ на *Action*.  
+Reducer имеет вид: `(previousState, action) => newState`, что напоминает функцию `reduce()`, откуда и название.  
 ```js
 const reduce = (accumulator, currentValue) => accumulator + currentValue;
+```
+
+```js
+const initialState = {
+  items: [],
+}
+
+const itemReducer = (state = initialState, action) => {
+  switch (action) {
+    case ADD_ITEM:
+      return ({
+        ...state,
+        items: [
+          ...state.items,
+          action.item,
+        ],
+      });
+
+    default:
+      return state;
+  }
+};
+```
+Почему используется деструктуризация `...` и нельзя просто напрямую изменить значение в state?  
+Потому что объекты и массивы в JavaScript передаются по ссылке.  
+Если изменить их значение напрямую, то произойдёт мутация и Redux не заметит изменений, а значит оно не дойдёт до View в нужный момент.
+
+Когда Action не обрабатывается в текущем Reducer, то он попадает в блок default.  
+Состояние должно остаться без изменений, поэтому оно возвращается без деструктуризации.  
+
+Reducer напоминает Callback во Flux, но есть существенное отличие.  
+Callback не принимает и не возвращает state: вместо этого он изменяет state напрямую.  
+```js
+const itemState = {
+  items: [],
+};
+
+const itemCallback = (action) => {
+  if (action.type === ADD_ITEM) {
+    itemState.items = [
+      ...items,
+      action.item,
+    ];
+  }
+};
 ```

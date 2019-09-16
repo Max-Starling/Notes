@@ -1,17 +1,19 @@
+
+* [Flux](#flux)
+* * [Особенности Flux](#особенности-flux)
+* * [Структура Flux](#структура-flux)
+* [Redux](#redux)
+* * [Три основных принципа Redux](#три-основных-принципа-redux)
+* * [Другие особенности Redux](#другие-особенности-redux)
+* * [Структура Redux](#структура-redux)
+* [Дополнительно](#дополнительно)
+* * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
+* * [Использование React с Redux](#использование-react-с-redux)
+
 # Flux
 
 **Flux** — архитетура построения пользовательских интерфейсов, основанная на *шаблоне "Наблюдатель"* (observer pattern, EventEmitter).  
 Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
-
-
-<!-- На данных момент есть несколько реализаций архитектуры и её видоизменённых форм:
-* [Flux](https://github.com/facebook/flux) (реализация от самих Facebook).
-* Redux
-* Vuex -->
-
-<!-- Главные *конкурентные* технологии: 
-* Mobx  -->
-
  
 ## Особенности Flux
 * *Однонаправленный поток данных*:  
@@ -103,81 +105,6 @@ const fetchItems = () => dispatcher.dispatch({
 **View** — UI-компонента (обычно React-компонента).
 ```jsx
 const Button = (<button onClick={fetchItems}>Fetch items</button>);
-```
-## Реализация Flux от Facebook
-*Функционал Dispatcher*:
-- `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
-- `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
-- `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
-- `unregister(id): void` — разрегистрирует Callback по id.
-
-*Функционал ReduceStore*:
-* `getState(): T` — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
-* `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
-* `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
-* `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
-```ts
-import { Dispatcher } from 'flux';
-import { ReduceStore } from 'flux/utils';
-
-const ItemDispatcher = new Dispatcher();
-
-/* Action Creators */
-export const changeFetchStatus = isFetching => ItemDispatcher.dispatch({
-  type: 'CHANGE_FETCH_STATUS',
-  isFetching,
-});
-
-export const fetchItems = () => ItemDispatcher.dispatch({
-  type: 'FETCH_ITEMS',
-  items: [1, 3],
-});
-
-interface IItemStore {
-  items: any[];
-  isFetching: boolean;
-}
-
-class ItemStore extends ReduceStore<IItemStore> {
-  constructor() {
-    super(ItemDispatcher);
-  }
-
-  getInitialState(): IItemStore {
-    return ({
-      items: [],
-      isFetching: false,
-    });
-  }
-
-  getState(): IItemStore {
-    return ({
-      ...this._state,
-    });
-  }
-
-  reduce(state: IItemStore, action: object): IItemStore {
-    switch (action.type) {
-      case 'CHANGE_FETCH_STATUS':
-        return ({
-          ...state,
-          isFetching: action.isFetching,
-        });
-    
-      case 'FETCH_ITEMS':
-        return ({
-          ...state,
-          items: [...action.items],
-        });
-    
-      default:
-        return state;
-    }
-  }
-}
-
-export default new ItemStore();
 ```
 
 # Redux
@@ -290,6 +217,84 @@ const itemCallback = (action) => {
 store.dispatch(addItem(7));
 // item's state: { items: [7] }
 console.log(store.getState())
+```
+
+# Дополнительно
+
+## Реализация Flux от Facebook и её использование
+*Функционал Dispatcher*:
+- `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
+- `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
+- `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
+- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `unregister(id): void` — разрегистрирует Callback по id.
+
+*Функционал ReduceStore*:
+* `getState(): T` — получение полного состояния текущего Store. Если Store неизменяемый (immutable), то следует переопределить метод и не передавать состояние напрямую.
+* `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
+* `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
+* `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
+```ts
+import { Dispatcher } from 'flux';
+import { ReduceStore } from 'flux/utils';
+
+const ItemDispatcher = new Dispatcher();
+
+/* Action Creators */
+export const changeFetchStatus = isFetching => ItemDispatcher.dispatch({
+  type: 'CHANGE_FETCH_STATUS',
+  isFetching,
+});
+
+export const fetchItems = () => ItemDispatcher.dispatch({
+  type: 'FETCH_ITEMS',
+  items: [1, 3],
+});
+
+interface IItemStore {
+  items: any[];
+  isFetching: boolean;
+}
+
+class ItemStore extends ReduceStore<IItemStore> {
+  constructor() {
+    super(ItemDispatcher);
+  }
+
+  getInitialState(): IItemStore {
+    return ({
+      items: [],
+      isFetching: false,
+    });
+  }
+
+  getState(): IItemStore {
+    return ({
+      ...this._state,
+    });
+  }
+
+  reduce(state: IItemStore, action: object): IItemStore {
+    switch (action.type) {
+      case 'CHANGE_FETCH_STATUS':
+        return ({
+          ...state,
+          isFetching: action.isFetching,
+        });
+    
+      case 'FETCH_ITEMS':
+        return ({
+          ...state,
+          items: [...action.items],
+        });
+    
+      default:
+        return state;
+    }
+  }
+}
+
+export default new ItemStore();
 ```
 
 ## Использование React с Redux

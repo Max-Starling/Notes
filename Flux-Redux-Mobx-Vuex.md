@@ -25,12 +25,12 @@ Action создаётся при взаимодействии пользоват
 
 **Action** — *объект*, *описывающий происходящее* в приложении *действие*.  
 
-*Action обязательно* должен иметь **тип** (type), может иметь *дополнительную информацию* (если полей несколько, то можно их объединить в один объект, например payload).
+*Action обязательно* должен иметь **тип** (type), может иметь *дополнительную информацию* (если полей несколько, то для удобства можно их объединить в одно поле-объект, например `payload: { /* ... */ }`).
 ```js
 const CHANGE_FETCH_STATUS = 'CHANGE_FETCH_STATUS';
 const FETCH_ITEMS = 'FETCH_ITEMS';
 ```
-Пример Actions.
+Пример Action.
 ```js
 const FETCH_ITEMS_ACTION = ({
   type: FETCH_ITEMS,
@@ -198,7 +198,7 @@ export default new ItemStore();
 
 ## Структура Redux
 
-Части **Action**, **Action Creator** и **Store** определяются аналогично подходу Flux за исключением того, что в Redux может быть только один Store, а Action Creator не может вызывать функцию dispatch, при необходимости за него это делает **Bound Action Creator**:
+Части **Action**, **Action Creator**, **Store** и **View** определяются аналогично подходу Flux за исключением того, что в Redux может быть только один Store, а Action Creator не может вызывать функцию dispatch, при необходимости за него это делает **Bound Action Creator**:
 ```js
 const ADD_ITEM = 'ADD_ITEM';
 
@@ -250,6 +250,8 @@ Reducers комбинируются в главный Reducer, который п
 ```js
 import { createStore, combineReducers } from 'redux';
 
+/* ... */
+
 const reducer = combineReducers({
   item: itemReducer,
   another: anotherReducer,
@@ -282,10 +284,110 @@ const itemCallback = (action) => {
 };
 ```
 
-В Redux отсутствует Dispatcher, его заменяет встроенный в Store механизм отправки Actions — функция **dispatch**.
+В Redux отсутствует Dispatcher, его работу берёт на Store, предоставляя функцию **dispatch**.
 ```js
 // item's state: { items: [] }
 store.dispatch(addItem(7));
 // item's state: { items: [7] }
 console.log(store.getState())
+```
+
+## Использование React с Redux
+
+### Возможная структура
+
+Для маленьких проектов и быстрых решений:
+```
+  - resources/
+  -- item.js
+  -- store.js
+```
+
+Хорошо расширяемая структура (разбиение по смыслу):
+```
+ - resources/
+ -- item/
+ --- item.actions.js
+ --- item.reducer.js
+ --- item.selectors.js
+ --- item.types.js
+ -- store.js
+```
+
+Также расширяемая, но очень удобная (разбиение по типу файлов):
+```
+ - resources/
+ -- actions/
+ --- item.actions.js
+ -- reducers/
+ --- item.reducer.js
+ -- selectors/
+ --- item.selectors.js
+ -- types/
+ --- item.types.js
+ -- store.js
+```
+### Настройка
+
+1) Создаём Reducers:
+```js
+/* item.reducer.js */
+
+const itemReducer = (state, action) => { /* ... */ };
+
+export default itemReducer;
+```
+2) Создаём Store, комбинируя Reducers:
+```js
+/* store.js */
+import { createStore, combineReducers } from 'redux';
+import { itemReducer } from './item/item.reducer';
+
+const reducer = combineReducers({ /* ... */ });
+
+const store = createStore(reducer);
+
+export default store;
+```
+
+3) Оборачиваем `<App>` компонентой `<Provider>`, в который передаём созданный Store.
+```jsx
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import App from './App'
+import store from './store'
+
+const AppContainer = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+render(<AppContainer />, document.getElementById('root'));
+```
+
+4) Оборачиваем компоненту, которую хотим подключить к Redux, компонентой высшего порядка.
+```
+const ItemView = ({ id, index, item, itemsLength }) => (
+  <>
+    <div class="item">{firstItem}</div>
+    <div class="index">`Item 1 of ${itemsLength}`</div>
+    <button onClick={deleteItem> 
+  </>
+);
+
+const DeleteItemButton = ({ addItem }) => (
+
+);
+
+const mapStateToProps = (state, props) => ({
+  item: state.items[props.id],
+  index: state.items.indexOf(item),
+  itemsLength: state.items.length,
+});
+
+const mapDispatchToProps = {
+
+};
 ```

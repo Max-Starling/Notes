@@ -1,14 +1,14 @@
 
 * [Flux](#flux)
-* * [Особенности Flux](#особенности-flux)
-* * [Структура Flux](#структура-flux)
+  * [Особенности Flux](#особенности-flux)
+  * [Структура Flux](#структура-flux)
 * [Redux](#redux)
-* * [Три основных принципа Redux](#три-основных-принципа-redux)
-* * [Другие особенности Redux](#другие-особенности-redux)
-* * [Структура Redux](#структура-redux)
+  * [Три основных принципа Redux](#три-основных-принципа-redux)
+  * [Другие особенности Redux](#другие-особенности-redux)
+  * [Структура Redux](#структура-redux)
 * [Дополнительно](#дополнительно)
-* * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
-* * [Использование React с Redux](#использование-react-с-redux)
+  * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
+  * [Использование React с Redux](#использование-react-с-redux)
 
 # Flux
 
@@ -334,28 +334,86 @@ export default new ItemStore();
 ```
 ### Настройка
 
-1) Создаём Reducers:
+**Thunk** - функция, которая оборачивает выражение, чтобы отложить его выполнение.  
+При помощи библиотеки redux-thunk можно отложить вызов функции dispatch, чтобы появилась возможность вызывать асинхронные функции:
+```js
+// без redux-thunk
+const doSomething = params => ({ type: 'DO_SOMETHING', ...params });
+
+// redux-thunk без асинхронной операции
+const doSomething = params => dispatch => dispatch({ type: 'DO_SOMETHING', ...params });
+
+// redux-thunk c асинхронной операцией
+
+const doSomething = params => async (dispatch) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return dispatch({ type: 'DO_SOMETHING', ...params });
+};
+```
+0) Устанавливаем зависимости
+```npm
+npm i redux react-redux redux-thunk
+```
+
+1) Создаём основные компоненты:
+
+Types
+```js
+export const DELETE_ITEM = 'DELETE_ITEM';
+```
+
+Actions (Actions, Action Creators, Bound Action Creators)
+```js
+/* item.actions */
+import { DELETE_ITEM } from './item.types';
+
+const deleteItem = id => dispatch => dispatch({ type: DELETE_ITEM, id });
+```
+
+Reducer
 ```js
 /* item.reducer.js */
 
-const itemReducer = (state, action) => { /* ... */ };
+const initialState = {
+  items: [],
+  /* ... */
+};
+
+const itemReducer = (state = initialState, action) => { /* ... */ };
 
 export default itemReducer;
 ```
-2) Создаём Store, комбинируя Reducers:
+
+Selectors (вспомогательные функции для получения некоторой части state)
+```js
+/* item.selectors */
+
+/* state - все данные в Store
+   item - название Reducer, отвечающего за данные для этой компоненты
+   items - массив элементов */
+const getItemById = (state, id) => state.item.items.find(item => item.id === id);
+const getItemsLength = state => state.item.items.length;
+```
+
+2) Создаём Store, комбинируя Reducers и добавляя redux-thunk в качестве middleware:
 ```js
 /* store.js */
-import { createStore, combineReducers } from 'redux';
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware,
+} from 'redux';
+import thunk from 'redux-thunk';
 import { itemReducer } from './item/item.reducer';
 
 const reducer = combineReducers({ /* ... */ });
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export default store;
 ```
 
-3) Оборачиваем `<App>` компонентой `<Provider>`, в который передаём созданный Store.
+3) Оборачиваем главную компоненту `<App>` компонентой `<Provider>`, в которую передаём созданный Store.
 ```jsx
 import React from 'react'
 import { render } from 'react-dom'
@@ -372,27 +430,36 @@ const AppContainer = () => (
 render(<AppContainer />, document.getElementById('root'));
 ```
 
-4) Оборачиваем компоненту, которую хотим подключить к Redux, компонентой высшего порядка.
-```
-const ItemView = ({ id, index, item, itemsLength }) => (
+4) Оборачиваем компоненту, которую хотим подключить к Redux, компонентой высшего порядка при помощи функции `connect(mapStateToProps, mapDispatchToProps)`.
+* `mapStateToProps(state, props)` отвечает за передачу части Store в props оборачиваемой компоненте (эта часть будет передаваться каждый раз после обновления в Store).
+* `mapDispatchToProps` отвечает за оборачивание переданных ему Action Creators в функцию dispatch (чтобы в оборачиваемой компоненте не нужно было вызывать dispatch).
+
+```jsx
+import { connect } from 'react-redux';
+import { deleteItem } from 'resources/item/item.actions';
+import { getItemsLength, getItemById } from 'resources/item/item.selectors';
+
+const ItemView = ({
+  item,
+  itemsLength,
+  dispatchDeleteItem
+}) => (
   <>
-    <div class="item">{firstItem}</div>
+    <div class="item">{item}</div>
     <div class="index">`Item 1 of ${itemsLength}`</div>
-    <button onClick={deleteItem> 
+    <button onClick={dispatchDeleteItem}> 
   </>
 );
 
-const DeleteItemButton = ({ addItem }) => (
-
-);
-
+// пусть props.id - параметр, который передаётся от родительской компоненты или от роутера
 const mapStateToProps = (state, props) => ({
-  item: state.items[props.id],
-  index: state.items.indexOf(item),
-  itemsLength: state.items.length,
+  item: getItemById(state, props.id),
+  itemsLength: getItemsLength(state),
 });
 
 const mapDispatchToProps = {
-
+  dispatchDeleteItem: deleteItem,
 };
+
+export default connect(mapStateToProps, mapDispatchToProps);
 ```

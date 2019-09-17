@@ -224,15 +224,13 @@ console.log(store.getState())
 
 # Vuex
 
-**Vuex** — шаблон управления состоянием приложения (state management pattern), а также блиблиотека, разработанная для Vue.js приложений.  
-Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
+**Vuex** — шаблон управления состоянием приложения (state management pattern), а также блиблиотека, разработанная для Vue.js приложений. 
  
 ## Особенности Vuex
 * *Однонаправленный поток данных*:  
 **Action -> Mutations -> State -> Views**.  
 Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
 * Может быть *только один State*.
-* *State* должен быть *неизменяемым* (immutable).
 * В приложении может быть только *один Dispatcher*, *региструющий все Callbacks*.
 
 ## Структура Vuex
@@ -269,6 +267,26 @@ const Items = {
     }
   }
 }
+```
+
+**Getter** — вспомогательная функция, которая принимает State и возвращает некоторую его часть или на основании State вычисляет что-то новое.
+```js
+const store = new Vuex.Store({
+  /* ... */,
+  getters: {
+    itemsLength: state => state.items.length,
+    numbers: state => state.items.filter(item => typeof item === 'number'),
+    getItemByIndex: state => index => state.items[index],
+  },
+});
+```
+Использование Getters.
+```js
+store.getters.itemsLength;
+store.getters.getItemByIndex(0);
+
+// в компоненте
+this.$store.getters.numbers;
 ```
 
 **Mutation** — функция, в которой происходит изменение State.  

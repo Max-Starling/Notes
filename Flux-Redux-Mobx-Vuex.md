@@ -6,6 +6,9 @@
   * [Три основных принципа Redux](#три-основных-принципа-redux)
   * [Другие особенности Redux](#другие-особенности-redux)
   * [Структура Redux](#структура-redux)
+* [Vuex](#vuex)
+  * [Особенности Vuex](#особенности-vuex)
+  * [Структура Vuex](#структура-vuex)
 * [Дополнительно](#дополнительно)
   * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
   * [Использование React с Redux](#использование-react-с-redux)
@@ -118,7 +121,7 @@ const Button = (<button onClick={fetchItems}>Fetch items</button>);
 
 ## Другие особенности Redux
 * *Однонаправленный поток данных*:  
-**Action Creator -> Action -> dispatch -> Reducers -> Store -> Views**.  
+**Action Creator -> Action -> Reducers -> Store -> Views**.  
 * *Store* только один, но он может разбиваться на части, за каждую из которых отвечает отдельный Reducer.
 * *Store* должен быть *неизменяемым* (immutable).
 * *Отсутствует Dispatcher*, вместо него используется функция `store.dispatch()`.
@@ -217,6 +220,130 @@ const itemCallback = (action) => {
 store.dispatch(addItem(7));
 // item's state: { items: [7] }
 console.log(store.getState())
+```
+
+# Vuex
+
+**Vuex** — шаблон управления состоянием приложения (state management pattern), а также блиблиотека, разработанная для Vue.js приложений.  
+Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
+ 
+## Особенности Vuex
+* *Однонаправленный поток данных*:  
+**Action -> Mutations -> State -> Views**.  
+Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
+* Может быть *только один State*.
+* *State* должен быть *неизменяемым* (immutable).
+* В приложении может быть только *один Dispatcher*, *региструющий все Callbacks*.
+
+## Структура Vuex
+ 
+**State** — место, где хранятся данные.  
+Располагается в Store и инициализируется следующим образом.
+```js
+import Vuex from 'vuex';
+
+const store = new Vuex.Store({
+  state: {
+    items: [],
+  },
+});
+```
+Чтобы State был доступен во всех компонентах, нужно встроить Store в приложение.
+```js
+  const app = new Vue({
+    /* ... */
+    store,
+  });
+```
+Использование State внутри компонент: `this.$store.state`.
+```js
+const Items = {
+  template: `<ul>
+  <li v-for="item in items">
+    {{ item }}
+  </li>
+</ul>`,
+  computed: {
+    items () {
+      return this.$store.state.items,
+    }
+  }
+}
+```
+
+**Mutation** — функция, в которой происходит изменение State.  
+Единственный способ изменить State — совершить (commit) Mutation.  
+Mutation — синхронная транзакция, для асинхронности используется Action.  
+Параметры Mutation: `(state, payload)`, `state` — ссылка на store.state, `payload` — объект с переданными параметрами.
+```js
+// mutation-types.js
+export const ADD_ITEM = 'ADD_ITEM';
+```
+```js
+// store.js
+import { ADD_ITEM } from './mutation-types';
+
+const store = new Vuex.Store({
+  /* ... */,
+  mutations: {
+    [ADD_ITEM] (state, payload) {
+      // мутируем State (не можем испозовать state.items.push(), потому
+      // что должна измениться ссылка на массив, произойти мутация)
+      state.items = [...state.items, item];
+    },
+  },
+});
+```
+Совершение Mutation: `commit(type, payload)`.
+```js
+// state: { items: [] }
+store.commit(ADD_ITEM, { item: 7 });
+// или
+store.commit({ type: ADD_ITEM, item: 7 });
+// state: { items: [7] }
+
+// в компоненте
+this.$store.commit(ADD_ITEM, { item: 7 });
+```
+
+**Action** — функция, которые совершает (commit) в своём теле Mutations и может выполнять асинхронные операции.  
+Параметры Action: `(context, payload)`, `context` — объект, который содержит:
+* `state` — то же, что и store.state
+* `commit(type, payload)` — функция для совершения Mutation
+* `dispatch(type, payload)` — функция для отправки Action
+* `getters` — геттеры
+
+```js
+import api from '/* ... */'; // связующее звено между клиентом и сервером
+
+const store = new Vuex.Store({
+  /* ... */,
+  actions: {
+    /* синхронный Action */
+    addItem (context, payload) {
+      context.commit('addItem', payload.item);
+    },
+    /* асинхронный Action */
+    async fetchItem (context) {
+      const item = await api.get(/*...*/); // получение item откуда-либо, допустим получили 7
+      
+      context.dispatch('addItem', { item });
+      // или
+      context.dispatch({ type: 'addItem', item });
+    },
+  },
+});
+```
+Отправка (dispatch) Action: `dispatch(type, payload)`.
+```js
+// state: { items: [] }
+store.dispatch('addItem', 5);
+// state: { items: [5] }
+store.dispatch('fetchItem');
+// state: { items: [5, 7] }
+
+// в компоненте
+this.$store.dispatch('fetchItem');
 ```
 
 # Дополнительно

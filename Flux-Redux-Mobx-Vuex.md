@@ -123,7 +123,8 @@ const Button = (<button onClick={fetchItems}>Fetch items</button>);
 * *Однонаправленный поток данных*:  
 **Action Creator -> Action -> Reducers -> Store -> Views**.  
 * *Store* только один, но он может разбиваться на части, за каждую из которых отвечает отдельный Reducer.
-* *Store* должен быть *неизменяемым* (immutable).
+* *Store* должен быть *неизменяемым* (immutable). 
+<!--Reducer не изменяет state напрямую: работает с копией и возвращают обновлённую версию. -->
 * *Отсутствует Dispatcher*, вместо него используется функция `store.dispatch()`.
 
 ## Структура Redux

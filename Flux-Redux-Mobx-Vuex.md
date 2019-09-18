@@ -365,6 +365,107 @@ store.dispatch('fetchItem');
 this.$store.dispatch('fetchItem');
 ```
 
+**View** — UI-компонента (Vue.js) 
+
+**Modules** позволяют создавать независимые блоки глобального State, в которых есть свои локальные State, Actions, Getters и Mutations. 
+```js
+const itemModule = {
+  state: { /* ... */ },
+  mutations: { /* ... */ },
+  actions: { /* ... */ },
+  getters: { /* ... */ },
+};
+
+const userModule = {
+  state: { /* ... */ },
+  mutations: { /* ... */ },
+  actions: { /* ... */ },
+  getters: { /* ... */ },
+};
+
+const store = new Vuex.Store({
+  modules: {
+    item: itemModule,
+    user: userModule,
+  }
+});
+
+store.state.item // item's state
+store.state.user // user's state
+```
+Структура локальных Mutations, Actions, Getters такая же, только теперь в качестве `state` берётся локальный State.  
+В локальных Actions и Getters есть возможность обратиться к глобальным State и Getters при помощи `rootState` и `rootGetters`.  
+```js
+const itemModule = {
+  state: {
+    items: [],
+  },
+  getters: {
+    itemsLength (state, getters, rootState, rootGetters) { /* ... */ },
+  },
+  mutations: {
+    ADD_ITEM (state, payload) {
+      state.items = [...state.items, item];
+    },
+  },
+  actions: {
+    addItem (context, payload) {
+      context.rootGetters;
+    },
+  },
+};
+```
+
+По умолчанию Actions, Getters, Mutations доступны в глобальном State.  
+Это удобно, если все эти названия уникальны, но может стать проблемой в большом приложении (у разных Modules могут совпадать названия некоторых Actions, Getters, Mutations).
+```js
+store.commit('ADD_ITEM');
+store.dispatch('addItem');
+store.getters.itemsLength;
+```
+Чтобы это исправить, можно замкнуть функционал в Module, задав ему namespace.
+```js
+const itemModule = {
+  namespaced: true,
+  /* ... */
+};
+
+const store = Vuex.Store({
+  modules: {
+    item: itemModule,
+  },
+});
+```
+Тогда обращение изменяется на:
+```js
+store.commit('item/ADD_ITEM');
+store.dispatch('item/addItem');
+store.getters['item/itemsLength'];
+```
+<!-- Обращения вроде `store.item.commit()` не работают. -->
+
+Modules можно подключать и удалять динамически (многие Vue.js плагины подключают свои Modules так к приложению).
+```js
+const adminModule = { /* ... */ };
+
+/* подключение модуля */
+store.registerModule('user', userModule);
+/* удаление модуля */
+store.unregisterModule('user');
+```
+Module может содержать другие Modules.  
+```js
+const moderatorModule = { /* ... */ };
+
+const userModule = {
+  modules: {
+    moderator: moderatorModule,
+  },
+};
+```
+
+В больших приложениях State может сильно разрастаться (становится неудобно и сложно его поддерживать), модули помогают решить эту проблему и сделать приложение более расширяемым.  
+
 # Дополнительно
 
 ## Реализация Flux от Facebook и её использование

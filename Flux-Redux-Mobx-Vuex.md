@@ -238,8 +238,10 @@ Action создаётся при взаимодействии пользоват
 **State** — *объект*, в котором *хранится состояние приложения*.  
 *Располагается* в *Store* и *инициализируется* вместе с ним.  
 ```js
+import Vue from 'vue';
 import Vuex from 'vuex';
 
+Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     items: [],

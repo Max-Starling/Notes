@@ -224,7 +224,7 @@ console.log(store.getState())
 
 # Vuex
 
-**Vuex** — шаблон управления состоянием приложения (state management pattern), а также блиблиотека, разработанная для Vue.js приложений. 
+**Vuex** — *шаблон управления состоянием* (state management pattern) приложения, а также *библиотека*, разработанная для Vue.js приложений. 
  
 ## Особенности Vuex
 * *Однонаправленный поток данных*:  
@@ -235,8 +235,8 @@ Action создаётся при взаимодействии пользоват
 
 ## Структура Vuex
  
-**State** — место, где хранятся данные.  
-Располагается в Store и инициализируется следующим образом.
+**State** — *объект*, в котором *хранится состояние приложения*.  
+*Располагается* в *Store* и *инициализируется* вместе с ним.  
 ```js
 import Vuex from 'vuex';
 
@@ -246,14 +246,14 @@ const store = new Vuex.Store({
   },
 });
 ```
-Чтобы State был доступен во всех компонентах, нужно встроить Store в приложение.
+Чтобы *State* был *доступен во всех компонентах*, нужно *встроить Store* в приложение.
 ```js
   const app = new Vue({
     /* ... */
     store,
   });
 ```
-Использование State внутри компонент: `this.$store.state`.
+Использование *State внутри компонент*: `this.$store.state`.
 ```js
 const Items = {
   template: `<ul>
@@ -269,7 +269,8 @@ const Items = {
 }
 ```
 
-**Getter** — вспомогательная функция, которая принимает State и возвращает некоторую его часть или на основании State вычисляет что-то новое.
+**Getter** — *вспомогательная функция*, *принимающая State* и *возвращающая* некоторую его *часть* или же *вычисляющая* на его основании *что-то новое*.
+*Параметры Getter*: `(state, getters)`, `state` — *ссылка* на `store.state`, `getters` — другие Getters, которые можно использовать.
 ```js
 const store = new Vuex.Store({
   /* ... */,
@@ -280,7 +281,7 @@ const store = new Vuex.Store({
   },
 });
 ```
-Использование Getters.
+*Использование Getters*.
 ```js
 store.getters.itemsLength;
 store.getters.getItemByIndex(0);
@@ -289,10 +290,10 @@ store.getters.getItemByIndex(0);
 this.$store.getters.numbers;
 ```
 
-**Mutation** — функция, в которой происходит изменение State.  
-Единственный способ изменить State — совершить (commit) Mutation.  
-Mutation — синхронная транзакция, для асинхронности используется Action.  
-Параметры Mutation: `(state, payload)`, `state` — ссылка на store.state, `payload` — объект с переданными параметрами.
+**Mutation** — *функция*, в которой происходит *изменение State*.  
+*Единственный способ изменить State* — *совершить* (commit) *Mutation*.  
+*Mutation* — *синхронная транзакция*, для *асинхронности* используется *Action*.  
+*Параметры Mutation*: `(state, payload)`, `state` — *ссылка* на `store.state`, `payload` — *объект с* переданными *параметрами*.
 ```js
 // mutation-types.js
 export const ADD_ITEM = 'ADD_ITEM';
@@ -312,7 +313,7 @@ const store = new Vuex.Store({
   },
 });
 ```
-Совершение Mutation: `commit(type, payload)`.
+*Совершение Mutation*: `commit(type, payload)`.
 ```js
 // state: { items: [] }
 store.commit(ADD_ITEM, { item: 7 });
@@ -324,12 +325,12 @@ store.commit({ type: ADD_ITEM, item: 7 });
 this.$store.commit(ADD_ITEM, { item: 7 });
 ```
 
-**Action** — функция, которые совершает (commit) в своём теле Mutations и может выполнять асинхронные операции.  
-Параметры Action: `(context, payload)`, `context` — объект, который содержит:
-* `state` — то же, что и store.state
-* `commit(type, payload)` — функция для совершения Mutation
-* `dispatch(type, payload)` — функция для отправки Action
-* `getters` — геттеры
+**Action** — *функция*, которые *совершает* (commit) в своём теле *Mutations* и может выполнять *асинхронные операции*.  
+*Параметры Action*: `(context, payload)`, `context` — объект, который содержит:
+* `state` — то же, что и `store.state`
+* `commit(type, payload)` — функция для *совершения Mutation*
+* `dispatch(type, payload)` — функция для *отправки Action*
+* `getters` — *Getters*
 
 ```js
 import api from '/* ... */'; // связующее звено между клиентом и сервером
@@ -352,7 +353,7 @@ const store = new Vuex.Store({
   },
 });
 ```
-Отправка (dispatch) Action: `dispatch(type, payload)`.
+*Отправка* (dispatch) *Action*: `dispatch(type, payload)`.
 ```js
 // state: { items: [] }
 store.dispatch('addItem', 5);

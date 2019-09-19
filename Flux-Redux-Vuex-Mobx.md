@@ -9,7 +9,7 @@
 * [Vuex](#vuex)
   * [Особенности Vuex](#особенности-vuex)
   * [Структура Vuex](#структура-vuex)
-* [Mobx](#mobx)
+* [MobX](#mobx)
 * [Дополнительно](#дополнительно)
   * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
   * [Использование React с Redux](#использование-react-с-redux)
@@ -471,8 +471,176 @@ const userModule = {
 
 В больших приложениях State может сильно разрастаться (становится неудобно и сложно его поддерживать), модули помогают решить эту проблему и сделать приложение более расширяемым.  
 
-# Mobx
+# MobX
 
+**MobX** — библиотека, созданная для управления состоянием приложения, основанная на подходе прозрачного функционального программирования (Transparent functional reactive programming, TFRP).  
+
+Сам по себе MobX не является архитектурой или хранилищем состояния, но обладает функционалом, с помощью которого можно это всё построить, из-за чего его часто считают альтернативой Redux.
+
+## Основной принцип MobX
+Всё, что может быть извлечено из состояния приложения, должно быть извлечено. Автоматически.  
+(речь идёт о текущем состоянии приложения: при его обновлении должно автоматически обновиться всё, что его использовало)
+
+*Реактивное программирование* на примере (достигается при помощи Observable):
+```js
+a = 5
+b = 7
+c = a + b // с = 12
+
+b = 10 // c = 15
+a -=4 // c = 11
+```
+
+## Особенности MobX
+
+**Actions -> State -> Derivations (computed values) -> Reactions**.
+
+## Структура MobX
+
+**State** — данные приложения (объекты, массивы, примитивы), которые в совокупности составляют Модель (как в подходах по типу MVC) приложения.  
+State децентрализован. 
+
+<!-- Всё, что в приложении имеет тип observable, относится к State. -->
+
+Чтобы была возможность подписаться на обновление значения, нужно задать ему тип Observable.  
+Для этих целей внутри классов можно использовать декораторы `@observable property = value`, вне классов — функцию `observable(value)`.
+```js
+import { observable } from 'mobx';
+
+// для массивов и объектов используется функция observable()
+const items = observable([1, 2, 3]);
+const item = observable({ title: 'Foo', description: 'Bar' });
+
+// для примитивных значений используется observer.box()
+const string = observable.box('string');
+const number = observable.box(7);
+const boolean = observable.box(true);
+
+// внутри классов можно использовать декораторы (пока ещё экспериментальные), но можно и функции
+class ItemStore {
+  @observable item = { title: 'Foo', description: 'Bar' }
+  @observable string = 'string' // в декораторе примитив без .box
+  /* или */
+  item = observable({ title: 'Foo', description: 'Bar' })
+  string = observable.box('string')
+}
+```
+
+**Derivation** — любое значение, которое может вычисляется автоматически после обновления State.  
+Derivation может быть переменной, UI-компонентой и многим другим.
+```js
+
+@computed
+```
+
+**Reaction** — это функция, которая запускается автоматически после обновления State.  
+Reaction похож на Derivation, но вместо генерации нового значения обрабатываются сайд-эффекты (side effects): вывод в консоль, запросы к серверу и прочее.
+
+```js
+// Автоматически вызывается для всех Observable значений, использующихся в сайд-эффектах
+autorun(() => { /* side effects here */ }));
+
+autorun(() => { console.log('Item changed', item) });
+
+when(() => condition, () => { /* side effects here */ });
+
+reaction(() => data, data => { /* side effects here */ });
+
+reaction(
+  () => arr.map(item => [item.a, item.b]),
+  data => console.log("CHANGED A,B:", data)
+);
+```
+
+При использовании MobX с React наиболее популярный Reaction — `observer`.  
+Он оборачивает метод класса `render()` или функциональный компонент в autorun, тогда в случае изменения любого Observable внутри них, компонент автоматически перерендерится.  
+```js
+import { Fragment } from 'react';
+import ReactDOM from 'react-dom';
+import { observer } from 'mobx-react';
+
+const state = observable({
+  number: 0,
+});
+
+const increment = () => {
+  state.number += 1;
+};
+
+// пример функциональной компоненты
+const Number = observer(({ state }) => (
+  <button onClick={increment}>Click me to increase: {state.number}</button>
+));
+
+// пример класса
+@observer
+class NumberClass extends React.Component {
+  render() {
+    return <button onClick={increment}>Click me to increase: {this.props.state.number}</button>;
+  }
+}
+
+const App = () => (
+  <Fragment>
+    <Number state={state} />
+    <NumberClass state={state} />
+  </Fragment>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+**Action** — всё, что изменяет State.  
+
+В отличие от архитектуры Flux и её произодных, MobX не ограничивает программиста в том, как события пользователя должны быть обработаны.
+
+Простые Actions для массивов и объектов
+```js
+// инициализация
+const items = observable([1, 2, 3]);
+const item = observable({ title: 'foo', description: 'bar' });
+
+// подписка на изменения
+autorun(() => console.log(item)); // сработает только при инициализации (ссылка на объект не меняется) и выведет в консоль Observable
+autorun(() => console.log('Title changed', item.title)); // при обновлении поля поля title объекта item
+autorun(() => console.log('Title or description changed', item.title, item.description)); // при обновлении одного из полей title или description объекта item
+autorun(() => console.log('Data changed', { ...item })); // при обновлении любого поля объекта item
+
+// простые Actions
+item.title = 'new';
+item.title = `${item.title} title`;
+item.description = 'new description';
+```
+Простые Actions для примитивов:
+```js
+let number = observable.box(1); // инициализация
+
+// подписка на изменения
+// Observable — объект. Чтобы получить значение переменной number, нужно использовать number.get()
+autorun(() => console.log('Changed to', number.get()); 
+
+// простой Action
+number.set(3); // в консоль выведется 'Changed to 3'
+
+// как ниже делать нельзя, поскольку это перезапишет переменную number, сделав её обычным примитивом
+number = 2; // в консоль не выведется ничего
+number.set(4); // TypeError: number.set is not a function
+```
+
+
+Если строить архитектуру управления состоянием при помощи MobX, то лучше всего использовать встроенный функционал action:
+```js
+import { action } from 'mobx';
+
+
+const items = observable([1, 2, 3]);
+items.push(4); // action
+
+const item = observable({ title: 'foo' });
+item.title = 'bar'; // action
+
+```
+MobX сам заботится, чтобы все изменения State, произошедшие при помощи Action, автоматически обработались в Derivations и Reactions.
 
 # Дополнительно
 

@@ -478,10 +478,10 @@ const userModule = {
 Сам по себе MobX не является архитектурой или хранилищем состояния, но обладает функционалом, с помощью которого можно это всё построить, из-за чего его часто считают альтернативой Redux.
 
 ## Основной принцип MobX
-Всё, что может быть извлечено из состояния приложения, должно быть извлечено. Автоматически.  
+Всё, что может быть извлечено (be derived) из состояния приложения, должно быть извлечено. Автоматически.  
 (речь идёт о текущем состоянии приложения: при его обновлении должно автоматически обновиться всё, что его использовало)
 
-*Реактивное программирование* на примере (достигается при помощи Observable):
+Суть того, к чему *стремится реактивное программирование*, можно показать на примере (достигается при помощи Observable).
 ```js
 a = 5
 b = 7
@@ -497,26 +497,36 @@ a -=4 // c = 11
 
 ## Структура MobX
 
+### State
+
 **State** — данные приложения (объекты, массивы, примитивы), которые в совокупности составляют Модель (как в подходах по типу MVC) приложения.  
 State децентрализован. 
 
 <!-- Всё, что в приложении имеет тип observable, относится к State. -->
 
 Чтобы была возможность подписаться на обновление значения, нужно задать ему тип Observable.  
-Для этих целей внутри классов можно использовать декораторы `@observable property = value`, вне классов — функцию `observable(value)`.
+
+Синтаксис:
+* `observable(value)` (только для массивов и объектов)
+* `observable.box(value)` (для примитивных значений)
+* `@observable property = value` (только в классах)
+
 ```js
 import { observable } from 'mobx';
 
-// для массивов и объектов используется функция observable()
+// массивы и объекты
 const items = observable([1, 2, 3]);
 const item = observable({ title: 'Foo', description: 'Bar' });
 
-// для примитивных значений используется observer.box()
+// примитивы
 const string = observable.box('string');
 const number = observable.box(7);
 const boolean = observable.box(true);
 
-// внутри классов можно использовать декораторы (пока ещё экспериментальные), но можно и функции
+// Observable.box создаёт объект. Для получения примитивного значения нужно использовать метод get()
+console.log(number.get()) // 7
+
+// внутри классов можно использовать декораторы (официально экспериментальные) или функции
 class ItemStore {
   @observable item = { title: 'Foo', description: 'Bar' }
   @observable string = 'string' // в декораторе примитив без .box
@@ -526,12 +536,27 @@ class ItemStore {
 }
 ```
 
-**Derivation** — любое значение, которое может вычисляется автоматически после обновления State.  
-Derivation может быть переменной, UI-компонентой и многим другим.
-```js
+### Derivation
 
-@computed
+**Derivation (computed values)** — любое значение, которое может вычисляется автоматически после обновления State.  
+Derivation может быть переменной, UI-компонентой и многим другим.  
+Здесь не должно быть сайд-эффектов.
+
+Синтаксис:
+* `computed(() => derivation)`
+* `@computed get property() { return derivation; }` (только в классе)
+
+```js
+const statement = observable.box(3 > 1); // true
+
+const oppositeStatement = computed(() => !statement.get());
+
+console.log(oppositeStatement); // false
+trueStatement.set(false);
+console.log(oppositeStatement); // true
 ```
+
+### Reaction
 
 **Reaction** — это функция, которая запускается автоматически после обновления State.  
 Reaction похож на Derivation, но вместо генерации нового значения обрабатываются сайд-эффекты (side effects): вывод в консоль, запросы к серверу и прочее.
@@ -554,7 +579,7 @@ reaction(
 
 При использовании MobX с React наиболее популярный Reaction — `observer`.  
 Он оборачивает метод класса `render()` или функциональный компонент в autorun, тогда в случае изменения любого Observable внутри них, компонент автоматически перерендерится.  
-```js
+```jsx
 import { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react';
@@ -589,6 +614,8 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
+
+### Action
 
 **Action** — всё, что изменяет State.  
 

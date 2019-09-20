@@ -499,12 +499,12 @@ a -=4 // c = 11
 
 ### State
 
-**State** — данные приложения (объекты, массивы, примитивы), которые в совокупности составляют Модель (как в подходах по типу MVC) приложения.  
-State децентрализован. 
+**State** — *данные приложения* (объекты, массивы, примитивы), составляющие в совокупности Модель приложения (как в подходах по типу MVC).  
 
-<!-- Всё, что в приложении имеет тип observable, относится к State. -->
+State децентрализован.  
+Любое значение, которое в приложении имеет тип Observable и его изменения отслеживаются при помощи Reactions, является частью State.
 
-Чтобы была возможность подписаться на обновление значения, нужно задать ему тип Observable.  
+<!--Чтобы была возможность подписаться на обновление значения, нужно задать ему тип Observable. -->
 
 Синтаксис:
 * `observable(value)` (только для массивов и объектов)
@@ -526,7 +526,7 @@ const boolean = observable.box(true);
 // Observable.box создаёт объект. Для получения примитивного значения нужно использовать метод get()
 console.log(number.get()) // 7
 
-// внутри классов можно использовать декораторы (официально экспериментальные) или функции
+// внутри классов можно использовать декораторы (официально пока ещё экспериментальные) или функции
 class ItemStore {
   @observable item = { title: 'Foo', description: 'Bar' }
   @observable string = 'string' // в декораторе примитив без .box
@@ -536,11 +536,76 @@ class ItemStore {
 }
 ```
 
+### Action
+
+**Action** — всё, что изменяет State.  
+
+В отличие от архитектуры Flux и её производных, MobX не ставит ораничений на то, как должны быть обработаны события пользователя.
+
+Простые Actions для массивов и объектов
+```js
+const item = observable({ title: 'foo', description: 'bar' });
+const items = observable([1, 2, 3]);
+
+// Actions
+item.title = 'new';
+item.title = `${item.title} title`;
+item.description = 'new description';
+items.pop()
+items.push(4)
+items[1] = 8;
+```
+Простые Actions для примитивов:
+```js
+let number = observable.box(1); // инициализация
+
+// Action
+number.set(3); // в консоль выведется 'Changed to 3'
+
+// как ниже делать нельзя, поскольку это перезапишет переменную number, сделав её обычным примитивом
+number = 2; // в консоль не выведется ничего
+number.set(4); // TypeError: number.set is not a function
+```
+MobX сам заботится, чтобы все изменения State, произошедшие при помощи Action, автоматически обработались в Derivations и Reactions.
+
+Если строить архитектуру управления состоянием при помощи MobX, то лучше всего использовать встроенный функционал `action`.
+* `action(fn)`
+* `action(name, fn)`
+* `@action classMethod()`
+
+В этом случае так же следует запретить любые изменения State (то есть изменения любого Observable) вне Actions.
+```js
+import { configure } from 'mobx';
+
+configure({ enforceActions: 'always' });
+```
+С такой конфигурацией простые примеры выше с Actions не будут работать (после появления Reactions), поскольку будет ошибка: `Error: [mobx] Since strict-mode is enabled, changing observed observable values outside actions is not allowed`.
+Нужно изменить код следующим образом:
+```js
+import { observable, action } from 'mobx';
+
+const item = observable({ title: 'foo', description: 'bar' });
+const items = observable([1, 2, 3]);
+
+const changeItem = action(({ title, description } = {}) => {
+  item.title = title;
+  item.description = description;
+  
+  // нельзя переприсваивать, поскольку item перестанет быть Observable
+  item = { title, description };
+});
+
+const addItem = action(item => items.push(item));
+```
+
 ### Derivation
 
 **Derivation (computed values)** — любое значение, которое может вычисляется автоматически после обновления State.  
 Derivation может быть переменной, UI-компонентой и многим другим.  
-Здесь не должно быть сайд-эффектов.
+Derivations используются в приложении, как и Observables.  
+
+На практике Derivation — результат выполнения функции, которая имеет тип Computed.  
+В этой функции не должно быть сайд-эффектов (side effects).
 
 Синтаксис:
 * `computed(() => derivation)`
@@ -559,11 +624,21 @@ console.log(oppositeStatement); // true
 ### Reaction
 
 **Reaction** — это функция, которая запускается автоматически после обновления State.  
-Reaction похож на Derivation, но вместо генерации нового значения обрабатываются сайд-эффекты (side effects): вывод в консоль, запросы к серверу и прочее.
+Reaction похож на Derivation, но вместо генерации нового значения в нём обрабатываются сайд-эффекты: вывод в консоль, запросы к серверу и прочее.
 
 ```js
 // Автоматически вызывается для всех Observable значений, использующихся в сайд-эффектах
 autorun(() => { /* side effects here */ }));
+
+// подписка на изменения
+autorun(() => console.log(item)); // сработает только при инициализации (ссылка на объект не меняется) и выведет в консоль Observable
+autorun(() => console.log('Title changed', item.title)); // при обновлении поля поля title объекта item
+autorun(() => console.log('Title or description changed', item.title, item.description)); // при обновлении одного из полей title или description объекта item
+autorun(() => console.log('Data changed', { ...item })); // при обновлении любого поля объекта item
+
+// подписка на изменения
+// Observable — объект. Чтобы получить значение переменной number, нужно использовать number.get()
+autorun(() => console.log('Changed to', number.get()); 
 
 autorun(() => { console.log('Item changed', item) });
 
@@ -578,10 +653,11 @@ reaction(
 ```
 
 При использовании MobX с React наиболее популярный Reaction — `observer`.  
-Он оборачивает метод класса `render()` или функциональный компонент в autorun, тогда в случае изменения любого Observable внутри них, компонент автоматически перерендерится.  
+Он оборачивает метод класса `render()` или функциональный компонент в `autorun`, тогда в случае изменения любого Observable внутри них, компонент автоматически перерендерится.  
 ```jsx
 import { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 
 const state = observable({
@@ -612,62 +688,8 @@ const App = () => (
   </Fragment>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById('root'));
 ```
-
-### Action
-
-**Action** — всё, что изменяет State.  
-
-В отличие от архитектуры Flux и её произодных, MobX не ограничивает программиста в том, как события пользователя должны быть обработаны.
-
-Простые Actions для массивов и объектов
-```js
-// инициализация
-const items = observable([1, 2, 3]);
-const item = observable({ title: 'foo', description: 'bar' });
-
-// подписка на изменения
-autorun(() => console.log(item)); // сработает только при инициализации (ссылка на объект не меняется) и выведет в консоль Observable
-autorun(() => console.log('Title changed', item.title)); // при обновлении поля поля title объекта item
-autorun(() => console.log('Title or description changed', item.title, item.description)); // при обновлении одного из полей title или description объекта item
-autorun(() => console.log('Data changed', { ...item })); // при обновлении любого поля объекта item
-
-// простые Actions
-item.title = 'new';
-item.title = `${item.title} title`;
-item.description = 'new description';
-```
-Простые Actions для примитивов:
-```js
-let number = observable.box(1); // инициализация
-
-// подписка на изменения
-// Observable — объект. Чтобы получить значение переменной number, нужно использовать number.get()
-autorun(() => console.log('Changed to', number.get()); 
-
-// простой Action
-number.set(3); // в консоль выведется 'Changed to 3'
-
-// как ниже делать нельзя, поскольку это перезапишет переменную number, сделав её обычным примитивом
-number = 2; // в консоль не выведется ничего
-number.set(4); // TypeError: number.set is not a function
-```
-
-
-Если строить архитектуру управления состоянием при помощи MobX, то лучше всего использовать встроенный функционал action:
-```js
-import { action } from 'mobx';
-
-
-const items = observable([1, 2, 3]);
-items.push(4); // action
-
-const item = observable({ title: 'foo' });
-item.title = 'bar'; // action
-
-```
-MobX сам заботится, чтобы все изменения State, произошедшие при помощи Action, автоматически обработались в Derivations и Reactions.
 
 # Дополнительно
 

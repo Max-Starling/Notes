@@ -10,6 +10,9 @@
   * [Особенности Vuex](#особенности-vuex)
   * [Структура Vuex](#структура-vuex)
 * [MobX](#mobx)
+  * [Основной принцип Mobx](#основной-принцип-mobx)
+  * [Особенности Vuex](#особенности-mobx)
+  * [Структура MobX](#структура-mobx)
 * [Дополнительно](#дополнительно)
   * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
   * [Использование React с Redux](#использование-react-с-redux)
@@ -478,8 +481,8 @@ const userModule = {
 Сам по себе MobX не является архитектурой или хранилищем состояния, но обладает функционалом, с помощью которого можно это всё построить, из-за чего его часто считают альтернативой Redux.  
 
 ## Основной принцип MobX
-Всё, что может быть извлечено (be derived) из состояния приложения, должно быть извлечено. Автоматически.  
-(речь идёт о текущем состоянии приложения: при его обновлении должно автоматически обновиться всё, что его использовало)
+> Всё, что может быть извлечено (be derived) из состояния приложения, должно быть извлечено. Автоматически.  
+Речь идёт о текущем состоянии приложения: при его обновлении должно автоматически обновиться всё, что его использовало.
 
 Суть того, к чему *стремится реактивное программирование*, можно показать на примере (достигается при помощи Observable).
 ```js
@@ -560,7 +563,7 @@ items[1] = 8;
 ```
 Простые Actions для примитивов:
 ```js
-let number = observable.box(1); // инициализация
+let number = observable.box(1);
 
 // Action
 number.set(3); // в консоль выведется 'Changed to 3'
@@ -582,7 +585,8 @@ import { configure } from 'mobx';
 
 configure({ enforceActions: 'always' });
 ```
-С такой конфигурацией простые примеры выше с Actions не будут работать (после появления Reactions), поскольку будет ошибка: `Error: [mobx] Since strict-mode is enabled, changing observed observable values outside actions is not allowed`.
+С такой конфигурацией простые примеры выше с Actions не будут работать (после появления Reactions), поскольку будет ошибка: `Error: [mobx] Since strict-mode is enabled, changing observed observable values outside actions is not allowed`.  
+
 Нужно изменить код следующим образом:
 ```js
 import { observable, action } from 'mobx';
@@ -600,6 +604,14 @@ const changeItem = action(({ title, description } = {}) => {
 
 const addItem = action(item => items.push(item));
 ```
+```js
+let number = observable.box(1);
+// set - автоматически является action, но если его добавить в функцию, то это уже работать не будет
+number.set(3); // может работать
+const set = value => number.set(value); // не работает
+const set = action(value => number.set(value)); // работает
+```
+
 
 ### Derivation
 

@@ -38,18 +38,18 @@ protocol:[//hostname[:port]][/path][?query]
 
 Браузер принимает введённую пользователем строку и пытается разбить её на лексемы.  
 
-Пример *разбиения URL на лексемы* `http://localhost:3000`.  
+Пример *разбиения URL на лексемы* http://localhost:3000.  
 `http` - протокол, `localhost` - hostname, `3000` - порт.
 
-Пример *разбиения URL на лексемы* `https://www.twitter.com/favicon.ico`.  
+Пример *разбиения URL на лексемы* https://www.twitter.com/favicon.ico.  
 `https` - протокол, `twitter.com` - hostname, `favicon.ico` - путь.
 
-Пример *разбиения URL на лексемы* `https://github.com/Max-Starling?from=2018-12-01&to=2018-12-31`.  
+Пример *разбиения URL на лексемы* https://github.com/Max-Starling?from=2018-12-01&to=2018-12-31.  
 `https` - протокол, `github.com` - hostname, `Max-Starling` - путь, `from=2018-12-01&to=2018-12-31` - query.
 
-Например, пользователь ввёл "Hello".
+Если браузеру не удалось найти протокол или корректный hostname, браузер делает поисковой запрос.  
 
-https://www.google.com/search?q=%D1%84
+Например, если пользователь ввёл в адресную строку `hello world`, то браузер с поисковиком Chrome по умолчанию перейдёт на https://www.google.com/search?q=hello%20world.
 
 ## Построение объектных моделей (DOM, CSSOM)
 

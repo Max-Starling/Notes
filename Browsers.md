@@ -38,13 +38,12 @@ protocol:[//hostname[:port]][/path][?query]
 
 Браузер принимает введённую пользователем строку и пытается понять, из чего она состоит — разбивает её на лексемы (за счёт наличия `:`, `//`, `/`, `?`).  
 
-Пример *разбиения URL на лексемы* http://localhost:3000.  
-`http` - протокол, `localhost` - hostname, `3000` - порт.
-
-Пример *разбиения URL на лексемы* https://twitter.com/favicon.ico.  
-`https` - протокол, `twitter.com` - hostname, `favicon.ico` - путь.
-
-Пример *разбиения URL на лексемы* https://github.com/Max-Starling?from=2018-12-01&to=2018-12-31.  
+Примеры *разбиения URL на лексемы*:  
+* http://localhost:3000  
+`http` - протокол, `localhost` - hostname, `3000` - порт
+* https://twitter.com/favicon.ico:  
+`https` - протокол, `twitter.com` - hostname, `favicon.ico` - путь
+* https://github.com/Max-Starling?from=2018-12-01&to=2018-12-31  
 `https` - протокол, `github.com` - hostname, `Max-Starling` - путь, `from=2018-12-01&to=2018-12-31` - query.
 
 При наличии в URL корректного hostname и отсутствии протокола, браузер подставляет нужный протокол самостоятельно (по умолчанию HTTP, HTTPS для сайтов).
@@ -71,7 +70,7 @@ protocol:[//hostname[:port]][/path][?query]
 
 Есть два популярных DNS-сервера: `1.1.1.1` — Cloudflare, `8.8.8.8` — Google), однако большинство людей используют DNS-сервер, предоставленный интернет-провайдером.
 
-Браузер выполняет DNS-запрос по протоколу UDP — транспортный протокол без установки соединения (connectionless).
+Браузер выполняет DNS-запрос по протоколу UDP, являющимся транспортным протоколом без установки соединения (connectionless).
 
 ## Построение объектных моделей (DOM, CSSOM)
 

@@ -180,12 +180,15 @@ const runTests = (powDataArray) => {
 ```
 Считываем данные из файла и запустить тесты.
 ```js
-const powDataArray = await readPowData('pow-data.txt');
+let powDataArray = await readPowData('pow-data.txt');
 runTests(powDataArray);
 ```
-Загружаем данные из другого файла, снова повторяем тесты.
+Загружаем данные из другого файла или же из другого источника, снова запускаем тесты.
 ```js
-const powDataArray = await readPowData('pow-data-2.txt');
+powDataArray = await readPowData('pow-data-2.txt');
+runTests(powDataArray);
+
+powDataArray = await getPowDataFromDB();
 runTests(powDataArray);
 ```
 

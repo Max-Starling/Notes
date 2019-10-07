@@ -164,7 +164,7 @@ const runTests = () => {
 const fs = require('fs');
 
 const readPowData = async (filename) => {
-  const powData = await fs.readFile(filename, 'utf8'); // async, await доступены в fs с Node 11+
+  const powData = await fs.readFile(filename, 'utf8'); // async, await доступны в fs с Node 11+
   return powData.split(' ');
 };
 ```
@@ -190,6 +190,38 @@ runTests(powDataArray);
 
 powDataArray = await getPowDataFromDB();
 runTests(powDataArray);
+```
+
+## KDT
+
+**Keyword-Driven Testing (KDT)** — тестирование, управляемое ключевыми словами; подход, использующий ключевые слова, описывающие набор действий, необходимых для выполнения определённого шага тестового сценария.
+
+Для использования подхода нужно определить набор ключевых слов и сопоставить им действия (функции).
+
+В KDT используется что-то вроде таблиц, чтобы ключевые слова могли иметь параметры, поэтому подход иногда называют **Table-Driven Testing (TDT)**.
+
+### Алгоритм KDT
+* Считываем ключевые слова вместе с их параметрами из таблицы.
+* Последовательно вызываем связанные с ключевыми словами функции.
+
+### Пример KDT
+
+Сопоставим функции ключевым словам.
+```js
+/* keyword "Login" */
+const login = (username, password) => { /* ... */ };
+
+/* keyword "Send Email" */
+const sendEmail = (receiver, message) => { /* ... */ };
+
+/* keyword "Logout" */
+const logout = () => { /* ... */ };
+```
+```js
+Login         | user                  | pass123
+Send Email    | another-user@mail.com | Hello!
+Send Email    | my-friend@mail.com    | Hi!
+Logout
 ```
 
 # Тестовые объекты

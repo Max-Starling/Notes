@@ -206,7 +206,11 @@ runTests(powDataArray);
 
 ### Пример KDT
 
-Сопоставим функции ключевым словам.
+Пусть наш тестовый сценарий требует входа в пользовательский аккаунт, отправки двух сообщений на разные адреса и выход из аккаунта.  
+
+Определяем ключевые слова: `Login`, `Send Email`, `Logout`.  
+
+Сопоставим им функции.
 ```js
 /* keyword "Login" */
 const login = (username, password) => { /* ... */ };
@@ -217,11 +221,71 @@ const sendEmail = (receiver, message) => { /* ... */ };
 /* keyword "Logout" */
 const logout = () => { /* ... */ };
 ```
+
+Теперь можно описать тестовый сценарий, например, следующим файлом (одна строка - одно ключевое слово).
 ```js
+/* user-test.txt */
 Login         | user                  | pass123
 Send Email    | another-user@mail.com | Hello!
 Send Email    | my-friend@mail.com    | Hi!
 Logout
+```
+
+Обработаем этот файл.
+```js
+const fs = require('fs');
+
+const removeExtraSpaces = str => str.replace(/ +\| +/g, '|');
+
+const readTestData = async (filename) => {
+  const testData = await fs.readFile(filename, 'utf8');
+ 
+  // убираем лишние пробелы в файле
+  const formattedTestData = removeExtraSpaces(testData);
+
+  // возвращаем массив строк файла
+  return formattedTestData.split('\n'); 
+};
+```
+Чтобы выполнять действие в зависимости от ключевого слова, можно использовать простую функцию с конструкцией `switch`.
+```js
+const makeAction = (keyword, params) => {
+  switch (keyword) {
+    case 'Login': return login(...params);
+    case 'Send Email': return sendEmail(...params);
+    case 'Logout': return logout();
+  };
+};
+```
+Осталось только считать строки из файла и выполнить то, что описано в каждой.
+```js
+  let rows = await readTestData('user-test.txt');
+  rows.forEach((row) => {
+    // выделяем ключевое слово и параметры в строке
+    const [keyword, ...params] = row.split('|');
+    // выполняем действие
+    makeAction(keyword, params);
+  });
+```
+Тут можно сделать вспомогательную функцию.
+```js
+const executeRows = (rows) => {
+  rows.forEach((row) => {
+    const [keyword, ...params] = row.split('|');
+    makeAction(keyword, params);
+  });
+};
+```
+Теперь можно выполнять любые последовательности, состоящие из определённых нами ключевых слов.
+```js
+  let rows = await readTestData('user-test.txt');
+  executeRows(rows);
+
+  rows = await readTestData('another-test.txt');
+  executeRows(rows);
+
+  rows = ['Login|admin|admin', 'Logout'];
+  executeRows(rows);
 ```
 
 # Тестовые объекты

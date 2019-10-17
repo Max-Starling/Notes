@@ -139,6 +139,8 @@ Controller, обрабатывающий основной запрос, пере
 
 *Presenter* также называют **Supervisor Controller**.
 
+![MVP](./assets/MVP.png)
+
 ### Особенности MVP 
 1) View пассивен (passive) и ничего не знает о Model. 
 2) Presenter не содержит бизнес-логики, он просто вызывает методы Model, а затем передаёт необходимые данные во View.  

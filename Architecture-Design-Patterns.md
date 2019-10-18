@@ -211,74 +211,97 @@ View и Controller в MVC составляют весь уровень пред�
 
 ### Пример реализации EBI
 
-- core/
--- entities/
---- article.ts
--- interactors/
---- article.ts
-- services/
--- requests/
---- article.ts
---- request.ts
--- responses/
---- article.ts
---- response.ts
--- index.ts
+```
+api/
+  article.ts
+core/  
+  entities/  
+    article.ts
+    entity.ts
+  interactors/  
+    article.ts  
+services/  
+  requests/  
+    article.ts  
+    request.ts  
+  responses/  
+    article.ts  
+    response.ts  
+  index.ts  
+```
 
-#### 
+#### Entities
 ```ts
-/* core/entities/article.ts */
-
-export interface Article {
+/* core/entities/entity.ts */
+export interface Entity {
   id: string;
+}
+
+/* core/entities/article.ts */
+import { Entity } from './entity.ts';
+
+export interface Article extends Entity {
   title: string;
 }
 
+const validate = (request: Article) => {
+  if (request.title.length === 0) {
+    throw new Error('Article\'s title must not be empty!');
+  }
+  return true;
+};
+```
+
+#### Interactors
+```ts
 /* core/interactors/article.ts */
 
+export const createArticle (request: CreateArticleRequest): CreateArticleResponse => {
+  
+}
 
+```
 
+#### Boundaries
+
+```ts
 /* services/article.ts */
-
 export interface ArticleBoundary {
-  createArticle(id: CreateArticleRequest): CreateArticleResponse;
-  findArticle(id: FindArticleRequest): FindArticleResponse;
+  createArticle(request: CreateArticleRequest): CreateArticleResponse;
+  findArticle(request: FindArticleRequest): FindArticleResponse;
 }
 ```
 
-#### Модели запросов и ответов
+#### Модели запросов (Request Models)
 ```ts
 /* services/requests/request.ts */
-
-// модель запроса (Request Model)
 export interface Request {}
 
 /* services/requests/article.ts */
+import { Request } from './request.ts';
 
-export interface FindArticleRequest {
+export interface FindArticleRequest extends Request {
   id: string;
 }
 
-export interface CreateArticleRequest {
+export interface CreateArticleRequest extends Request {
   title: string;
 }
-
+```
+#### Модели ответов (Response Models)
+```ts
 /* services/responses/response.ts */
+interface Response {}
 
-// модель ответа (Response Model)
-interface Response {
-  status: number;
-  data: any;
-}
+/* services/responses/article.ts */
+import { Response } from './response.ts';
 
-/* services/requests/article.ts */
-
-export interface FindArticleResponse {
+export interface FindArticleResponse extends Response {
   id: string;
   title: string;
 }
 
-export interface CreateArticleResponse {
+export interface CreateArticleResponse extends Response {
   id: string;
   title: string;
 }
@@ -518,6 +541,8 @@ interface IEmailService {
 
 Более того, любой внешний слой может напрямую обращаться к любому внутреннему.  
 Это позволяет избежать создания вспомогательных прокси-методов и классов, усложняющих код.
+
+![Onion Architecture](./assets/Onion.png)
 
 ### Ключевые принципы Луковой архитектуры
 * Приложение построено вокруг независимой объектной модели (в центре луковицы располагается модель предметной области, которая ни от чего не зависит).

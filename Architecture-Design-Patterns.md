@@ -173,6 +173,10 @@ Controller, обрабатывающий основной запрос, пере
 
 ![EBI](./assets/EBI.png)
 
+Схема работы в обозначениях, введённых автором книги.
+
+![EBI](./assets/EBI_2.png)
+
 ### Entity
 
 **Entities** содержат данные системы и всю логику, напрямую связанную с этими данными (такую логику, которая при внесении изменений в Entity тоже должна изменяться; меняется структура — меняются методы работы с ней). Эта логика не зависит от приложения.
@@ -257,6 +261,10 @@ const validate = (request: Article) => {
 /* core/interactors/article.ts */
 
 export const createArticle (request: CreateArticleRequest): CreateArticleResponse => {
+  
+}
+
+export const findArticle (request: FindArticleRequest): FindArticleResponse => {
   
 }
 

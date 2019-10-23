@@ -50,6 +50,26 @@ typeof function(){} // "function"
 
 В JavaScript замыкания создаются автоматически при создании функции.
 
+## Всплытие
+
+В JavaScript переменная может быть использована перед тем, как она была определена (declared) в коде.
+
+**Всплытие** (hoising) - поведение JavaScript, помещающее объявления (declarations) вверх текущей области видимости (current scope).
+
+Всплывают (hoist) сами объявления (declarations), но не присвоенные им значения (initializations).  
+Это связано с тем, что переменная создаётся в области видимости на первом этапе интерпретации, а инициализируется значением на втором.
+
+```js
+console.log(foo); // выведет undefined
+var foo = 5;
+```
+
+Всплывают переменные `var`, а `let` и `const` не всплывают, поскольку возникает `ReferenceError`.
+
+```js
+console.log(bar); // ReferenceError: Cannot access 'bar' before initialization
+let bar = 5;
+```
 
 ## Типы ошибок в JavaScript
 

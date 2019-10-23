@@ -56,19 +56,25 @@ typeof function(){} // "function"
 
 **Всплытие** (hoising) - поведение JavaScript, помещающее объявления (declarations) вверх текущей области видимости (current scope).
 
+```js
+foo = 3;
+console.log(foo); // выведет 3
+var foo;
+```
+
 Всплывают (hoist) сами объявления (declarations), но не присвоенные им значения (initializations).  
 Это связано с тем, что переменная создаётся в области видимости на первом этапе интерпретации, а инициализируется значением на втором.
 
 ```js
 console.log(foo); // выведет undefined
-var foo = 5;
+var foo = 3;
 ```
 
 Всплывают переменные `var`, а `let` и `const` не всплывают, поскольку возникает `ReferenceError`.
 
 ```js
 console.log(bar); // ReferenceError: Cannot access 'bar' before initialization
-let bar = 5;
+let bar = 3;
 ```
 
 ## Типы ошибок в JavaScript

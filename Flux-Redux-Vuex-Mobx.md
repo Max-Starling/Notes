@@ -15,6 +15,7 @@
   * [Структура MobX](#структура-mobx)
 * [Дополнительно](#дополнительно)
   * [Реализация Flux от Facebook и её использование](#реализация-flux-от-facebook-и-её-использование)
+  * [Redux Thunk vs Redux Saga](#redux-thunk-vs-redux-saga)
   * [Использование React с Redux](#использование-react-с-redux)
 
 # Flux
@@ -785,6 +786,48 @@ class ItemStore extends ReduceStore<IItemStore> {
 export default new ItemStore();
 ```
 
+## Redux Thunk vs Redux Saga
+
+### Redux Thunk
+
+**Thunk** — функция, которая оборачивает выражение, чтобы отложить его выполнение.  
+
+```js
+// обычный Action Creator
+const doSomething = params => ({ type: 'DO_SOMETHING', ...params });
+
+// обычный Bound Action Creator
+const boundDoSomething = params => dispatch({ type: 'DO_SOMETHING', ...params });
+```
+В обоих случаях нет места асинхронным функциям.
+
+Также можно заметить, что функция `dispatch(action)` сама по себе *возвращает Action*, то есть результат вызова функций `doSomething()` и `boundDoSomething()` одинаков: возвращается Action типа `DO_SOMETHNG`.
+
+Библиотека `redux-thunk` вместо возвращения Action или вызова `dispatch(action)` возвращает функцию, что позволяет отложить вызов функции `dispatch(action)`, а перед вызовом проводить какие-то дополнительные операции, в том числе и асинхронные.
+```js
+// Action Creator при использовании redux-thunk
+const doSomething = params => dispatch => dispatch({ type: 'DO_SOMETHING', ...params });
+
+// Action Creator c асинхронной операцией при использовании redux-thunk
+const doSomething = params => async (dispatch) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return dispatch({ type: 'DO_SOMETHING', ...params });
+};
+```
+Приятным бонусом является то, что в функции мы можем контролировать возвращаемое значения, поскольку не обязательно возвращать результат выполнения `dispatch(action)`).
+```js
+const doSomething = params => async (dispatch) => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  dispatch({ type: 'DO_SOMETHING', ...params });
+  const data = { /* ... */ };
+  return data;
+};
+```
+Таким образом можно вернуть какие-то данные в компоненту (например, пойманные ошибки).
+
+### Redux Saga
+
+
 ## Использование React с Redux
 
 ### Возможная структура
@@ -822,22 +865,6 @@ export default new ItemStore();
 ```
 ### Настройка
 
-**Thunk** - функция, которая оборачивает выражение, чтобы отложить его выполнение.  
-При помощи библиотеки redux-thunk можно отложить вызов функции dispatch, чтобы появилась возможность вызывать асинхронные функции:
-```js
-// без redux-thunk
-const doSomething = params => ({ type: 'DO_SOMETHING', ...params });
-
-// redux-thunk без асинхронной операции
-const doSomething = params => dispatch => dispatch({ type: 'DO_SOMETHING', ...params });
-
-// redux-thunk c асинхронной операцией
-
-const doSomething = params => async (dispatch) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  return dispatch({ type: 'DO_SOMETHING', ...params });
-};
-```
 0) Устанавливаем зависимости
 ```npm
 npm i redux react-redux redux-thunk

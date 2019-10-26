@@ -848,7 +848,30 @@ console.log(it.next()); // { value: 1, done: false }
 console.log(it.next()); // { value: 2, done: false }
 console.log(it.next()); // { value: undefined, done: true }
 ```
+Для началы работы с сагами необходимо создать сагу-наблюдателя и сагу-рабочего.
 
+**Сага-наблюдатель** (watcher Saga) следит за Actions и создаёт новую задачу на каждый отправленный Action. 
+```js
+import { takeEvery } from 'redux-saga/effects'
+
+function* watchFetchArticles() {
+  yield takeEvery('FETCH_ARTICLES', fetchArticles);
+}
+```
+**Сага-рабочий** (worker Saga) использует эффекты (Effects).
+```js
+import API from '/* ... */';
+import { call, put } from 'redux-saga/effects'
+
+function* fetchArticles() {
+  try {
+    const articles = yield call(() => API.get('/articles'));
+    yield put({ type: 'FETCH_SUCCESS', payload: articles });
+  } catch (error) {
+    yield put({ type: 'FETCH_ERROR', payload: error });
+  }
+}
+```
 
 ## Использование React с Redux
 

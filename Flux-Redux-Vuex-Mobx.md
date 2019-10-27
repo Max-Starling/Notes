@@ -827,7 +827,7 @@ const doSomething = params => async (dispatch) => {
 
 ### Redux Saga
 
-**Saga** - архитектурный паттерн их микросервисной архитектуры для реализации транзакции, охватывающей (span) несколько сервисов. 
+**Saga** — архитектурный паттерн их микросервисной архитектуры для реализации транзакции, охватывающей (span) несколько сервисов. 
 
 Внутри сервиса доступны ACID-транзакции, но между несколькими сервисами их использовать нельзя, поэтому и используется *Saga*, последовательно запускающая локальные транзакции в каждом сервисе. В случае, если какая-нибудь локальная транзакция из последовательности не проходит, Saga отменяет всю последовательность при помощи компенсирующих транзакций.
 
@@ -850,7 +850,7 @@ console.log(it.next()); // { value: undefined, done: true }
 ```
 Для началы работы с сагами необходимо создать сагу-наблюдателя и сагу-рабочего.
 
-**Сага-наблюдатель** (watcher Saga) следит за Actions и создаёт новую задачу на каждый отправленный Action. 
+**Сага-наблюдатель** (Watcher Saga) следит за Actions и создаёт новую задачу на каждый отправленный Action при помощи вспомогательной функции `takeEvery`. 
 ```js
 import { takeEvery } from 'redux-saga/effects'
 
@@ -858,20 +858,53 @@ function* watchFetchArticles() {
   yield takeEvery('FETCH_ARTICLES', fetchArticles);
 }
 ```
-**Сага-рабочий** (worker Saga) использует эффекты (Effects).
+
+**Эффект** (Effect) — простой JavaScript-объект (plain JS Object), содержащий необходимые инструкции, которые должен выполнить `redux-saga middleware`. Например: отправить (dispatch) Action, вызвать асинхронную функцию.
+
+**Сага-рабочий** (Worker Saga) использует эффекты, чтобы обработать Action.
 ```js
-import API from '/* ... */';
+import axios from 'axios';
 import { call, put } from 'redux-saga/effects'
 
 function* fetchArticles() {
   try {
-    const articles = yield call(() => API.get('/articles'));
+    const articles = yield call(axios.get, '/articles');
     yield put({ type: 'FETCH_SUCCESS', payload: articles });
   } catch (error) {
     yield put({ type: 'FETCH_ERROR', payload: error });
   }
 }
 ```
+
+В примере выше используются два основных эффекта.  
+Первым эффектом является `call(fn, ...args)`, описывающий асинхронный HTTP-запрос.
+```js
+{
+  CALL: {
+    fn: axios.get,
+    args: ['/articles']
+  }
+}
+```
+Вторым — `put(action)`, заменяющий `dispatch`.
+```js
+{
+  PUT: {
+    action: { type: 'FETCH_SUCCESS', payload: articles }
+  }
+}
+```
+
+Таким образом, вместо вызова сайд-эффектов напрямую
+```js
+function* fetchArticles() {
+  const articles = yield axios.get('/articles');
+  dispatch({ type: 'FETCH_SUCCESS', articles })
+}
+```
+используются Эффекты, являющиеся простыми объектами, что вносит большую гибкость и позволяет с лёгкостью их тестировать.
+
+Если есть несколько отправленных одновременно Actions, то `takeEvery` вызывает несколько экземпляров саги-рабочего, наделяя саги свойством параллелизма (concurrency).
 
 ## Использование React с Redux
 

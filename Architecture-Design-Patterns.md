@@ -714,9 +714,7 @@ interface IEmailService {
 ```ts
 class Singleton {
   private static instance: Singleton;
-
-  private constructor() { }
-
+  private constructor() {}
   static getInstance(): Singleton {
     if (!Singleton.instance) {
       Singleton.instance = new Singleton();
@@ -727,7 +725,6 @@ class Singleton {
 
 const singletonA = Singleton.getInstance();
 const singletonB = Singleton.getInstance();
-
 console.log(singletonA === singletonB); // true
 ```
 ## Структурные
@@ -818,3 +815,8 @@ console.log(singletonA === singletonB); // true
 Модули верхних уровней не должны зависеть от модулей нижних уровней.  
 Оба типа модулей должны зависеть от абстракций.
 
+## Принцип разделения ответственности
+
+**Принцип разделения ответственности** (Separation of Concerns, SoC) предполагает разделение приложения на функциональные блоки, как можно меньше перекрывающие функции друг друга.
+
+Объектно-ориентированные языки разделяют ответственность между объектами, процедурные языки - между процедурами и функциями, микросервисная архитектура - между сервисами. Многие архитектуры стремятся отделить представление (Presentation) от бизнес-логики (Business Logic) приложения, некоторые архитектуры дополнительно разделяют бизнес-логику на предметную область (Domain) и на её конкретную реализацию. OOCSS разделяет структурные свойства (Structure) и свойства оформления (Skin). В сетевой модели OSI протокол HTTP отвечает за взаимодействие с пользователем - прикладной уровень (Application layer), за саму передачу данных отвечает протокол TCP - транспортный уровень (Transport  layer). 

@@ -710,6 +710,26 @@ interface IEmailService {
 
 Часто считается антипаттерном, поскольку нарушает модульность кода (похож на глобальную переменную).
 
+Для реализации одиночки пишется класс с приватным конструктором; стратическим полем, хранящим экземпляр (instance) класса, и статическим методом, создающим и сохраняющим экземпляр при первом обращении и возвращает при последующих.
+```ts
+class Singleton {
+  private static instance: Singleton;
+
+  private constructor() { }
+
+  static getInstance(): Singleton {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton();
+    }
+    return Singleton.instance;
+  }
+}
+
+const singletonA = Singleton.getInstance();
+const singletonB = Singleton.getInstance();
+
+console.log(singletonA === singletonB); // true
+```
 ## Структурные
 
 ## Поведенческие

@@ -828,8 +828,50 @@ console.log(singletonA === singletonB); // true
 Абстракции не должны зависеть от деталей.  
 Детали должны зависеть от абстракций.
 
-Модули верхних уровней не должны зависеть от модулей нижних уровней.  
+Модули верхних уровней (high-level modules) не должны зависеть от модулей нижних уровней (low-level modules).  
 Оба типа модулей должны зависеть от абстракций.
+
+Пусть у нас есть класс `Service` (модуль верхнего уровня), который использует класс `Repository` (модуль нижнего уровня) и, соответственно, зависит от него. Аналогично, класс `Repository` использует класс-сущность `User`.
+```ts
+class UserService {
+  repo: UserRepository;
+  constructor () {
+    this.repo = UserRepositoryFactory();
+  }
+}
+
+const UserRepositoryFactory = (): UserRepository => new UserRepository();
+
+class User {
+  id: string;
+  name: string;
+  constructor (id: string, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+class UserRepository {
+  constructor () {}
+  getUserById(id: string): User { /* ... */ }
+}
+```
+В примере выше использован паттерн проектирования "Фабрика", чтобы вынести логику создания объектов из сервиса (Inversion of Control).
+
+Выделим абстракцию, определив интерфейсы.
+```js
+interface IUser {
+  id: string;
+  name: string;
+}
+
+interface IUserRepository {
+  getUserById(id: string): IUser
+}
+```
+Заменяем в `UserService` строчку `repo: UserRepository` на `repo: IUserRepository` и в `UserRepository` строчку `getUserById(id: string): User` на `getUserById(id: string): IUser`. Теперь модули верхних уровней не зависят от модулей нижних уровней, а зависят от интерфейсов, то есть абстракции.
+
+Заменим также строчку `class User {}` на `class User implements IUser {}`,  строчку `class UserRepository {}` на `class UserRepository implements IUserRepository {}`. Теперь модули нижних уровней (классы; детали реализации) зависят от абстракции, но не наоборот.
 
 ## Принцип разделения ответственности (SoC)
 

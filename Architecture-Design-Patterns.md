@@ -836,7 +836,64 @@ class EmployeeInjector {
 ```
 Поскольку начальное значение `Salary` не задано в примере, пришлось сделать его необязательным (`?:`) в интерфейсе `IEmployee` и классе `Employee` во избежание ошибок инициализации. Задать начальное значение *внедрением свойства* нельзя. 
 
-**Внедрение метода** (Method Injection):
+**Внедрение метода** (Method Injection): зависимость предоставляется через метод интерфейса или класса (`setSalary(salary)`).
+```ts
+/* определяем метод интерфейса, принимающий salary */
+interface IEmployeeMethods {
+  setSalary: (salary: ISalary) => void;
+}
+
+/* реализуем метод интерфейса в классе */
+class Employee implements IEmployeeMethods {
+  salary?: ISalary;
+
+  constructor() {}
+
+  setSalary(salary: ISalary): void {}
+}
+```
+Инжектор в этом случае:
+```ts
+class EmployeeInjector {
+  emp: IEmployee;
+
+  constructor() {
+    this.emp = new Employee();
+    const salary = new Salary(500, '$');
+    /* приводим this.emp к типу интерфейса, чтобы вызвать метод */
+    (<IEmployeeMethods>this.emp).setSalary(salary);
+  }
+}
+```
+
+Внедрение зависимостей на примере модулей:  
+Пусть есть два модуля A и B, модуль B использует модуль A.  
+Простой случай включения модуля:
+```js
+/* B.js */
+const A = require('A');
+
+module.exports = {
+  /* работа с модулем A */
+};
+```
+*Внедрение зависимости*:
+```js
+/* B.js */
+
+module.exports = (A) => {
+  /* работа с модулем A */
+};
+```
+```js
+/* C.js */
+const A = require('A');
+const B = require('B');
+
+module.exports = {
+  B: B(A);
+};
+```
 
 ## Структурные
 

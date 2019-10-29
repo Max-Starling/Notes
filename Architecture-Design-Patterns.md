@@ -27,10 +27,10 @@
 - [Принципы проектирования](#принципы-проектирования)
   - [Поддерживаемый код](#поддерживаемый-код)
   - [Принципы пакетов](#принципы-пакетов)
-  - [Основные принципы ООП](#основные-принципы-ооп)
-  - [Принципы SOLID](#принципы-solid)
   - [Принцип разделения ответственности (SoC)](#принцип-разделения-ответственности-soc)
   - [Принцип инверсии управления (IoC)](#принцип-инверсии-управления-ioc)
+  - [Основные принципы ООП](#основные-принципы-ооп)
+  - [Принципы SOLID](#принципы-solid)
   - [Принцип DRY](#принцип-dry)
   - [Принцип KISS](#принцип-kiss)
   - [Принцип YAGNI](#принцип-yagni)
@@ -733,6 +733,111 @@ const singletonA = Singleton.getInstance();
 const singletonB = Singleton.getInstance();
 console.log(singletonA === singletonB); // true
 ```
+
+### Внедрение зависимостей
+
+**Внедрение зависимостей** (Dependency Injection) — порождающий паттерн, реализующий *принцип инверсии управления* (IoC). 
+
+*Внедрение зависимостей* позволяет полностью вынести создание объектов, от которых зависит некоторый класс, за пределы этого класса, предоставляя эти объекты другим путём.
+
+*Внедрение зависимостей* вводит следующие 3 понятия
+* **Клиет** — класс, зависимый (dependent) от *Сервиса*.
+* **Сервис** — класс, предоставляющий свой объект *Клиенту*.
+* **Инжектор** — класс, внедряющий объект *Сервиса* в *Клиент*.
+
+Возьмём пример из раздела с *принципом инверсии управления* и улучшим его при помощи *принципа инверсии зависимостей* (DIP), заменив классы на интерфейсы, где это возможно.
+```ts
+interface ISalary {
+  value: number;
+  currency: string;
+}
+
+interface IEmployee {
+  salary: ISalary;
+}
+
+const SalaryFactory = (value: number, currency: string): ISalary => new Salary(value, currency);
+
+class Employee implements IEmployee {
+  salary: ISalary;
+
+  constructor() {
+    this.salary = SalaryFactory(500, '$');
+  }
+
+  getSalary() {
+    return this.salary.toString();
+  }
+}
+
+class Salary implements ISalary {
+  value: number;
+  currency: string;
+
+  constructor(value: number, currency: string) {
+    this.value = value;
+    this.currency = currency;
+  }
+
+  toString() {
+    return `${this.value}${this.currency}`;
+  }
+}
+```
+Паттерн "Фабрика" отвечает за создание объекта класса `Salary`, но само создание (пусть и при помощи фабрики) всё ещё происходит в классе `Employee`.
+
+В данном примере класс `Employee` — *Клиент*, `Salary` — *Сервис*.  
+Рассмотрим 3 способа, как можно написать *Инжектор*, который назовём `EmployeeInjector`.
+
+**Внедрение в конструктор** (Constructor Injection): зависимость предоставляется через параметры конструктора (`constructor(salary:  ISalary)`).
+```ts
+class Employee implements IEmployee {
+  salary: ISalary;
+
+  constructor(salary: ISalary) {
+    this.salary = salary;
+  }
+}
+```
+Инжектор в этом случае:
+```ts
+class EmployeeInjector {
+  emp: IEmployee;
+
+  constructor() {
+    const salary = new Salary(500, '$');
+    this.emp = new Employee(salary);
+  }
+}
+```
+
+**Внедрение свойства** (Property Injection): зависимость предоставляется через публичное свойство (`emp.salary`).
+```ts
+interface IEmployee {
+  salary?: ISalary;
+}
+
+class Employee implements IEmployee {
+  salary?: ISalary;
+
+  constructor() {}
+}
+```
+Инжектор в этом случае:
+```ts
+class EmployeeInjector {
+  emp: IEmployee;
+
+  constructor() {
+    this.emp = new Employee();
+    this.emp.salary = new Salary(500, '$');
+  }
+}
+```
+Поскольку начальное значение `Salary` не задано в примере, пришлось сделать его необязательным (`?:`) в интерфейсе `IEmployee` и классе `Employee` во избежание ошибок инициализации. Задать начальное значение *внедрением свойства* нельзя. 
+
+**Внедрение метода** (Method Injection):
+
 ## Структурные
 
 ## Поведенческие
@@ -780,6 +885,72 @@ console.log(singletonA === singletonB); // true
 * **Acyclic-Dependencies Principle (ADP)**. Циклы в графе пакетных зависимостей недопустимы.
 * **Stable-Dependencies Principle (SDP)**. Зависимости в направлении стабильности. Часто меняющиеся части системы должны зависеть от редко меняющихся (стабильных), но не наоборот. 
 * **Stable-Abstractions Principle (SAP)**. Стабильные пакеты должны быть более абстрактными и содержать те классы и модули, которые можно расширять, а не те, которые должны изменяться. При изменении классов в пакете велика вероятность изменений их использования, а значит и изменений в зависимых пакетах.
+
+## Принцип разделения ответственности (SoC)
+
+**Принцип разделения ответственности** (Separation of Concerns, SoC) предполагает разделение приложения на функциональные блоки, как можно меньше перекрывающие функции друг друга.
+
+Объектно-ориентированные языки разделяют ответственность между объектами, процедурные языки — между процедурами и функциями, микросервисная архитектура — между сервисами. Многие архитектуры стремятся отделить представление (Presentation) от бизнес-логики (Business Logic) приложения, некоторые архитектуры дополнительно разделяют бизнес-логику на предметную область (Domain) и на её конкретную реализацию. OOCSS разделяет структурные свойства (Structure) и свойства оформления (Skin). В сетевой модели OSI протокол HTTP отвечает за взаимодействие с пользователем — прикладной уровень (Application layer), за саму передачу данных отвечает протокол TCP — транспортный уровень (Transport  layer). 
+
+## Принцип инверсии управления (IoC)
+
+**Принцип инверсии управления** (Inversion of Control, IoC) предполагает передачу, дилегирование управления из одного места в другое, что позволяет достичь слабой связанности (loose coupling) кода.
+
+Пример из жизни: человек может приготовить еду сам, а может просто заказать её, тогда ему не нужно заботиться о процессе приготовления пищи.  
+
+Путь есть два класса: `Employee`, отвечающий за рабочих, и `Salary`, отвечающий за заработную плату. 
+Пусть также каждый новый рабочий по умолчанию получает `500$`.
+```ts
+class Employee {
+  salary: Salary;
+
+  constructor() {
+    this.salary = new Salary(500, '$');
+  }
+
+  getSalary() {
+    return this.salary.toString();
+  }
+}
+
+class Salary {
+  value: number;
+  currency: string;
+
+  constructor(value: number, currency: string) {
+    this.value = value;
+    this.currency = currency;
+  }
+
+  toString() {
+    return `${this.value}${this.currency}`;
+  }
+}
+
+const emp = new Employee();
+console.log(emp.getSalary());
+```
+Класс `Employee` напрямую создаёт объект класса `Salary` в своём конструкторе, что делает их сильно связанными. Изменения в `Salary` влекут за собой непосредственные изменения в `Employee`.
+
+Более того, мы не можем изолированно протестировать класс `Employee`, поскольку не можем заменить создание объекта класса `Salary` заглушкой (stub) или заменить класс `Salary` макетом (mock).
+
+Сделаем фабрику, которая будет создавать Salary-объекты.
+```ts
+const SalaryFactory = (value: number, currency: string): Salary => new Salary(value, currency);
+```
+и заменим строку `this.salary = new Salary(500, '$')` на `this.salary = SalaryFactory(500, '$')`.
+
+Результат выполнения кода тот же, но мы ослабили связь между классами `Employee` и `Salary`, передав контроль над созданием объектов фабрике. Теперь, если класс `Salary` изменится, мы сможем оградить `Employee` от изменений, внеся изменения только в фабрику.
+
+Например, конструктор класса `Salary` должен теперь принимать один параметр вместо двух: `new Salary('500$')`, тогда фабрика изменится следующим образом
+```ts
+const SalaryFactory = (value: number, currency: string): Salary => new Salary(`${value}${currency}`);
+```
+
+<!-- Также мы теперь можем протестировать `Employee` независимо от `Salary` при помощи следующей заглушки:
+```ts
+const SalaryFactory = (): object => ({ value: 500, currency: '$', toString() { return this.value + this.currency; } });
+```-->
 
 ## Основные принципы ООП
 
@@ -872,72 +1043,6 @@ interface IUserRepository {
 Заменяем в `UserService` строчку `repo: UserRepository` на `repo: IUserRepository` и в `UserRepository` строчку `getUserById(id: string): User` на `getUserById(id: string): IUser`. Теперь модули верхних уровней не зависят от модулей нижних уровней, а зависят от интерфейсов, то есть абстракции.
 
 Заменим также строчку `class User {}` на `class User implements IUser {}`,  строчку `class UserRepository {}` на `class UserRepository implements IUserRepository {}`. Теперь модули нижних уровней (классы; детали реализации) зависят от абстракции, но не наоборот.
-
-## Принцип разделения ответственности (SoC)
-
-**Принцип разделения ответственности** (Separation of Concerns, SoC) предполагает разделение приложения на функциональные блоки, как можно меньше перекрывающие функции друг друга.
-
-Объектно-ориентированные языки разделяют ответственность между объектами, процедурные языки — между процедурами и функциями, микросервисная архитектура — между сервисами. Многие архитектуры стремятся отделить представление (Presentation) от бизнес-логики (Business Logic) приложения, некоторые архитектуры дополнительно разделяют бизнес-логику на предметную область (Domain) и на её конкретную реализацию. OOCSS разделяет структурные свойства (Structure) и свойства оформления (Skin). В сетевой модели OSI протокол HTTP отвечает за взаимодействие с пользователем — прикладной уровень (Application layer), за саму передачу данных отвечает протокол TCP — транспортный уровень (Transport  layer). 
-
-## Принцип инверсии управления (IoC)
-
-**Принцип инверсии управления** (Inversion of Control, IoC) предполагает передачу, дилегирование управления из одного места в другое, что позволяет достичь слабой связанности (loose coupling) кода.
-
-Пример из жизни: человек может приготовить еду сам, а может просто заказать её, тогда ему не нужно заботиться о процессе приготовления пищи.  
-
-Путь есть два класса: `Employee`, отвечающий за рабочих, и `Salary`, отвечающий за заработную плату. 
-Пусть также каждый новый рабочий по умолчанию получает `500$`.
-```ts
-class Employee {
-  salary: Salary;
-
-  constructor() {
-    this.salary = new Salary(500, '$');
-  }
-
-  getSalary() {
-    return this.salary.toString();
-  }
-}
-
-class Salary {
-  value: number;
-  currency: string;
-
-  constructor(value: number, currency: string) {
-    this.value = value;
-    this.currency = currency;
-  }
-
-  toString() {
-    return `${this.value}${this.currency}`;
-  }
-}
-
-const emp = new Employee();
-console.log(emp.getSalary());
-```
-Класс `Employee` напрямую создаёт объект класса `Salary` в своём конструкторе, что делает их сильно связанными. Изменения в `Salary` влекут за собой непосредственные изменения в `Employee`.
-
-Более того, мы не можем изолированно протестировать класс `Employee`, поскольку не можем заменить создание объекта класса `Salary` заглушкой (stub) или заменить класс `Salary` макетом (mock).
-
-Сделаем фабрику, которая будет создавать Salary-объекты.
-```ts
-const SalaryFactory = (value: number, currency: string): Salary => new Salary(value, currency);
-```
-и заменим строку `this.salary = new Salary(500)` на `this.salary = SalaryFactory(500)`.
-
-Результат выполнения кода тот же, но мы ослабили связь между классами `Employee` и `Salary`, передав контроль над созданием объектов фабрике. Теперь, если класс `Salary` изменится, мы сможем оградить `Employee` от изменений, внеся изменения только в фабрику.
-
-Например, конструктор класса `Salary` должен теперь принимать один параметр вместо двух: `new Salary('500$')`, тогда фабрика изменится следующим образом
-```ts
-const SalaryFactory = (value: number, currency: string): Salary => new Salary(`${value}${currency}`);
-```
-
-<!-- Также мы теперь можем протестировать `Employee` независимо от `Salary` при помощи следующей заглушки:
-```ts
-const SalaryFactory = (): object => ({ value: 500, currency: '$', toString() { return this.value + this.currency; } });
-```-->
 
 ## Принцип DRY
 

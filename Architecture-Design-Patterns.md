@@ -866,7 +866,7 @@ class EmployeeInjector {
 }
 ```
 
-Внедрение зависимостей на примере модулей:  
+*Внедрение зависимости* на примере *модулей*:  
 Пусть есть два модуля A и B, модуль B использует модуль A.  
 Простой случай включения модуля:
 ```js
@@ -893,6 +893,43 @@ const B = require('B');
 module.exports = {
   B: B(A);
 };
+```
+
+**IoC-контейнер, DI-контейнер** — *фреймворк*, реализующий *автоматическое внедрение зависимостей*. Он управляет созданием объектов и их временем жизни, а также внедряет зависимости в класс.
+
+*IoC-контейнер* создаёт объект какого-то класса и встраивает все объекты, от которых зависит класс, в конструктор, свойство или метод класса во время выполнения (at run-time) и утилизирует (dispose), когда это необходимо.
+
+*IoC-контейнер* предоставляет следующий жизненный цикл внедряемых зависимостей (DI lifecycle):
+* Регистрация (Register)
+* Разрешение (Resolve)
+* Ликвидация (Dispose)
+
+Пример использования *IoC-контейнера* в *NodeJS-приложении*.
+```js
+const awilix = require('awilix');
+
+const container = awilix.createContainer({
+  injectionMode: awilix.InjectionMode.PROXY
+});
+
+const createUserRepository = ({ db }) => ({
+  getUserById(id) { return db.query(/* ... */) }
+});
+
+function Database(connectionString) { /* ... */ }
+
+/* регистрация */
+container.register({
+  connectionString: awilix.asValue('/* ... */'),
+  userRepository: awilix.asFunction(createUserRepository),
+  db: awilix.asClass(Database),
+});
+
+/* разрешение и использование */
+container.resolve('userRepository').getUserById('1');
+
+/* ликвидация контейнера */
+container.dispose();
 ```
 
 ## Структурные

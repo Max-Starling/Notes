@@ -872,13 +872,12 @@ const SalaryFactory = (value: number, currency: string): Salary => new Salary(va
 ```
 и заменим строку `this.salary = new Salary(500)` на `this.salary = SalaryFactory(500)`.
 
-Результат выполнения кода тот же, но мы ослабили связь между классами `Employee` и `Salary`. Теперь, если класс `Salary` изменится, мы сможем оградить `Employee` от изменений, внеся изменения в фабрику.
+Результат выполнения кода тот же, но мы ослабили связь между классами `Employee` и `Salary`, передав контроль над созданием объектов фабрике. Теперь, если класс `Salary` изменится, мы сможем оградить `Employee` от изменений, внеся изменения только в фабрику.
 
 Например, конструктор класса `Salary` должен теперь принимать один параметр вместо двух: `new Salary('500$')`, тогда фабрика изменится следующим образом
 ```ts
 const SalaryFactory = (value: number, currency: string): Salary => new Salary(`${value}${currency}`);
 ```
-`Employee` остался без изменений.
 
 ## Принцип DRY
 

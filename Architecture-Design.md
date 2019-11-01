@@ -1302,6 +1302,91 @@ shapes.forEach(shape => shape.draw());
 
 ### Абстракция
 
+**Абстрагировать** объект означает отбросить его маловажные, несущественные детали, чтобы выделить самую важную часть. Что войдёт в "самую важную часть", зависит от решаемой задачи.
+
+**Абстракция** — использование только тех характеристик объекта (свойств и методов), которые с необходимой точностью представляют его данные в системе.
+
+*Абстракция* позволяет работать с объектами, не вдаваясь в особенности их реализации.
+
+У всего есть **уровни абстракции**.
+
+Пытаясь что-то описать, мы выбираем какой-то уровень абстракции.
+Например, мы можем описать птицу следующим образом.
+```ts
+class Bird {
+  age: number;
+  size: number;
+  name: string;
+}
+```
+Сейчас мы создали некоторую абстракцию, но также можем добавить некоторые другие детали, чтобы выйти на новый уровень абстракции.
+```ts
+class Bird {
+  age: number;
+  size: number;
+  name: string;
+  eat(): void { /* ... */ };
+  sleep(): void { /* ... */ };
+}
+```
+Хорошо подумав, мы решаем, что одного класса для нашего приложения мало: необходимы более конкретные виды птиц (чайка, лебедь). Помечаем класс `Bird` как абстрактный, чтобы нельзя было создавать экземпляры "неконкретных" птиц (`new Bird()`), а также помечаем некоторые его методы (в приложении голубь и лебедь могут спать и есть по-разному, пусть в них это и определяется).
+```ts
+abstract class Bird {
+  age: number;
+  size: number;
+  name: string;
+  abstract eat(): void;
+  abstract sleep(): void;
+}
+
+class Gull extends Bird {
+  eat(): void {
+    console.log('eating a fish');
+  }
+
+  sleep(): void {
+    console.log('sleep on the mountain');
+  }
+}
+
+class Dove extends Bird { /* ... */ }
+```
+Затем мы решаем, что есть плавающие и летающий птицы.
+```ts
+abstract class Bird { /* ... */ }
+
+abstract class SwimmingBird extends Bird {
+  abstract swim():void;
+}
+
+abstract class FlyingBird extends Bird {
+  abstract fly():void;
+}
+```
+Поскольку в TypeScript множественное наследование запрещено, а в абстрактных классах у нас нет реализованных методов, используем интерфейсы.
+```ts
+interface IBird {
+  age: number;
+  size: number;
+  name: string;
+  eat: () => void;
+  sleep: () => void;
+}
+
+interface ISwimmingBird extends IBird {
+  swim: () => void;
+}
+
+interface IFlyingBird extends IBird {
+  fly: () => void;
+}
+
+class Gull implements ISwimmingBird, IFlyingBird { /* ... */ }
+class Starling implements IFlyingBird { /* ... */ }
+class Chicken implements IBird { /* ... */ }
+```
+Можно продолжать детализировать и дальше, если этого требует приложение.
+
 ## Принципы SOLID
 
 Принципы SOLID были разработаны Робертом С. Мартином.

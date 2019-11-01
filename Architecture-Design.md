@@ -1105,8 +1105,11 @@ const fn = () => {
 
 console.log(a); // ReferenceError: a is not defined
 console.log(b); // ReferenceError: a is not defined
-console.log(fn()) // 3
+console.log(fn()); // 3
 ```
+
+Жизненный пример инкапсуляции:  
+Вентилятор. Его интерфейс представлен несколькими кнопками: вкл/выкл и иногда регулировка мощности. Пользователь просто жмёт на кнопки, а внутри вентилятора проиходят процессы, скрытые от глаз пользователя. В частности, работа редуктора и электродвигателя.
 
 ### Наследование
 
@@ -1153,6 +1156,118 @@ class ColorfullPoint extends Point {
 
 ### Полиморфизм
 
+**Полиморфизм** — способность предоставлять один и тот же интерфейс для различных реализаций.
+
+**Ad-hoc-полиморфизм** поддерживается посредством перегрузки (overload) функций, операторов и методов, в слаботипизированных языках - неявное приведение типов.
+
+* Перегрузка операторов в C++.  
+
+Задана структура `Point`, описывающая точку на плоскости `(x, y)`.  
+В примере перегружаются операторы сложения и вывода для структуры `Point`.
+```cpp
+#include <iostream>
+using namespace std;
+
+typedef struct point {
+  int x;
+  int y;
+
+  point(int x0 = 0, int y0 = 0) {
+    x = x0;
+    y = y0;
+  }
+} Point;
+
+/* перегрузка оператора вывода */
+ostream& operator << (ostream &stream, const Point &p) {
+  return stream << "(" << p.x << ", " << p.y << ")";
+}
+
+/* перегрузка оператора сложения */
+Point operator + (const Point &A, const Point &B) {
+  return Point (A.x + B.x, A.y + B.y);
+}
+
+int main() {
+  Point A(1, 2);
+  Point B(3, 4);
+  cout << A + B; /* выведет (4, 6) */
+  return 0;
+}
+```
+
+* Перегрузка функций и методов в TypeScript.
+
+Задан класс `Point`, описывающий точку на координатной прямой `(x)`.  
+В примере перегружены методы и функции, связанные со сложением точек.
+```ts
+/* перегрузка функции */
+function sum(A: Point, B: Point): Point;
+function sum(A: Point, B: number): Point;
+function sum(A: any, B: any): Point {
+    return new Point(A + B);
+}
+
+class Point {
+  x = 0;
+  constructor(x: number) {
+    this.x = x;
+  }
+  valueOf() { return this.x; }
+  /* перегрузка методов */
+  add(point: number): void;
+  add(point: Point): void;
+  add(point: any): void {
+    this.x += point;
+  }
+}
+
+const A = new Point(1);
+A.add(10);
+console.log(A); // // Point { x: 11 }
+console.log(sum(A, 6)); // Point { x: 17 }
+
+const B = new Point(20);
+console.log(sum(A, B)); // Point { x: 31 }
+```
+
+* Неявное приведение типов в JavaScript.
+```js
+1 + "7" // 17
+1 + true // 2
+true == 'true' // false
+```
+
+
+**Параметрический полиморфизм** позволяет определять функцию или тип данных обобщённо (generically), чтобы их значения обрабатывались идентично вне зависимости от их типа.
+
+```ts
+function valueOf<T>(obj: T): any {
+  return obj.valueOf();
+}
+
+/* экземпляр класса Point из примеров выше */
+const A = new Point(17);
+console.log(valueOf<Point>(A));
+```
+```ts
+interface Item<T> {
+  field: T;
+  method(prop: T) => T; 
+}
+
+class NumberItem extends Item<number> {
+  field: number;
+  method(prop: number) => prop + 1;
+}
+
+```
+```ts
+type Props = { /* ... */ };
+type State = { /* ... */ };
+
+class MyComponent extends React.Component<Props, State> { /* ... */ }
+```
 ### Абстракция
 
 ## Принципы SOLID

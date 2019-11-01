@@ -1021,7 +1021,7 @@ class Salary {
   }
 }
 
-const emp = new Employee();
+const emp: Employee = new Employee();
 console.log(emp.getSalary());
 ```
 Класс `Employee` напрямую создаёт объект класса `Salary` в своём конструкторе, что делает их сильно связанными. Изменения в `Salary` влекут за собой непосредственные изменения в `Employee`.
@@ -1063,7 +1063,7 @@ class BlackBox {
   }
 }
 
-const box = new BlackBox();
+const box: BlackBox  = new BlackBox();
 box.start();
 console.log(box.state); // Error: Property 'state' is private and only accessible within class 'BlackBox'.
 ```
@@ -1088,7 +1088,7 @@ class WhiteBox extends BlackBox {
   }
 }
 
-const box = new WhiteBox();
+const box: WhiteBox = new WhiteBox();
 box.logState(); // off
 box.start();
 box.logState(); // on
@@ -1274,7 +1274,7 @@ class Assistant {
   }
 }
 
-const Sara = new Assistant();
+const Sara: Assistant = new Assistant();
 Sara.say(SARA_PHRASES.hi);
 ```
 

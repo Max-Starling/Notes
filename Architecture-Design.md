@@ -979,13 +979,26 @@ const duck = DuckFactory.create();
 
 const flyingBirds: IFlyingBird[] = [dove, duck];
 ```
+Использовать фабрики очень удобно, поскольку мы избегаем использования оператора `new` напрямую, инкапсулируя эту логику внутри метода.
+Это позволяет также инкапсулировать внутри метода некоторые общие свойства для какой-то подгруппы объектов, не дублируя при этом код и не создавая новый класс для них (не считая самой фабрики).
+```ts
+class BlackDoveFactory implements IFlyingBirdFactory {
+  create(): IFlyingBird {
+    return new Dove({ color: 'black', size: 'large' });
+  }
+}
+```
+
 Сделать что-то похожее можно при помощи функций, но это уже нельзя назвать фабричным методом.
 ```ts
 const createDove = (): Dove => new Dove();
-const createBlackDove = (): Dove => new Dove({ color: 'black' });
+const createWhiteDove = (): Dove => new Dove({ color: 'white', gender: 'female' });
+const createBlackDove = (): Dove => new Dove({ color: 'black', gender: 'male' });
 
 /* создаём 5 чёрных лебедей */
-const blackDoves: Dove[] = [...new Array(5)].map(createBlackDove);
+const doves: Dove[] = [...new Array(5)].map(createBlackDove);
+/* добавляем к ним одного белого */
+doves.push(createWhiteDove());
 ```
 
 ### Абстрактная фабрика

@@ -708,7 +708,12 @@ interface IEmailService {
 
 ## Порождающие
 
-**Порождающие паттерны** отвечают за удобное и безопасное создание новых объектов (групп объектов).
+**Порождающие паттерны** отвечают за удобное и безопасное создание новых объектов или групп объектов.
+
+- [Одиночка (Singleton)](#одиночка)
+- [Внедрение зависимостей (Dependency Injection)](#внедрение-зависимостей)
+- [Фабричный метод (Factory Method)](#фабричный-метод)
+- [Абстрактная фабрика (Abstract Factory)](#абстрактная-фабрика)
 
 ### Одиночка
 
@@ -787,7 +792,10 @@ class Salary implements ISalary {
 Паттерн "Фабрика" отвечает за создание объекта класса `Salary`, но само создание (пусть и при помощи фабрики) всё ещё происходит в классе `Employee`.
 
 В данном примере класс `Employee` — *Клиент*, `Salary` — *Сервис*.  
-Рассмотрим 3 способа, как можно написать *Инжектор*, который назовём `EmployeeInjector`.
+Рассмотрим 3 способа, как можно написать *Инжектор*, который назовём `EmployeeInjector`:
+* *Внедрение в конструктор*
+* *Внедрение свойства*
+* *Внедрение метода*
 
 **Внедрение в конструктор** (Constructor Injection): зависимость предоставляется через параметры конструктора (`constructor(salary:  ISalary)`).
 ```ts
@@ -931,6 +939,58 @@ container.resolve('userRepository').getUserById('1');
 /* ликвидация контейнера */
 container.dispose();
 ```
+
+### Фабричный метод
+
+**Фабричный метод** (Factory Method) — порождающий паттерн, определяющий интерфейс для создания объекта некоторого класса, при этом решение о том, какой класс будет у объекта, принимается в дочернем классах.
+
+
+Связываем объекты разных классов в одно семейство, характеризующее их общие черты.
+
+Лебеди и утки являются летающими птицами. Пусть их классы `Dove` и `Duck` реализуют общий интерфейс `IFlyingBird`. 
+```ts
+interface IFlyingBird { /* ... */ }
+class Dove implements IFlyingBird { /* ... */ }
+class Duck implements IFlyingBird { /* ... */ }
+```
+Описываем абстрактный фабричный метод, создающий летающий птиц, и реализуем его в конкретных классах (фабриках).
+```ts
+interface IFlyingBirdFactory {
+  create(): IFlyingBird /* фабричный метод */
+}
+
+class DoveFactory implements IFlyingBirdFactory {
+  create(): IFlyingBird {
+    return new Dove();
+  }
+}
+
+class DuckFactory implements IFlyingBirdFactory {
+  create(): IFlyingBird {
+    return new Duck();
+  }
+}
+
+const doveFactory = new DoveFactory();
+const dove = DoveFactory.create();
+
+const duckFactory = new DuckFactory();
+const duck = DuckFactory.create();
+
+const flyingBirds: IFlyingBird[] = [dove, duck];
+```
+Сделать что-то похожее можно при помощи функций, но это уже нельзя назвать фабричным методом.
+```ts
+const createDove = (): Dove => new Dove();
+const createBlackDove = (): Dove => new Dove({ color: 'black' });
+
+/* создаём 5 чёрных лебедей */
+const blackDoves: Dove[] = [...new Array(5)].map(createBlackDove);
+```
+
+### Абстрактная фабрика
+
+**Абстрактная фабрика** (Abstract Factory) — порождающий паттерн, позволяющий создавать семейство концептуально связанных объектов, не привязываясь к классам этих объектов.
 
 ## Структурные
 

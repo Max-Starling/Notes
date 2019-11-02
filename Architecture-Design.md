@@ -944,7 +944,6 @@ container.dispose();
 
 **Фабричный метод** (Factory Method) — порождающий паттерн, определяющий интерфейс для создания объекта некоторого класса, при этом решение о том, какой класс будет у объекта, принимается в дочернем классах.
 
-
 Связываем объекты разных классов в одно семейство, характеризующее их общие черты.
 
 Лебеди и утки являются летающими птицами. Пусть их классы `Dove` и `Duck` реализуют общий интерфейс `IFlyingBird`. 
@@ -1004,6 +1003,86 @@ doves.push(createWhiteDove());
 ### Абстрактная фабрика
 
 **Абстрактная фабрика** (Abstract Factory) — порождающий паттерн, позволяющий создавать семейство концептуально связанных объектов, не привязываясь к классам этих объектов.
+
+Интерфейс `IFlyingBirdFactory` из примеров выше по сути описывает абстрактную фабрику с одним абстрактным методом. Рассмотрим случай, когда абстрактных методов несколько.
+
+Пусть у нас есть люди, собаки и кошки. Выделим кое-что, что объединяет их всех — разделение пола на мужской и женский.
+```ts
+interface ICreatureFactory {
+  createMale(): Male {}
+  createFemale(): Female {}
+}
+
+class HumanFactory implements ICreatureFactory {
+  createMale(): Male {
+    return new HumanFemale();
+  }
+  
+  createFemale(): Female {
+    return new HumanFemale();
+  }
+}
+```
+
+Пусть у нас есть набор инструментов: топор, кирка, лопата. Инструменты могут состоять из разных материалов, поэтому каждый из них должен быть абстрактным (чтобы нельзя было создать сущность без материала, то есть представлен либо абстрактным классом (если содержит реализации методов), либо интерфейсом.
+```ts
+abstract class Axe { /* ... */ }
+abstract class Pickaxe { /* ... */ }
+abstract class Shovel { /* ... */ }
+```
+Пусть материалами будут камень и железо.
+```ts
+class StoneAxe extends Axe { /* ... */ }
+class StonePickaxe extends Pickaxe { /* ... */ }
+class StoneShovel extends Shovel { /* ... */ }
+class IronAxe extends Axe { /* ... */ }
+class IronPickaxe extends Pickaxe { /* ... */ }
+class IronShovel extends Shovel { /* ... */ }
+```
+Создаём абстрактную фабрику, с помощью которой мы сможем создавать инструменты из нужного материала.
+```ts
+interface IToolFactory {
+  createAxe(): Axe {}
+  createPickaxe(): Pickaxe {}
+  createShovel(): Shovel {}
+}
+```
+Создаём фабрики, которые её реализуют.
+```ts
+class StoneToolFactory implements IToolFactory {
+  createAxe(): Axe {
+    return new StoneAxe();
+  }
+  createPickaxe(): Pickaxe {
+    return new StonePickaxe();
+  }
+  createShovel(): Shovel {
+    return new StoneShovel();
+  }
+}
+
+class IronToolFactory implements IToolFactory {
+  createAxe(): Axe {
+    return new IronAxe();
+  }
+  createPickaxe(): Pickaxe {
+    return new IronPickaxe();
+  }
+  createShovel(): Shovel {
+    return new IronShovel();
+  }
+}
+
+const toolFactory = new StoneToolFactory();
+
+const stoneTools = [
+  toolFactory.createAxe(),
+  toolFactory.createPickaxe(),
+  toolFactory.createShovel(),
+];
+```
+Такой подход очень расширяемый. Если в будущем мы захотим добавить новый материал для набора инструментов (например, сталь или золото), можно будет это очень просто реализовать созданием новой фабрики.
+
 
 ## Структурные
 

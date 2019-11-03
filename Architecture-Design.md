@@ -714,6 +714,7 @@ interface IEmailService {
 - [Внедрение зависимостей (Dependency Injection)](#внедрение-зависимостей)
 - [Фабричный метод (Factory Method)](#фабричный-метод)
 - [Абстрактная фабрика (Abstract Factory)](#абстрактная-фабрика)
+- [Строитель (Builder)](#строитель)
 
 ### Одиночка
 
@@ -746,7 +747,7 @@ console.log(singletonA === singletonB); // true
 *Внедрение зависимостей* позволяет полностью вынести создание объектов, от которых зависит некоторый класс, за пределы этого класса, предоставляя эти объекты другим путём.
 
 *Внедрение зависимостей* вводит следующие 3 понятия
-* **Клиет** — класс, зависимый (dependent) от *Сервиса*.
+* **Клиент** — класс, зависимый (dependent) от *Сервиса*.
 * **Сервис** — класс, предоставляющий свой объект *Клиенту*.
 * **Инжектор** — класс, внедряющий объект *Сервиса* в *Клиент*.
 
@@ -1083,6 +1084,136 @@ const stoneTools = [
 ```
 Такой подход очень расширяемый. Если в будущем мы захотим добавить новый материал для набора инструментов (например, сталь или золото), можно будет это очень просто реализовать созданием новой фабрики.
 
+### Строитель
+
+**Строитель** (Builder) — порождающий паттерн, предоставляющий возможность поэтапного (пошагового) создания составных объектов.
+
+Будем делать пиццу.  
+Пусть пицца может быть разных размеров, на разном тесте и с разными ингредиентами.
+```ts
+enum Size { Small = 'Small', Medium = 'Medium', Large = 'Large' }
+enum DoughType { Thin = 'Thin', Thick = 'Thick' }
+
+enum CheeseType { Mozzarella = 'Mozzarella', Parmesan = 'Parmesan', Gouda = 'Gouda' , Cheddar = 'Cheddar' }
+enum HamType { Chicken = 'Chicken', Pork = 'Pork', Turkey = 'Turkey' }
+enum MushroomsType { Chanterelles = 'Chanterelles', Champignons = 'Champignons' }
+enum SauceType { BBQ = 'BBQ', Ketchup = 'Ketchup', Ranch = 'Ranch', Garlic = 'Garlic' }
+enum VegetableType { Tomato = 'Tomato', Pepper = 'Pepper' }
+
+type Ingredient = CheeseType | HamType | MushroomsType | SauceType | VegetableType;
+
+class Pizza {
+  size: Size;
+  dough: DoughType;
+  ingredients: Ingredient[];
+  constructor(size: Size, dough: DoughType) {
+    this.size = size;
+    this.dough = dough;
+    this.ingredients = [];
+  }
+  addIngredient(ingredient: Ingredient): void {
+    this.ingredients.push(ingredient);
+  }
+}
+```
+Описываем *абстрактного строителя* `PizzaBuilder`, который может создать любую пиццу.  
+Его наследники будут переопределять метод `build`, в котором определяется последовательность добавления ингредиентов.
+```ts
+abstract class PizzaBuilder {
+  private pizza: Pizza;
+  constructor(size: Size, dough: DoughType) {
+    this.pizza = new Pizza(size, dough);
+  }
+  addCheese(cheese: CheeseType): void {
+    this.pizza.addIngredient(cheese);
+  };
+  addHam(ham: HamType): void {
+    this.pizza.addIngredient(ham);
+  };
+  addMushrooms(mushrooms: MushroomsType): void {
+    this.pizza.addIngredient(mushrooms);
+  };
+  addSauce(sauce: SauceType): void {
+    this.pizza.addIngredient(sauce);
+  };
+  addVegetable(vegetable: VegetableType): void {
+    this.pizza.addIngredient(vegetable);
+  };
+  abstract build(): void
+  async cook(time: number): Promise<Pizza> {
+    this.build();
+    await new Promise(resolve => setTimeout(resolve, time));
+    return this.pizza;
+  }
+}
+```
+Описываем *конкретного строителя* `MargheritaPizzaBuilder`, который может создать пиццу "Маргариту" (тонкое тесто, томаты, мацарелла, томатная паста).
+```ts
+class MargheritaPizzaBuilder extends PizzaBuilder {
+  constructor(size: Size) {
+    super(size, DoughType.Thin);
+  }
+  build(): void {
+    this.addVegetable(VegetableType.Tomato);
+    this.addCheese(CheeseType.Mozzarella);
+    this.addSauce(SauceType.Ketchup);
+  }
+}
+```
+Описываем *директора*, который знает, как работать со строителем, чтобы получить готовую пиццу (нужно собрать пиццу и готовить её в течение 3 секунд).
+```ts
+class Director {
+  async cookMargherita(size: Size): Promise<Pizza> {
+    const margheritaBuilder = new MargheritaPizzaBuilder(size);
+    margheritaBuilder.build();
+    const pizza = await margheritaBuilder.cook(3000);
+    console.log('Margherita is ready!');
+    return pizza;
+  }
+}
+
+const director = new Director();
+director.cookMargherita(Size.Medium).then(pizza => console.log(pizza));
+```
+
+Для полноты картины рассмотрим ещё один небольшой пример: построение ландшафта. Здесь `add`-методы будут реализованы не в родительском абстрактном строителе, а в конкретном дочернем.
+```ts
+class Landscape { /* ... */ }
+
+abstract class LandscapeBuilder {
+  private landscape: Landscape;
+  constructor() {
+    this.landscape = new Landscape();
+  }
+  abstract addTree(): void;
+  abstract addBush(): void;
+  abstract addRiver(): void;
+  render(): Landscape {
+    return this.landscape;
+  }
+}
+
+class ForestLandscapeBuilder extends LandscapeBuilder {
+  addTree(): void { /* ... */ };
+  addBush(): void { /* ... */ };
+  addRiver(): void { /* ... */ };
+}
+
+class ForestDirector {
+  buildForest() {
+    const builder = new ForestLandscapeBuilder();
+    builder.addBush();
+    builder.addTree();
+    builder.addTree();
+    return builder.render(); 
+  }
+}
+
+const director = new ForestDirector();
+director.buildForest();
+```
+
+### Прототип
 
 ## Структурные
 

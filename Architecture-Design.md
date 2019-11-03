@@ -1215,6 +1215,51 @@ director.buildForest();
 
 ### Прототип
 
+**Прототип** (Prototype) — порождающий паттерн, позволящий копировать объект любой сложности без привязки к его конкретному классу.
+
+```ts
+interface Prototype<T> {
+  clone(): T
+}
+
+class Article implements Prototype<Article> {
+  title: string;
+  date: Date;
+  constructor(title: string) {
+    this.title = title;
+    this.date = new Date();
+  }
+  clone(): this {
+    return Object.assign({}, this);
+  }
+}
+
+const article = new Article('Prototype Pattern');
+const copy = article.clone();
+console.log(article === copy); // false
+```
+Есть много вариантов сделать клонирование.  
+Если требуется *неглубокое клонирование* (shallow clone), то хорошим вариантом будет:
+```js
+clone(): this {
+  return Object.assign({}, this);
+}
+```
+Если требуется *глубокое клонирование* (deep clone), то хорошим вариантом будет:
+```js
+const _ = require('lodash')
+/* ... */
+
+clone():this {
+  return _.cloneDeep(this);
+}
+```
+Достаточно популярным способом клонирования является вариант с *сериализацией*, но он приводит к утрате некоторых данных.
+```js
+JSON.parse(JSON.stringify({ field: Infinity }));
+// в результате будет { field: null }
+```
+
 ## Структурные
 
 ## Поведенческие

@@ -196,17 +196,17 @@ console.log(push(array, 's')); // ['n', 'o', 't', 'e', 's']
 
 **Клонирование через оператор присваивания** `=` означает *запись ссылки на объект* в *новую переменную*. Если *изменить* эту *переменную* (не заменить полностью, а изменить поля), то *изменится* и *оригинальный* объект.
 ```js
-const foo = { a: 7 };
-const bar = foo; // передача ссылки
-console.log(foo === bar); // true
-bar.a = 3;
+const obj = { a: 7 };
+const copy = obj; // передача ссылки
+console.log(foo === copy); // true
+copy.a = 3;
 console.log(foo.a) // 3;
 ```
 Следует *избегать поведения*, при котором *изменение копии влияет на оригинальный объект*.
 
 **Клонирование через for..in**
 ```js
-const clone = (obj) => {
+const cloneObject = (obj) => {
   const copy = {};
   for (let key in obj) {
     copy[key] = obj[key];
@@ -219,31 +219,54 @@ const clone = (obj) => {
 
 ### Неглубокое клонирование через Object.assign()
 
+**Неглубокое клонирование** (shallow clone) копирует свойства верхнего уровня в новый объект. Если свойство является объектом, то оно передаётся по ссылке.
+```js
+const cloneObject = obj => Object.assign({}, obj);
+
+const obj = {
+  field: {
+    nestedField: 'notes',
+  },
+};
+const copy = cloneObject(obj);
+console.log(obj === copy); // false
+copy.field.nestedField = 'changed';
+console.log(obj.field.nestedField); // 'changed' (изменение клона повлияло на оригинал)
+console.log(obj.field === copy.field); // true (ссылаются на один объект)
+```
+В случае, если вложенные объекты отсутствуют, это является достаточно хорошим вариантом.
+
 ### Глубокое клонирование через сериализацию
-*Клонирование объекта через сериализацию* является достаточно популярным. 
+*Клонирование объекта через сериализацию* очень популярно благодаря простоте, скорости работы (JSON-сериализация реализовывается и оптимизируется браузером) и возможности глубокого клонирования. 
 ```js
-const object = { /* ... */ };
-const copy = JSON.parse(JSON.stringify(object));
-```
+const cloneObject = obj => JSON.parse(JSON.stringify(obj));
 
-Преимущество: глубокое клонирование.  
-```js
-
+const obj = {
+  field: {
+    nestedField: 'notes',
+  },
+};
+const copy = cloneObject(obj);
+console.log(obj === copy); // false
+copy.field.nestedField = 'changed';
+console.log(obj.field.nestedField); // 'notes' (изменение клона не повлияло на оригинал)
+console.log(obj.field === copy.field); // false
 ```
-Первый недостаток: может привести к утрате некоторых данных (data loss).
+Недостаток: утрата некоторых данных (data loss), а точнее тех данных, которые не поддерживаются в JSON.
 ```js
-JSON.parse(JSON.stringify({
+const cloneObject = obj => JSON.parse(JSON.stringify(obj));
+
+const copy = cloneObject({
   a: () => {}, // поле опускается
   b: Infinity, // значение заменяется на null
   c: NaN, // значение заменяется на null
   d: new Date(), // превратится в строку
   e: undefined, // поле окускается
-}));
-
-// в результате будет { b: null, c: null, d: "XXXX-XX-XXTXX:XX:XX.XXXZ" }
+  а: Symbol(''), // заменяется на null
+});
+console.log(copy); // { b: null, c: null, d: "XXXX-XX-XXTXX:XX:XX.XXXZ" }
 ```
-Второй недостаток: не всякий объект может быть преобразован в JSON.  
-Например, есть он содержит циклическую ссылку (circular reference) или `BigInt`.
+Более того, некоторые данные вообще не могут быть преобразованы в JSON. Например, циклическая ссылка (circular reference) или `BigInt` вызовут исключение, которое нужно будет где-то обработать.
 ```js
 JSON.parse({ a: () => {} }); // SyntaxError: Unexpected token o in JSON at position 1
 ```

@@ -8,7 +8,7 @@
   - [Operator запятая](#оператор-запятая)
 - [Объекты](#объекты)
   - [Перебор свойств объекта](#перебор-свойств-объекта)
-  - [Клонирование и сравнение объектов](#клонирование-и-сравнение-объектов)
+  - [Клонирование объектов](#клонирование-объектов)
   - [Является ли объектом](#является-ли-объектом)
 - [Встроенные объекты](#встроенные-объекты)
   - [Error и его наследники](#error-и-его-наследники)
@@ -177,7 +177,10 @@ console.log(push(array, 's')); // ['n', 'o', 't', 'e', 's']
 
 # Объекты
 - [Перебор свойств объекта](#перебор-свойств-объекта)
-- [Клонирование и сравнение объектов](#клонирование-и-сравнение-объектов)
+- [Клонирование объектов](#клонирование-объектов)
+  - [Плохие способы клонирования](#плохие-способы-клонирования)
+  - [Неглубокое клонирование](#неглубокое-клонирование)
+  - [Глубокое клонирование](#глубокое-клонирование)
 - [Является ли объектом](#является-ли-объектом)
 
 ## Перебор свойств объекта
@@ -186,13 +189,13 @@ console.log(push(array, 's')); // ['n', 'o', 't', 'e', 's']
 
 Метод `Object.keys(obj)` *возвращает массив* из *собственных* (own) *перечисляемых свойств* объекта `obj` в том же *порядке*, в котором они обходились бы *циклом* `for..in`.
 
-## Клонирование и сравнение объектов
+## Клонирование объектов
 
 В JavaScript *объекты* и *массивы* (тоже являющиеся объектами) *передаются по ссылке* (by reference). 
 
 Существует множество способов *клонировать объект* (object clone), среди которых есть плохие и хорошие.
 
-### Плохие способы клонирования объектов
+### Плохие способы клонирования
 
 **Клонирование через оператор присваивания** `=` означает *запись ссылки на объект* в *новую переменную*. Если *изменить* эту *переменную* (не заменить полностью, а изменить поля), то *изменится* и *оригинальный* объект.
 ```js
@@ -266,7 +269,7 @@ const cloneObject = obj => ({ ...obj });
 ### Глубокое клонирование
 **Глубокое клонирование** (deep clone) подразумевает копирование свойств на всех уровнях, то есть на каждом уровне вложенности вместо передаче по ссылке создаётся новый объект с теми же свойствами.
 
-*Клонирование объекта через сериализацию* очень популярно благодаря простоте, скорости работы (JSON-сериализация реализована и оптимизирована браузером) и возможности глубокого клонирования. 
+**Клонирование через JSONсериализацию** очень популярно благодаря простоте, скорости работы (JSON-сериализация реализована и оптимизирована браузером) и возможности глубокого клонирования. 
 ```js
 const cloneObject = obj => JSON.parse(JSON.stringify(obj));
 
@@ -338,9 +341,19 @@ typeof(null) === 'object' // true
 ```
 
 # Встроенные объекты
-
+- [Error и его наследники](#error-и-его-наследники)
+  - [ReferenceError](#referenceerror)
+  - [SyntaxError](#syntaxerror)
+  - [TypeError](#typeerror)
+  - [RangeError](#rangeerror)
+  - [EvalError](#evalerror)
+  - [URIError](#urierror)
+  - [InternalError](#internalerror)
+- [Promise](#promise)
+  - [Порядок в Promise.all()](#порядок-в-promiseall)
 ## Error и его наследники
 
+### ReferenceError
 **ReferenceError** — ошибка при обращении к *несуществующей переменной*.
 ```js
 foo.field; // ReferenceError: foo is not defined
@@ -350,6 +363,7 @@ console.log(foo) // ReferenceError: Cannot access 'foo' before initialization
 const foo = {};
 ```
 
+### SyntaxError
 **SyntaxError** - ошибка при попытке интерпретировать *синтаксически неправильный* код.
 ```js
 const foo; // SyntaxError: Missing initializer in const declaration
@@ -363,12 +377,13 @@ function foo(){ /* ... */ }() // SyntaxError: Unexpected token )
 ```js
 JSON.parse('{ "field":"value", }'); // SyntaxError: Unexpected token } in JSON at position 19
 ```
+### TypeError
 **TypeError** - ошибка при наличии *значения несовместимого* (неожидаемого) *типа*.
 ```js
 const foo = {};
 foo.method(); // TypeError: foo.method is not a function
 ```
-
+### RangeError
 **RangeError** — ошибка в случае нахождения *значения за пределами допустимого диапазона*.
 ```js
 const foo = new Array(-1); // RangeError: Invalid array length
@@ -381,7 +396,7 @@ foo.toFixed(101); // RangeError: toFixed() digits argument must be between 0 and
 function foo() { foo() }
 foo(); // RangeError: Maximum call stack size exceeded (везде, кроме Firefox)
 ```
-
+### EvalError
 **EvalError** — ошибка в *глобальной функции eval()*. В *текущей* спецификации *не используется* и остаётся лишь для *совместимости*.
 
 Ошибка ниже связана с проведением браузерами *политики безопастности контента* (Content Security Policy), которая помогает *избежать* многих *потенциальных XSS* (cross-site scripting) *атак*.  
@@ -389,12 +404,14 @@ foo(); // RangeError: Maximum call stack size exceeded (везде, кроме F
 ```js
 window.setInterval("alert('notes')", 25); // Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src github.githubassets.com".
 ```
+### URIError
 **URIError** - ошибка при передаче *недопустимых параметров* в *encodeURI()* или *decodeURI()*.
 ```js
 encodeURI('\uD900'); // URIError: malformed URI sequence (Firefox)
 encodeURI('\uD900'); // URIError: The URI to be encoded contains an invalid character (Edge)
 encodeURI('\uD900'); // URIError: URI malformed (Chrome and others)
 ```
+### InternalError
 **InternalError** - *внутренняя* ошибка в *движке JavaScript*. (только *Firefox*)
 ```js
 function foo() { foo() }

@@ -8,8 +8,9 @@
   - [Operator запятая](#оператор-запятая)
 - [Объекты](#объекты)
   - [Перечисление свойств объекта](#перечисление-свойств-объекта)
-  - [Клонирование объектов](#клонирование-объектов)
   - [Является ли объектом](#является-ли-объектом)
+  - [Клонирование объектов](#клонирование-объектов)
+  - [Сравнение объектов](#сравнение-объектов)
 - [Встроенные объекты](#встроенные-объекты)
   - [Error и его наследники](#error-и-его-наследники)
   - [Promise](#promise)
@@ -177,11 +178,12 @@ console.log(push(array, 's')); // ['n', 'o', 't', 'e', 's']
 
 # Объекты
 - [Перечисление свойств объекта](#перечисление-свойств-объекта)
+- [Является ли объектом](#является-ли-объектом)
 - [Клонирование объектов](#клонирование-объектов)
   - [Плохие способы клонирования](#плохие-способы-клонирования)
   - [Неглубокое клонирование](#неглубокое-клонирование)
   - [Глубокое клонирование](#глубокое-клонирование)
-- [Является ли объектом](#является-ли-объектом)
+- [Сравнение объектов](#сравнение-объектов)
 
 ## Перечисление свойств объекта
 
@@ -190,6 +192,18 @@ console.log(push(array, 's')); // ['n', 'o', 't', 'e', 's']
 Метод `Object.keys(obj)` *возвращает массив* из *собственных* (own) *перечисляемых свойств* объекта `obj` в том же *порядке*, в котором они обходились бы *циклом* `for..in`. Поскольку свойства собственные, цепочка прототипов не включается в перечисление.
 
 Метод `Object.getOwnPropertyNames(o)` *возвращает массив* названий всех собственных свойств объекта `obj`.
+
+## Является ли объектом
+```js
+const isObject = value => typeof value === 'object' && !Array.isArray(value) && value !== null;
+```
+Такая реализация обусловлена следующим поведением [оператора typeof](#оператор-typeof):
+```js
+typeof({}) === 'object' // true
+typeof([]) === 'object' // true
+typeof(() => {}) === 'function' // true
+typeof(null) === 'object' // true
+```
 
 ## Клонирование объектов
 
@@ -346,8 +360,6 @@ const v8 = require('v8');
 const clone = obj => v8.deserialize(v8.serialize(obj));
 ```
 
-Другие способы реализации глубокого клонирования являются готовыми решениями, предоставленными сторонними библиотеками. Одним из таких является функция `_.cloneDeep(obj)` в библиотеке `lodash`, другая - `extend(true, {}, obj)` в `jQuery`.
-
 Пример глубокого клонирования конкретного объекта без всяких функций.
 ```js
 const user = {
@@ -362,25 +374,90 @@ const clone = {
   comments: [...user.comments],
 };
 ```
-Такое поведение можно было бы реализовать рекурсивной функцией, но в случае циклической ссылки будет выброшено исключение `«too much recursion»` или подобное ему. Такие случаи нужно находить и обрабатывать отдельно.
-```js
-const clone = {};
-clone.proto = clone; // циклическая ссылка
-console.log(clone); // { proto: {...} }
-console.log(clone.proto); // { proto: {...} }
-console.log(clone.proto.proto.proto); // { proto: {...} }
-```
-
-## Является ли объектом
+Такое поведение можно было бы реализовать рекурсивной функцией `cloneObject`. Например,
 ```js
 const isObject = value => typeof value === 'object' && !Array.isArray(value) && value !== null;
+
+const cloneObject = (obj) => {
+  let copy = {};
+  for (let prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      const value = obj[prop];
+      /* если значение является объектом, рекурсивно копируем его свойства */
+      copy[prop] = isObject(value) ? cloneObj(value) : value;
+    }
+  }
+  return copy;
+}
 ```
-Такая реализация обусловлена следующим поведением [оператора typeof](#оператор-typeof):
+Эта функция не может обработать все случаи. Например, отдельно следует описывать работу с массивами и функциями, а также с циклическими ссылками, выбрасывающими исключения `«too much recursion»` и подобные.
 ```js
-typeof({}) === 'object' // true
-typeof([]) === 'object' // true
-typeof(() => {}) === 'function' // true
-typeof(null) === 'object' // true
+const copy = {};
+copy.proto = copy; // циклическая ссылка
+console.log(copy); // { proto: {...} }
+console.log(copy.proto); // { proto: {...} }
+console.log(copy.proto.proto.proto); // { proto: {...} }
+```
+
+Таким образом, для глубокого клонирования лучше всего использовать готовые решения. Такими являются  `_.cloneDeep(obj)` в библиотеке `lodash`, `jQuery.extend(true, {}, obj)`, `angular.clone(obj)` и другие.
+
+## Сравнение объектов
+
+Реализация `shallowEqual`.
+```js
+const isObject = value => typeof value === 'object' && value !== null;
+
+const compareObjects = (A, B) => {
+  const keysA = Object.keys(A);
+  const keysB = Object.keys(B);
+ 
+  /* Если количество свойств не совпадает, то объекты разные. */
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+ 
+  /* Рассматриваются свойства объекта A в объекте B. Если объект B не имеет хотя бы одно 
+  собственное (own) свойство или значения свойств не строго равны, то объекты разные. */
+  return !keysA.some(key => !B.hasOwnProperty(key) || A[key] !== B[key]);
+};
+
+const shallowEqual = (A, B) => {
+  /* Если значения A и B проходят строгое равенство, то они одинаковые. */
+  if (A === B) {
+    return true;
+  }
+ 
+  /* Если оба значения равны NaN, то они одинаковые. */
+  if ([A, B].every(Number.isNaN)) {
+    return true;
+  }
+  
+  /* Eсли A и/или B не являются объектами, то они не одинаковы,  
+  поскольку не прошли проверки выше. */
+  if (![A, B].every(isObject)) {
+    return false;
+  }
+  
+  /* Остался случай, когда A и B — объекты */
+  return compareObjects(A, B);
+};
+
+const a = { field: 1 };
+const b = { field: 2 };
+const c = { field: { field: 1 } };
+const d = { field: { field: 1 } };
+
+console.log(shallowEqual(1, 1)); // true
+console.log(shallowEqual(1, 2)); // false
+console.log(shallowEqual(null, null)); // true
+console.log(shallowEqual(NaN, NaN)); // true
+console.log(shallowEqual([], [])); // true
+console.log(shallowEqual([1], [2])); // false
+console.log(shallowEqual({}, {})); // true
+console.log(shallowEqual({}, a)); // false
+console.log(shallowEqual(a, b)); // false
+console.log(shallowEqual(a, c)); // false
+console.log(shallowEqual(c, d)); // false
 ```
 
 # Встроенные объекты

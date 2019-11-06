@@ -220,7 +220,7 @@ obj.hasOwnProperty('a'); // true
 copy.hasOwnProperty('a'); // false
 ```
 
-**Клонирование в цикле for..in** означает копирование не только собственных (own) свойств объекта, но и свойств прототипа. Сам прототип не копируется.
+**Клонирование в цикле for..in** означает копирование не только собственных (own) свойств объекта, но и свойств прототипа. Само свойство, отвечающее за прототип, не копируется.
 ```js
 const cloneObject = (obj) => {
   const copy = {};
@@ -232,14 +232,26 @@ const cloneObject = (obj) => {
 
 const prototype = { prop: 'prototype property' };
 const obj = { field: 'value' };
-obj.__proto__ = prototype;
+obj.__proto__ = prototype; // так делать не желательно, но для примера можно
 console.log(obj); // { field: 'value' }
 console.log(obj.prop); // 'prototype property'
 
 const copy = cloneObject(obj);
 console.log(copy); // { field: "value", prop: "prototype property" }
 ```
-Можно отбросить свойства прототипа проверкой `if (obj.hasOwnProperty(key))`, тогда получится поведение, похожее на `Object.assign()`.
+
+**Клонирование через eval** является самым худшим вариантом. 
+```js
+const cloneObject = obj => eval(uneval(obj));
+
+const obj = { /* ... */ };
+const copy = cloneObject(obj);
+```
+
+Во-первых, использование `eval` - это плохо.
+> Eval is not evil. Using eval poorly is. 
+
+Во-вторых, требуется поддержки функции `uneval`, имеющаяся только у Firefox, но даже в нём это может не сработать из-за политики безопастности контента (Content Security Policy): `EvalError: call to eval() blocked by CSP`.
 
 ### Неглубокое клонирование
 
@@ -268,6 +280,25 @@ console.log(obj.field === copy.field); // true (ссылаются на один
 **Клонирование через Spread-оператор** `...` работает аналогично `Object.assign()`.
 ```js
 const cloneObject = obj => ({ ...obj });
+```
+
+**Клонирование при помощи Object.keys()** подразумевает перебор и копирование собственных свйоств оригинального объекта.
+```js
+const cloneObject = (obj) => {
+  const copy = {};
+  Object.keys(obj).forEach((key) => {
+    copy[key] = obj[key];
+  });
+  return copy;
+};
+```
+В случае, если `Object.assign` и `...` не поддерживаются, можно написать полифилл с использованием `Object.keys`.
+
+Аналогичного `Object.keys` поведелия можно добиться от *клонирования в цикле for..in*, добавив в нём дополнительную проверку на принадлежность свойства.
+```js
+for (let key in obj) {
+ if (obj.hasOwnProperty(key)) { /* ... */ }
+}
 ```
 
 Готовым решением неглубокого копирования является функция `_.clone(value)` из библиотеки `lodash`.
@@ -309,7 +340,13 @@ console.log(copy); // { b: null, c: null, d: "XXXX-XX-XXTXX:XX:XX.XXXZ" }
 JSON.parse({ a: () => {} }); // SyntaxError: Unexpected token o in JSON at position 1
 ```
 
-Другие способы реализации функции являются готовыми решениями, предоставленными сторонними библиотеками. Одним из таких является функция `_.cloneDeep(value)` в библиотеке `lodash`.
+**Клонирование через V8-сериализацию** в Node.js (экспериментальная функциональность).
+```js
+const v8 = require('v8');
+const clone = obj => v8.deserialize(v8.serialize(obj));
+```
+
+Другие способы реализации глубокого клонирования являются готовыми решениями, предоставленными сторонними библиотеками. Одним из таких является функция `_.cloneDeep(obj)` в библиотеке `lodash`, другая - `extend(true, {}, obj)` в `jQuery`.
 
 Пример глубокого клонирования конкретного объекта без всяких функций.
 ```js

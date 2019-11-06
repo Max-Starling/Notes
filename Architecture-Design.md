@@ -1238,27 +1238,7 @@ const article = new Article('Prototype Pattern');
 const copy = article.clone();
 console.log(article === copy); // false
 ```
-Есть много вариантов сделать клонирование.  
-Если требуется *неглубокое клонирование* (shallow clone), то хорошим вариантом будет:
-```js
-clone(): this {
-  return Object.assign({}, this);
-}
-```
-Если требуется *глубокое клонирование* (deep clone), то хорошим вариантом будет:
-```js
-const _ = require('lodash')
-/* ... */
-
-clone():this {
-  return _.cloneDeep(this);
-}
-```
-Достаточно популярным способом клонирования является вариант с *сериализацией*, но он приводит к утрате некоторых данных.
-```js
-JSON.parse(JSON.stringify({ field: Infinity }));
-// в результате будет { field: null }
-```
+Есть [много способов клонирования объектов](https://github.com/Max-Starling/Notes/blob/master/JavaScript.md#клонирование-объектов) реализовать функцию `clone()`. Каждый из них имеет свои преимущества и недостатки по сравнению с остальными.  
 
 ## Структурные
 

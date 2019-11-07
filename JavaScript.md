@@ -310,7 +310,7 @@ const cloneObject = (obj) => {
 ```
 В случае, если `Object.assign` и `...` не поддерживаются, можно написать полифилл с использованием `Object.keys`.
 
-Аналогичного `Object.keys` поведелия можно добиться от *клонирования в цикле for..in*, добавив в нём дополнительную проверку на принадлежность свойства.
+Аналогичного `Object.keys` поведения можно добиться от *клонирования в цикле for..in*, добавив в нём дополнительную проверку на принадлежность свойства.
 ```js
 for (let key in obj) {
  if (obj.hasOwnProperty(key)) { /* ... */ }
@@ -346,7 +346,7 @@ const copy = cloneObject({
   b: Infinity, // значение заменяется на null
   c: NaN, // значение заменяется на null
   d: new Date(), // превратится в строку
-  e: undefined, // поле окускается
+  e: undefined, // поле опускается
   а: Symbol(''), // заменяется на null
 });
 console.log(copy); // { b: null, c: null, d: "XXXX-XX-XXTXX:XX:XX.XXXZ" }

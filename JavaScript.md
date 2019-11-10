@@ -69,7 +69,7 @@ console.log(i); // ReferenceError: i is not defined
 console.log(foo); // ReferenceError: Cannot access 'foo' before initialization
 let foo = 'notes';
 ```
-*Переменную let* *нельзя объявить дважды* с одним и *тем же названием*.
+*Переменную let* *нельзя объявить дважды* с одним и *тем же именем*.
 ```js
 let foo = 1;
 let foo = 7; // SyntaxError: Identifier 'foo' has already been declared
@@ -81,28 +81,28 @@ const foo = 1;
 foo = 7; // TypeError: Assignment to constant variable.
 ```
 
-**Переменная var** является *предком переменных let* и *const* и не обладает их ограничениями.
+**Переменная var** является *предком переменных let* и *const* и *не обладает их ограничениями*.
 
-*Переменная var* не имеет блочной области видимости.
-```
-while(true) {
-  var a = 1;
-  break;
+*Переменная var* *не имеет блочной области видимости*.
+```js
+if (true) {
+  var foo = 1;
 }
-console.log(a);
+console.log(foo);
+```
 ```js
 for (var i = 0; i < 10; i++) {
   /* ... */
 }
 console.log(i); // 10
 ```
-*Переменную var* можно использовать до её инициализации. Такое поведение называется *всплытием*. Значение до инициализации: `undefined`.
+*Переменную var* *можно использовать до* её *инициализации*. Такое поведение называется *всплытием*. *Значение до инициализации*: `undefined`.
 ```js
 console.log(foo); // undefined
 var = 'notes';
 console.log(foo); // 'notes'
 ```
-*Переменную var* можно объявить дважды с тем же именем.
+*Переменную var* *можно объявить дважды* с *тем же именем*.
 ```js
 var foo = 1;
 console.log(foo); // 1

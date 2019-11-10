@@ -643,6 +643,10 @@ JSON.parse('{ "field":"value", }'); // SyntaxError: Unexpected token } in JSON a
 const foo = {};
 foo.method(); // TypeError: foo.method is not a function
 ```
+```js
+const foo = 1;
+foo = 7; // TypeError: Assignment to constant variable
+```
 ### RangeError
 **RangeError** — ошибка в случае нахождения *значения за пределами допустимого диапазона*.
 ```js

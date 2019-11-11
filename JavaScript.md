@@ -215,8 +215,13 @@ if (field === void 0)
 Иногда нужно просто *выполнить функцию*, *ничего не возвращая*, но *стрелочная* функция в своей *краткой форме всегда возвращает результат выражения*, что может иногда приводить к *неожиданным последствиям*.  
 Можно себя *обезопасить*:
 ```js
-const onClick = void () => this.setState({ isClicked: true });
+const onClick = () => void this.setState({ isClicked: true });
 ```
+Здесь стоит обратить внимание, что код ниже выдаст ошибку: приоритет `=>` ниже, чем у `void`.
+```js
+const onClick = void () => this.setState({ isClicked: true }); // SyntaxError: Malformed arrow function parameter list
+```
+Приоритет оператор
 
 ## Оператор запятая
 
@@ -755,23 +760,23 @@ throw new Error(/* ... */);
 
 ## Promise
 
-**Promise** (обещание) – *специальный объект*, *содержащий своё состояние*.  
+**Promise** (промис) – *специальный объект*, *содержащий своё состояние*.  
 *Изначально состояние* `pending` (ожидание).  
 Затем либо `resolved`/`fulfilled` (выполнено успешно), либо `rejected` (выполнено с ошибкой).
 
 ```javascript
 /* создание Promise */
-const callback = (resolve, reject) => { /* ... */ };
-const promise = new Promise(callback); 
+const executor = (resolve, reject) => { /* ... */ };
+const promise = new Promise(executor); 
 ```
-Функция `callback(resolve, reject)` *вызывается автоматически*. В ней можно выполнять *любые асинхронные операции*. По их завершении следует вызвать либо `resolve(result)`, либо `reject(error)`.
+Функция `executor(resolve, reject)` *вызывается автоматически*. В ней можно выполнять *любые асинхронные операции*. По их завершении следует вызвать либо `resolve(value)`, либо `reject(reason)`.
 
-После вызова `resolve` или `reject` *Promise меняет* своё *состояние*, которое становится *конечным* (больше его изменить нельзя). 
+После вызова `resolve` или `reject` *промис меняет* своё *состояние*, которое становится *конечным* (больше его изменить нельзя). 
 
-Отреагировать на изменение состояния Promise можно при помощи `then` и `catch`.
+*Отреагировать* на *изменение состояния промиса* можно при помощи `then` и `catch`.
 ```js
-const onResolved = () => { /* ... */ };
-const onRejected = () => { /* ... */ };
+const onResolved = value => { /* ... */ };
+const onRejected = reason => { /* ... */ };
 
 // функция onFulfilled сработает при успешном выполнении
 promise.then(onResolved);
@@ -780,6 +785,29 @@ promise.then(onResolved, onRejected);
 promise.catch(onRejected);
 ```
 
+Пример с *setTimeout*, где *промис успешно выполнится* не менее, чем через *3 секунды*.
+```js
+const executor = resolve => void setTimeout(resolve, 3000);
+const promise = new Promise(executor);
+promise.then(() => console.log('resolved!'));
+// через ~3 секунды выведется 'resolved!'
+```
+Пример с *передачей значения* в `resolve`.
+```js
+const executor = resolve => void resolve('resolved!');
+const promise = new Promise(executor);
+promise.then(console.log);
+// через ~3 секунды выведется 'resolved!'
+```
+Пример с *передачей причины* в `reject`.
+```js
+const executor = (resolve, reject) => void reject('rejected!');
+const promise = new Promise(executor);
+promise.catch(console.log);
+// через ~3 секунды выведется 'rejected!'
+```
+
+### Промисификация
 **Промисификация** – *создание обёртки*, *возвращающей Promise*, вокруг *асинхронной* функциональности.
 
 Обычно *промисифицируют асинхронные функции*, построенные на *функциях обратного вызова* (callbacks).
@@ -794,20 +822,25 @@ const promisify = fn => (...args) => new Promise((resolve, reject) => {
 
 <!-- fn.call(this, [...args, callback]); // вызывается fn с обновлёнными аргументами -->
 
+### Цепочка промисов
+
+Если нужно выполнять асинхронные операции в определённой последовательности, можно каждую из них обернуть в промис и создать **цепочку промисов** (Promise chain). Для *создания* такой *цепочки* необходимо в `.then()` или `.catch()` *вернуть промис*.
+
 ### Порядок в Promise.all()
 
-**Итерируемый объект** (iterable) — *любой* объект, элементы которого можно перебрать при помощи *цикла for..of*.  
+**Итерируемый объект** (iterable) — *любой* объект, *элементы* которого можно *перебрать* при помощи *цикла for..of*.  
 По-умолчанию такими *являются встроенные типы Array*, *Set*, *String* и *Map*, в то время как *Object не является*.
 
-Функция Promise.all(iterable) принимает итерируемый объект (обычно массив), содержащий промиссы, дожидается выполнения каждого и промиссом возвращает массив из их значений.
+Функция `Promise.all(iterable)` *принимает итерируемый объект* (обычно массив), содержащий промисы (элементы, не являющиеся промисами, помещаются в `Promise.resolve()`), *дожидается выполнения каждого из промисов* и *возвращает массив*, состоящий из их *значений*.
 
-Несмотря на то, что промиссы выполняются асинхронно, порядок в результирующем массиве значений совпадает с порядком промиссов в начальном итерируемом объекте благодаря *внутреннему свойству [[Index]]*:
+Несмотря на то, что *промисы выполняются асинхронно*, *порядок в результирующем массиве значений совпадает* с *порядком промисов* в *ачальном итерируемом объекте* благодаря *внутреннему свойству [[Index]]*:
 ```js
 const slow = new Promise(resolve => setTimeout(resolve, 250, 'slow'));
 const instant = 'instant'; // тип не Promise , поэтому преобразуется в Promise.resolve('instant')
 const quick = new Promise(resolve => setTimeout(resolve, 50, 'quick'));
 
-Promise.all([slow, instant, quick]).then(responses => responses.map(response => console.log(response)));
+const onResolved = responses => responses.map(response => console.log(response));
+Promise.all([slow, instant, quick]).then(onResolved);
 
 // или то же самое с помощью async/await
 try {

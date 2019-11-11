@@ -755,42 +755,44 @@ throw new Error(/* ... */);
 
 ## Promise
 
-**Promise** (обещание) – специальный объект, содержащий своё состояние.  
-Изначально состояние `pending` (ожидание).  
-Затем либо `fulfilled` (выполнено успешно), либо `rejected` (выполнено с ошибкой).
+**Promise** (обещание) – *специальный объект*, *содержащий своё состояние*.  
+*Изначально состояние* `pending` (ожидание).  
+Затем либо `resolved`/`fulfilled` (выполнено успешно), либо `rejected` (выполнено с ошибкой).
 
 ```javascript
-const promise = new Promise(function(resolve, reject) {
-  // Эта функция будет вызвана автоматически
-  // В ней можно делать любые асинхронные операции,
-  // По их завершению следует вызвать:
-  // resolve(result) при успешном выполнении или
-  // reject(error) при ошибке
-});
+/* создание Promise */
+const callback = (resolve, reject) => { /* ... */ };
+const promise = new Promise(callback); 
+```
+Функция `callback(resolve, reject)` *вызывается автоматически*. В ней можно выполнять *любые асинхронные операции*. По их завершении следует вызвать либо `resolve(result)`, либо `reject(error)`.
 
-const onFulfilled = () => { /* ... */ };
+После вызова `resolve` или `reject` *Promise меняет* своё *состояние*, которое становится *конечным* (больше его изменить нельзя). 
+
+Отреагировать на изменение состояния Promise можно при помощи `then` и `catch`.
+```js
+const onResolved = () => { /* ... */ };
 const onRejected = () => { /* ... */ };
 
-// onFulfilled сработает при успешном выполнении
-promise.then(onFulfilled)
-// onRejected сработает при ошибке
-promise.then(null, onRejected)
+// функция onFulfilled сработает при успешном выполнении
+promise.then(onResolved);
+// функция onRejected – при выполнении с ошибкой
+promise.then(onResolved, onRejected);
+promise.catch(onRejected);
 ```
 
-После вызова `resolve` или `reject` Promise меняет своё состояние, которое становится конечным (больше его изменить нельзя).  
+**Промисификация** – *создание обёртки*, *возвращающей Promise*, вокруг *асинхронной* функциональности.
 
-**Промисификация** – создание обёртки, возвращающей Promise, вокруг асинхронной функциональности.
-
-Обычно промисифицируют асинхронные функции, работающие с функциями обратного вызова (callbacks).
+Обычно *промисифицируют асинхронные функции*, построенные на *функциях обратного вызова* (callbacks).
 ```js
 const callback = (err, result) => err ? reject(err) : resolve(result);
 
 /* Принимается функция fn и возвращается функция-обёртка, возвращающая Promise. */
 const promisify = fn => (...args) => new Promise((resolve, reject) => {    
-  args.push(callback); // callback добавляется в конец аргументов функции fn
-  fn.call(this, ...args); // вызывается fn с обновлёнными аргументами
+  fn(...args, callback);
 });
 ```
+
+<!-- fn.call(this, [...args, callback]); // вызывается fn с обновлёнными аргументами -->
 
 ### Порядок в Promise.all()
 

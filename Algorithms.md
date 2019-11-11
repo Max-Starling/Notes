@@ -22,4 +22,5 @@ const bubbleSort = (array) => {
 ```
 
 https://function-x.ru/cpp_algoritmy_sortirovki.html  
+https://habr.com/ru/post/204600/  
 https://en.wikipedia.org/wiki/Timsort  

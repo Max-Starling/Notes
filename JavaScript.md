@@ -644,7 +644,11 @@ const arr = [0, 1, 2]; // [0, 1, 2]
 const arr = [0, 1, 2, ]; // [0, 1, 2]
 const arr = [, 0, 1, 2]; // [empty, 0, 1, 2]
 const arr = Array(0, 1, 2); // [0, 1, 2]
-const arr = Array.from('012'); // [0, 1, 2]
+const arr = Array.from('012'); // ['0', '1', '2']
+const arr = [...'012']; // ['0', '1', '2']
+
+const arr = [];
+arr[2] = 3; // [empty × 2, 3]
 
 const arr = [,,,,,]; // [empty × 5]
 const arr = Array(100); // [empty × 100]
@@ -657,6 +661,17 @@ const arr = Array(100).fill(1); // [1 x 100]
 
 const arr = Array.from(Array(100).keys()); // [0, 1, 2, ..., 99]
 const arr = Array.from({ length: 100 }, (item, index) => index + 1); // [1, 2, 3, ..., 100]
+```
+
+## Добавление и удаление элементов в массив
+```js
+let arr = [1]; // [1]
+arr.push(2, 3); // [1, 2, 3]
+arr.unshift(0); // [0, 1, 2, 3]
+arr.pop(); // [0, 1, 2]
+delete arr[0]; // [empty, 1, 2]
+arr.shift(); // [1, 2]
+arr = [0, ...arr]; // [0, 1, 2]
 ```
 
 # Функции

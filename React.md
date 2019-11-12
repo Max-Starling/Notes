@@ -29,3 +29,25 @@ React самостоятельно следит за обновлениями.
 <!-- /* приведёт к уничтожению (unmount) старых <Text>, <Description>
 и созданию (remount) новых /* -->
 ```
+
+Если *корневые элементы* имеют *одинаковый тип*, *React сравнивает* их *атрибуты* и *обновляет* *только изменённые атрибуты* (в случае *атрибута* `style` — *только изменённые стили*).
+```jsx
+<!-- /* при замене */ -->
+<button
+  className="btn"
+  style={{ border: 'none', background: 'black' }}
+  onClick={onClick}
+  tabIndex={1}
+/>
+<!-- /* на */ -->
+<button
+  className="button"
+  style={{ border: 'none', background: 'grey' }}
+  onClick={onClick}
+  tabIndex={1}
+/>
+<!-- /* React обновит только className и background в style  */ -->
+```
+
+*После обработки DOM-узла* *React* *рекурсивно проходится* по *дочерним элементам*.
+

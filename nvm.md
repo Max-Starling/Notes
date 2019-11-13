@@ -10,11 +10,11 @@
 C:\Users\<Username>\AppData\Roaming\nvm\nvm.exe
 ```
 ## Basic commands
-* node -v - check nodejs version
-* nvm install <version> - install necessary 
-* nvm list - check installed versions
-* nvm use <version> - set nodejs version
-* nvm version - version of nvm
+* `node -v` - check nodejs version
+* `nvm install <version>` - install necessary 
+* `nvm list` - check installed versions
+* `nvm use <version>` - set nodejs version
+* `nvm version` - version of nvm
 
 ## Issue
 

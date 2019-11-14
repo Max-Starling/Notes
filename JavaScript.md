@@ -114,7 +114,7 @@ var foo = 7;
 console.log(foo); // 7
 ```
 
-**Глобальная переменная** ссылается на *свойство глобального объекта* (в JavaScript им является `window`, в NodeJS — `global`), то есть по факту она не является переменной.
+**Глобальная переменная** ссылается на *свойство глобального объекта* (в *JavaScript* им является `window`, в *NodeJS* — `global`), то есть по факту она *не является переменной*. 
 ```js
 foo = 1;
 window.foo = 7;
@@ -180,6 +180,9 @@ bar = 'notes';
 console.log(bar); // ReferenceError: Cannot access 'bar' before initialization
 let bar = 3;
 ```
+
+## Приведение типов
+
 
 # Операторы
 - [Оператор typeof](#оператор-typeof)
@@ -287,23 +290,46 @@ const push = (arr, val) => arr.push(val), arr; // SyntaxError: Missing initializ
 
 ## Оператор delete
 
-**Оператор delete** — *унарный* оператор, *удаляющий свойство* из объекта (массива, функции и других наследников `Object`).
+**Оператор delete** — *унарный* оператор, *удаляющий свойство* из объекта (массива, функции и других наследников `Object`). 
+
+При *успешном удалении* `delete` возвращает `true`, `false` иначе.
+
 ```js
 const foo = { a: 1, b: 7 };
 console.log(foo); // { a: 1, b: 7 }
-delete foo.a;
+delete foo.a; // true
 console.log(foo); // { b: 7 }
 ```
-При работе с массивами, `delete` создаёт дыры в них.
+При работе с *массивами*, `delete` создаёт *дыры* в них.
 ```js
 const bar = [1, 2, 3];
-delete bar[0];
+delete bar[0]; // true
 console.log(bar); // [empty, 2, 3]
 console.log(bar.length) // 3
-delete bar[2];
+delete bar[2]; // true
 console.log(bar); // [empty, 2, empty]
 console.log(bar.length) // 3
 ```
+*Оператор delete* *может удалить глобальную переменную*, поскольку на самом деле она является *свойством глобального объекта* `window`.
+```js
+foo = 'notes';
+console.log(window.foo); // 'notes'
+delete foo; // true
+console.log(window.foo); // undefined
+```
+
+*Оператор delete* *не может удалять переменные* `var, let, const` и *функции*. 
+```js
+var foo = 'notes';
+delete foo; // false
+console.log(foo); // 'notes'
+
+function bar () {}
+delete bar; // false
+console.log(bar); // ƒ bar () {}
+```
+
+Оператор `delete` *не связан* с *очисткой памяти*. *Очиста памяти* осуществляется *сборщиком мусора* при *разрыве ссылок*.
 
 # Объекты
 - [Перечисление свойств объекта](#перечисление-свойств-объекта)

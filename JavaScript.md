@@ -183,6 +183,26 @@ let bar = 3;
 
 ## Приведение типов
 
+```js
+// примитивы: number, string, boolean, null, undefined
+const isPrimitive = value => !['object', 'function'].includes(typeof value) || value === null;
+
+const toPrimitive = (value, preferredType) => {
+  if (isPrimitive(value)) {
+    return value;
+  }
+
+  if (value.valueOf && isPrimitive(value.valueOf())) {
+    return value.valueOf();
+  }
+
+  if (value.toString && isPrimitive(value.toString())) {
+    return value.toString();
+  }
+
+  throw new TypeError('Cannot convert object to primitive value');
+};
+```
 
 # Операторы
 - [Оператор typeof](#оператор-typeof)
@@ -292,7 +312,7 @@ const push = (arr, val) => arr.push(val), arr; // SyntaxError: Missing initializ
 
 **Оператор delete** — *унарный* оператор, *удаляющий свойство* из объекта (массива, функции и других наследников `Object`). 
 
-При *успешном удалении* `delete` возвращает `true`, `false` иначе.
+При *успешном удалении* `delete` возвращает `true` (в том числе, если удаляется несуществующее свойство), `false` иначе.
 
 ```js
 const foo = { a: 1, b: 7 };

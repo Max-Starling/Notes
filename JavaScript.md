@@ -183,8 +183,16 @@ let bar = 3;
 
 ## Приведение типов
 
+### 
+*Бинарный оператор* `+` приводит значения либо к числам и совершает сложение, либо к строкам и совершает конкатенацию.
+
+Для начала *операнды приводятся* к *примитивным значениям* при помощи функции `toPrimitive(value)`, работающей по следующему *алгоритму*.
+* Если `value` — *примитивное* значение (`number`, `string`, `boolean`, `null`, `undefined`), то *вернуть* его.
+* Иначе *вызвать* `value.valueOf()`. Если *результат* — *примитивное* значение, то *вернуть* его.
+* Иначе *вызвать* `value.toString()`. Если *результат* — *примитивное* значение, то *вернуть* его.
+* Выбросить *исключение* `TypeError('Cannot convert object to primitive value')`.
+
 ```js
-// примитивы: number, string, boolean, null, undefined
 const isPrimitive = value => !['object', 'function'].includes(typeof value) || value === null;
 
 const toPrimitive = (value, preferredType) => {

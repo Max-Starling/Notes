@@ -217,49 +217,7 @@ let bar = 3;
 ### 
 *Бинарный оператор* `+` приводит значения либо к числам и совершает сложение, либо к строкам и совершает конкатенацию.
 
-Для начала *операнды приводятся* к *примитивным значениям* при помощи функции `toPrimitive(argument)`, работающей по следующему *алгоритму*.
-* Если `value` — *примитивное* значение (`number`, `string`, `boolean`, `null`, `undefined`), то *вернуть* его.
-* Иначе *вызвать* `value.valueOf()`. Если *результат* — *примитивное* значение, то *вернуть* его.
-* Иначе *вызвать* `value.toString()`. Если *результат* — *примитивное* значение, то *вернуть* его.
-* Выбросить *исключение* `TypeError('Cannot convert object to primitive value')`.
-
-```js
-const isPrimitive = argument => !['object', 'function'].includes(typeof argument) || argument === null;
-
-const toPrimitive = (argument, preferredType) => {
-  if (isPrimitive(argument)) {
-    return argument;
-  }
-
-  if (argument.valueOf && isPrimitive(argument.valueOf())) {
-    return argument.valueOf();
-  }
-
-  if (argument.toString && isPrimitive(argument.toString())) {
-    return argument.toString();
-  }
-
-  throw new TypeError('Cannot convert object to primitive value');
-};
-```
-
-Приведение значения к типу `boolean` производится функцией `ToBoolean(argument)` по следующим правилам.
-* Если значение `argument` имеет тип `boolean`, то вернуть значение.
-* Иначе, если `argument` равно `undefined`, `null`, `+0`, `-0`, `NaN`, `""` (пустая строка), то *вернуть* `false`.
-* В остальных случаях (`Object`, `Symbol`, `17`, числа кроме 0 и непустые строки) *вернуть* `true`.
-```js
-const toBoolean = (argument) => {
-  if (typeof argument === 'boolean') {
-    return argument;
-  }
-
-  if ([undefined, null, +0, -0, NaN, ''].includes(argument)) {
-    return false;
-  }
-  
-  return true;
-}
-```
+### Приведение объекта к примитивному значению
 
 *Каждый объект* имеет *метод* `valueOf()`, который должен *возвращать числовое представление объекта*, но *по умолчанию возвращает этот* же *объект*, то есть *непримитивное значение*.
 ```js
@@ -285,7 +243,107 @@ const date = new Date();
 console.log(date.valueOf()); // 1573833066283
 ```
 
-Также каждый объект имеет *метод* `toString()`
+Помимо `valueOf()`, каждый объект имеет метод `toString()`, *возвращающий строковое представление объекта*.
+```js
+const a = {};
+console.log(a.toString()); // "[object Object]"
+
+console.log([].toString()); // ""
+console.log([1, 2, 3].toString()); // "1,2,3"
+
+const date = new Date();
+console.log(date.toString()); // "Sun Nov 17 2139 19:13:50 GMT+0300 (Moscow Standard Time)"
+
+function fn() { /* ... */ }
+console.log(fn.toString()); // "function fn() { /* ... */ }"
+```
+
+Для начала *операнды приводятся* к *примитивным значениям* при помощи функции `toPrimitive(argument)`, работающей по следующему *алгоритму*.
+* Если `value` — *примитивное* значение (`number`, `string`, `boolean`, `null`, `undefined`), то *вернуть* его.
+* Иначе *вызвать* `value.valueOf()`. Если *результат* — *примитивное* значение, то *вернуть* его.
+* Иначе *вызвать* `value.toString()`. Если *результат* — *примитивное* значение, то *вернуть* его.
+* Выбросить *исключение* `TypeError('Cannot convert object to primitive value')`.
+
+```js
+const isPrimitive = argument => !['object', 'function'].includes(typeof argument) || argument === null;
+
+const toPrimitive = (argument, preferredType) => {
+  if (isPrimitive(argument)) {
+    return argument;
+  }
+
+  if (argument.valueOf && isPrimitive(argument.valueOf())) {
+    return argument.valueOf();
+  }
+
+  if (argument.toString && isPrimitive(argument.toString())) {
+    return argument.toString();
+  }
+
+  throw new TypeError('Cannot convert object to primitive value');
+};
+```
+### Приведение к логическому значению
+Приведение значения к типу `boolean` производится функцией `ToBoolean(argument)` по следующим правилам.
+* Если значение `argument` имеет тип `boolean`, то вернуть значение.
+* Иначе, если `argument` равно `undefined`, `null`, `0`, `NaN`, `""` (пустая строка), то *вернуть* `false`.
+* В *остальных* случаях (`Object`, `Symbol`, `17`, *числа кроме* `0` и *непустые строки*) *вернуть* `true`.
+```js
+const ToBoolean = (argument) => {
+  if (typeof argument === 'boolean') {
+    return argument;
+  }
+
+  if ([undefined, null, 0, NaN, ''].includes(argument)) {
+    return false;
+  }
+  
+  return true;
+}
+```
+
+### Приведение к числу
+Приведение значения к типу `number` производится функцией `ToNumber(argument)` по следующим правилам.
+* Если значение `argument` имеет тип `number`, то вернуть значение.
+* Иначе, если `argument` имеет тип `boolean`, *вернуть* `1` (`true`) или `0` (`false`).
+* Иначе, если `argument` имеет тип `string`, попытаться привести строку к числу или вернуть `NaN` в случае неудачи.
+* Иначе, если `argument` имеет тип `Symbol`, выбросить `TypeError`.
+* Иначе, если `argument` имеет тип `Object`, вызвать `ToNumber(ToPrimitive(argument))`.
+* Иначе, если `argument` равно `undefined`, *вернуть* `NaN`.
+* Иначе, если `argument` равно `null`, *вернуть* `0`.
+```js
+const ToNumber = (argument) => {
+  if (typeof argument === 'number') {
+    return argument;
+  }
+
+  if (typeof argument === 'boolean') {
+    return argument ? 1 : 0;
+  }
+  
+  if (typeof argument === 'string') {
+    return parseFloat(argument, 10);
+  }
+  
+  if (typeof argument === 'symbol') {
+    throw new TypeError('Cannot convert a Symbol value to a string');
+  }
+  
+  if (!isPrimitive(argument)) {
+    return ToNumber(ToPrimitive(argument));
+  }
+  
+  if (argument === undefined) {
+    return NaN;
+  }
+  
+  if (argument === null) {
+    return 0;
+  }
+  
+  throw new TypeError('Cannot convert argument to number');
+}
+```
 
 Оператор `==` производит *неявное приведение типа* к *числу* (если оба операнда не являются строками).
 

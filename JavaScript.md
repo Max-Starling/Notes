@@ -47,7 +47,7 @@
 Пример языков со *статической типизацией*: *Java*, *C#*.
 ```java
 /* Java */
-public class HelloWorld {
+public class Notes {
   public static void main(String []args){
     int number = 1; // числовой тип
     number = true; // error: incompatible types: boolean cannot be converted to int
@@ -83,7 +83,7 @@ console.log(1 - []); // 1
 Например, *нельзя сложить число* и *массив*.
 ```java
 /* Java */
-public class HelloWorld {
+public class Notes {
   public static void main(String []args){
     int number = 17;
     int array[] = new int[3];
@@ -249,7 +249,44 @@ console.log(foo); // ReferenceError: foo is not defined
 
 ### Явное и неявное преобразование
 
-В JavaScript
+Если *преобразование типов* происходит *автоматически*, то оно называется **неявным**. Этот тип преобразований *характерен JavaScript*. Обычно *такие преобразования* происходят при *выполнении операций* между *операндами разных типов*. 
+```js
+console.log(1 + [] + {} + 'notes'); // "1[object Object]notes"
+console.log(1 - []); // 1
+```
+
+Если *преобразование типов* задаётся разработчиком *вручную* (явно), то оно называется **явным**. 
+
+В *JavaScript* есть множество *способов явно преобразовать тип*.
+```js
+/* приведение к числу */
+console.log(+'017.6'); // 17.6 (при помощи унарного оператора "+")
+console.log(Number('')); // 0 (при помощи Number())
+console.log(parseInt('11.1abc', 10)); // 11.1 (при помощи parseInt)
+console.log(parseFloat('11.1abc', 10)); // 11.1 (при помощи parseFloat)
+
+/* приведение к логическому значению при помощи Boolean() */
+console.log(Boolean('notes')); // true
+console.log(Boolean('')); // false
+console.log(Boolean(-1)); // true
+
+/* приведение к логическому значению при помощи String() */
+console.log(String(null)); // 'null'
+console.log(String({})); // '[object Object]'
+```
+
+Пример *явного преобразования* в *Java*.
+```js
+/* Java */
+class Notes {
+  public static void main(String[] args) {
+    double foo = 11.1;
+    int bar = (int)a; // приведение double к int
+    System.out.println(bar); // 11
+  }
+}
+```
+
 ### Преобразование объекта к примитивному значению
 
 Если *объект* участвует в *операции*, подразумевающей использование *примитивного значения*, он *должен быть* *приведён*.

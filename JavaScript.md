@@ -521,6 +521,21 @@ typeof null // "object" (врождённая ошибка языка)
 typeof function(){} // "function"
 ```
 
+### Оператор typeof и undefined
+
+Раньше в JavaScript `undefined` являлся *названием глобальной переменной*, по умолчанию *не имеющей значения*. То есть *переменная* `undefined` имела *примитивное значение* `undefined`, но его можно было *переопределить*.
+```js
+var foo = {};
+console.log(foo.prop === undefined); // true (нет такого свойства)
+undefined = 17;
+console.log(foo.prop === undefined); // false
+```
+Из-за *изменяемости* (mutability) `undefined` *не использовали явно*, а получали *другим способом*.
+
+Например, `typeof foo.prop === 'undefined'`.
+
+Сейчас такой *ошибки нет*.
+
 ## Оператор void
 
 **Оператор void** — *унарный* оператор, *выполнящий принимаемое выражение* и *возвращающий undefined*.  

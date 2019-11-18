@@ -524,6 +524,10 @@ typeof function(){} // "function"
 console.log(typeof null); // "object"
 console.log(null instanceof Object); // false
 ```
+Оператор `typeof` считает, что `NaN` (Not-a-Number) является `"number"`. Это объясняется тем, что `NaN` появляется только при операциях с числами, а также содержится в `Number.NaN` (как и метод `Number.isNaN(value)`).
+```js
+console.log(typeof NaN); // "number"
+```
 
 ### Оператор typeof и undefined
 

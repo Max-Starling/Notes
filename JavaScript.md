@@ -1101,12 +1101,12 @@ arr = [0, ...arr]; // [0, 1, 2]
 
 ## Сортировка
 
-**Сортировка** (sorting) — *упорядочивание элементов* в *списке* (массиве).
+**Сортировка** (sorting) — *упорядочивание элементов* в *списке* (массиве) по какому-то *правилу*.
 
 В JavaScript для *сортировки массива* имеется метод `Array.prototype.sort(comparator)`, принимающий в качестве аргумента **компаратор** (comparator) — функцию `comparator(a, b)`, задающую порядок сортировки. Если `a` и `b` равны, то функция должна вернуть `0`, если `a > b` — что-то больше нуля (например, `1`), если `a < b` — что-то меньше нуля (например, `-1`).
 ```js
-const array = [3, 2, 1];
-console.log(array.sort()); //  [1, 2, 3]
+const numbers = [3, 2, 1];
+console.log(numbers.sort()); //  [1, 2, 3]
 ``` 
 **Компаратор** (в электронике) — устройство, принимающее два входных сигнала и определяющее, какой из них больше (возвращает `1`, если больше первый, `0` — если второй).
 
@@ -1114,8 +1114,8 @@ console.log(array.sort()); //  [1, 2, 3]
 
 Если не задать компаратор в методе `sort()`, то применится компаратор по умолчанию, сравнивающий элементы в лексикографическом порядке (как строки, посимвольно).
 ```js
-const array = [1, 8, 9, 10, 11];
-console.log(array.sort()); // [1, 10, 11, 8, 9]
+const numbers = [1, 8, 9, 10, 11];
+console.log(numbers.sort()); // [1, 10, 11, 8, 9]
 // поскольку '1' > '8', то '10' > '8' и `11` > `8`
 ```
 
@@ -1125,9 +1125,18 @@ const ascendingComparator = (a, b) => a - b; // если a > b, то a - b > 0
 
 const descendingComparator = (a, b) => b - a; // если a > b, то a - b > 0
 
-const array = [1, 8, 9, 10, 11];
-console.log(array.sort(ascendingComparator)); // [1, 8, 9, 10, 11]
-console.log(array.sort(descendingComparator)); // [11, 10, 9, 8, 1]
+const numbers = [1, 8, 9, 10, 11];
+console.log(numbers.sort(ascendingComparator)); // [1, 8, 9, 10, 11]
+console.log(numbers.sort(descendingComparator)); // [11, 10, 9, 8, 1]
+```
+Аналогично можно сортировать и более сложные сущности.  
+Например: объекты по их конкретным полям.
+```js
+const enginerComparator = (a, b) => b.skill - a.skill;
+
+const enginers = [{ skill: 3 }, { skill: 1 }, { skill: 2 }];
+console.log(enginers.sort(enginerComparator));
+// [{ skill: 3 }, { skill: 2 }, { skill: 1 }]
 ```
 
 

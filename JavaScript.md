@@ -1114,19 +1114,34 @@ console.log(numbers.sort()); //  [1, 2, 3]
 
 Если не задать компаратор в методе `sort()`, то применится компаратор по умолчанию, сравнивающий элементы в лексикографическом порядке (как строки, посимвольно).
 ```js
-const numbers = [1, 8, 9, 10, 11];
+const numbers = [11, 1, 8, 10, 9];
 console.log(numbers.sort()); // [1, 10, 11, 8, 9]
 // поскольку '1' > '8', то '10' > '8' и `11` > `8`
 ```
 
 Определим *компараторы* для *сортировки* массива из *чисел* *по возрастанию* (ascending) и *по убыванию* (descending).
 ```js
+/* по возрастанию */
 const ascendingComparator = (a, b) => a - b; // если a > b, то a - b > 0
 
+/* более делальная версия, делающая то же самое  */
+const anotherAscendingComparator = (a, b) => {
+  /* оператор > приводит свои операнды к числу */
+  if (a > b) {
+    return 1;
+  }
+  if (b > a) {
+    return -1;
+  }
+  return 0;
+}
+
+/* по убыванию */
 const descendingComparator = (a, b) => b - a; // если a > b, то a - b > 0
 
-const numbers = [1, 8, 9, 10, 11];
+const numbers = [11, 1, 8, 10, 9];
 console.log(numbers.sort(ascendingComparator)); // [1, 8, 9, 10, 11]
+console.log(numbers.sort(anotherAscendingComparator)); // [1, 8, 9, 10, 11]
 console.log(numbers.sort(descendingComparator)); // [11, 10, 9, 8, 1]
 ```
 Аналогично можно сортировать и более сложные сущности.  

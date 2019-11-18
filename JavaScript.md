@@ -1336,6 +1336,78 @@ Promise.all('notes').then(res => console.log(res)); // ['n', 'o', 't', 'e', 's']
 Promise.all(['n', 'o', 't', 'e', 's']).then(res => console.log(res));
 ```
 
+### Promise и async/await
+
+```js
+async function f(time) {
+  const foo = await new Promise(res => setTimeout(() => res('Notes 1'), time));
+  console.log(foo);
+  const bar = await Promise.resolve('Notes 2');
+  console.log(bar);
+  await Promise.reject('Error');
+}
+
+f(2000);
+// Notes 1
+// Notes 2
+// Uncaught (in promise) Error
+```
+```js
+f(2000).catch(e => console.log(e));
+// Notes 1
+// Notes 2
+// Error
+```
+
+```js
+const asyncGeneratorStep = (gen, resolve, reject, _next, _throw, method, arg) => {
+  try {
+    const { value, done } = gen[method](arg);
+    if (done) {
+      resolve(value);
+    } else {
+      Promise.resolve(value).then(_next, _throw);
+    }
+  } catch (error) {
+    reject(error);
+  }
+}
+
+const _asyncToGenerator = fn => (...args) =>
+  new Promise((resolve, reject) => {
+    const _next = value => void step('next', value);
+    const _throw = error => void step('throw', error);
+    const gen = fn(args);
+    function step (method, arg) {
+      asyncGeneratorStep(gen, resolve, reject, _next, _throw, method, arg);
+    }
+    _next(undefined);
+  });
+
+const generator = function* (time) {
+  const foo = yield new Promise(res => setTimeout(() => res('Notes 1'), time));
+  console.log(foo);
+  const bar = yield Promise.resolve('Notes 2');
+  console.log(bar);
+  yield Promise.reject('Error');
+};
+
+function f() {
+  return _asyncToGenerator(generator).apply(this, arguments);
+}
+
+f(2000);
+// Notes 1
+// Notes 2
+// Uncaught (in promise) Error
+```
+```js
+f(2000).catch(e => console.log(e));
+// Notes 1
+// Notes 2
+// Error
+```
+
 # Спецификация
 
 ## Функции под капотом JavaScript

@@ -336,31 +336,74 @@ a.toString = () => 'a{}';
 console.log(a.toString()); // 'a{}'
 ```
 
-*Объект* приводится к *примитивному значению* при помощи функции `toPrimitive(argument)`, работающей по следующему *алгоритму*.
+*Объект* приводится к *примитивному значению* при помощи функции `toPrimitive(argument, preferredType)`, работающей по следующему *алгоритму*.
 * Если `value` — *примитивное* значение (`number`, `string`, `boolean`, `null`, `undefined`), то *вернуть* его.
 * Иначе *вызвать* `value.valueOf()`. Если *результат* — *примитивное* значение, то *вернуть* его.
 * Иначе *вызвать* `value.toString()`. Если *результат* — *примитивное* значение, то *вернуть* его.
 * Выбросить *исключение* `TypeError('Cannot convert object to primitive value')`.
 
+По умолчанию параметр `preferredType` имеет занчение `'number'`. Если передать `'string'`, то шаги алгоритма с `valueOf()` и `toString()` *меняются местами*.
+
 ```js
 const isPrimitive = argument => !['object', 'function'].includes(typeof argument) || argument === null;
 
-const toPrimitive = (argument, preferredType) => {
+const toPrimitive = (argument, preferredType = 'number') => {
   if (isPrimitive(argument)) {
     return argument;
   }
+  
+  if (preferredType === 'number') {
+    /* сперва valueOf(), затем toString() */
+    if (argument.valueOf && isPrimitive(argument.valueOf())) {
+      return argument.valueOf();
+    }
 
-  if (argument.valueOf && isPrimitive(argument.valueOf())) {
-    return argument.valueOf();
+    if (argument.toString && isPrimitive(argument.toString())) {
+      return argument.toString();
+    }
+  } else if (preferredType === 'string') {
+    /* сперва toString(), затем valueOf() */
+    if (argument.toString && isPrimitive(argument.toString())) {
+      return argument.toString();
+    }
+    
+    if (argument.valueOf && isPrimitive(argument.valueOf())) {
+      return argument.valueOf();
+    }
   }
-
-  if (argument.toString && isPrimitive(argument.toString())) {
-    return argument.toString();
-  }
-
+  
   throw new TypeError('Cannot convert object to primitive value');
 };
 ```
+### Преобразование к строке
+Преобразование значения к типу `string` производится функцией `ToString(argument)` по следующим правилам.
+* Если значение `argument` имеет тип `string`, то вернуть значение.
+* Иначе, если `argument` имеет тип `Symbol`, выбросить `TypeError`.
+* Иначе, если `argument` имеет примитивный тип `number`, `boolean`, `undefined`, `null`, обернуть его в строку и вернуть: `"null"`, `"undefined"`, `"1.2"`, `"NaN"`, `"true"`, `"false"`.
+* Иначе, если `argument` имеет тип `Object`, вернуть результат `ToString(ToPrimitive(argument))`.
+```js
+const ToString = (argument) => {
+  if (typeof argument === 'string') {
+    return argument;
+  }
+
+  if (typeof argument === 'symbol') {
+    throw new TypeError('Cannot convert a Symbol value to a string');
+  }
+  
+  const allowedPrimitives = ['number', 'boolean', 'undefined'];
+  if (allowedPrimitives.includes(typeof argument) || argument === null) {
+    return `${argument}`;
+  }
+
+  if (!isPrimitive(argument)) {
+    return ToNumber(ToPrimitive(argument));
+  }
+
+  throw new TypeError('Cannot convert argument to string');
+}
+```
+
 ### Преобразование к логическому значению
 Преобразование значения к типу `boolean` производится функцией `ToBoolean(argument)` по следующим правилам.
 * Если `argument` имеет тип `boolean`, то *вернуть значение*.
@@ -386,9 +429,9 @@ const ToBoolean = (argument) => {
 * Иначе, если `argument` имеет тип `boolean`, *вернуть* `1` (`true`) или `0` (`false`).
 * Иначе, если `argument` имеет тип `string`, попытаться *преобразовать строку* к числу или вернуть `NaN` в случае неудачи. *Пустая строка* приводится к *нулю*.
 * Иначе, если `argument` имеет тип `Symbol`, выбросить `TypeError`.
-* Иначе, если `argument` имеет тип `Object`, вызвать `ToNumber(ToPrimitive(argument))`.
 * Иначе, если `argument` равно `undefined`, *вернуть* `NaN`.
 * Иначе, если `argument` равно `null`, *вернуть* `0`.
+* Иначе, если `argument` имеет тип `Object`, вернуть результат `ToNumber(ToPrimitive(argument))`.
 ```js
 const ToNumber = (argument) => {
   if (typeof argument === 'number') {
@@ -404,11 +447,7 @@ const ToNumber = (argument) => {
   }
   
   if (typeof argument === 'symbol') {
-    throw new TypeError('Cannot convert a Symbol value to a string');
-  }
-  
-  if (!isPrimitive(argument)) {
-    return ToNumber(ToPrimitive(argument));
+    throw new TypeError('Cannot convert a Symbol value to a number');
   }
   
   if (argument === undefined) {
@@ -418,12 +457,16 @@ const ToNumber = (argument) => {
   if (argument === null) {
     return 0;
   }
+
+  if (!isPrimitive(argument)) {
+    return ToNumber(ToPrimitive(argument));
+  }
   
   throw new TypeError('Cannot convert argument to number');
 }
 ```
 
-Оператор `==` производит *неявное преобразование типа* к *числу* (если оба операнда не являются строками).
+Оператор *нестрогого равенства* `==` производит *неявное преобразование типа* к *числу* (если оба операнда не являются строками).
 
 Интересный пример.
 ```js

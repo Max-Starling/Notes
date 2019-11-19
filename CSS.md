@@ -456,9 +456,9 @@ div /* 1 */
 
 Говорят, что *потомки наследуют свойства предка*. 
 
-*Наследуются свойства*, определяющие *параметры отображения текста* (все `font-*`, большинство `text-*`), *произношения текста вслух* (`speak-*`) и *отображения списка* (`list-*`), также *наследуются* `color`, `visibility`, `cursor` `letter-spacing`, `line-height`, `white-space`, `border-collapse` и другие, менее популярные свойства.
+*Наследуются свойства*, определяющие *параметры отображения текста* (все `font-*`, большинство `text-*`), *произношения текста вслух* (`speak-*`) и *отображения списка* (`list-*`), также *наследуются* `color`, `visibility`, `cursor`, `letter-spacing`, `line-height`, `white-space`, `border-collapse`, `border-spacing` и другие, менее популярные свойства.
 
-*Почти все остальные* свойства *не наследуются*. Среди них: *свойста блочной модели* (`border`, `margin`, `padding`, `width`, `height`), *позиционирования* (`position`, `top`, `left`,`right`, `bottom`, `float`), `background-*`, `transform`, `display`, `z-index`, `text-decoration` и многие другие.
+*Почти все остальные* свойства *не наследуются*. Среди них: *свойста блочной модели* (`border-*`, `margin-*`, `padding-*`, `*-width`, `*-height`), *позиционирования* (`position`, `top`, `left`,`right`, `bottom`, `float`), `background-*`, `transform`, `display`, `z-index`, `text-decoration` и многие другие.
 
 ```html
 <div>

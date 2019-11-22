@@ -14,8 +14,25 @@ const decrement = val => val - 1;
 const incrementDecrement = val => decrement(increment(val)); // композиция
 const incrementTwice = val => increment(increment(val)); // композиция
 
-let foo = incrementDecrement(0);
+const foo = incrementDecrement(0);
 console.log(foo); // 0
-let bar = incrementTwice(0);
+const bar = incrementTwice(0);
 console.log(bar); // 2
+```
+
+Можно написать функцию `compose`, которая будет делать композицию любого числа функций при помощи `reduceRight`.
+```js
+// args - параметры функции
+
+const compose = (...functions) => args => functions.reduceRight((arg, fn) => fn(arg), args);
+
+console.log(compose(
+  incrementTwice,
+  increment,
+  decrement,
+  incrementDecrement,
+)(0)); // 2
+
+const fns = Array(10).fill(increment); // [ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ]
+console.log(compose(fns)(0)); // 10
 ```

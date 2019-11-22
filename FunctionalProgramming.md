@@ -41,5 +41,10 @@ console.log(compose(
 
 /* массив из 10 функций increment */
 const fns = Array(10).fill(increment); // [ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ]
-console.log(compose(fns)(0)); // 10
+console.log(compose(...fns)(0)); // 10
+```
+
+## Pipe
+```js
+const pipe = (...functions) => args => functions.reduce((arg, fn) => fn(arg), args);
 ```

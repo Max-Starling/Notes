@@ -25,7 +25,7 @@ console.log(bar); // 2
 
 Композицию можно делать и из большего числа функций.
 ```js
-console.log(increment(decrement(increment(4)))); // 5
+console.log(incrementTwice(increment(decrement(incrementDecrement(increment(0)))))); // 3
 ```
 Если в *композиции* участвуют *много функций*, а их *названия длинные*, то такую композицию *трудно прочитать*. Можно написать *функцию* `compose`, которая *составляет композицию* из *любого числа функций*.
 ```js
@@ -39,6 +39,7 @@ console.log(compose(
   increment,
 )(0)); // 3
 
+/* массив из 10 функций increment */
 const fns = Array(10).fill(increment); // [ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ]
 console.log(compose(fns)(0)); // 10
 ```

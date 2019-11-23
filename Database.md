@@ -167,7 +167,7 @@ SELECT DISTINCT title, description FROM notes;
  
 ## Запросы SELECT с условиями WHERE
 
-*Ключевое слово* `WHERE` используется для *указания условий* в *запросе* `SELECT`.
+**Ключевое слово WHERE** используется для *указания условий* в *запросе* `SELECT`.
 
 ```SQL
 -- схема
@@ -210,7 +210,7 @@ SELECT * FROM notes
 ```
 ## Сортировка при помощи ORDER BY
 
-*Ключевое слово* `ORDER BY` используется для *сортировки результатов запроса* `SELECT`.
+**Ключевое слово ORDER BY** используется для *сортировки результатов запроса* `SELECT`.
 
 Можно указать *порядок сортировки*: `ASC` (ascending) — *по возрастанию*, используется *по умолчанию*; `DESC` (descending) — *по убыванию*.
 ```SQL
@@ -238,3 +238,28 @@ SELECT * FROM notes
 SELECT COUNT(ID), MIN(ID), AVG(ID), MAX(ID), SUM(ID) FROM notes;
 ```
 ![SQL Example](./assets/SQL_aggregate.png)
+
+### Оператор AS
+
+**Оператор  AS** используется для *переименования столбца* в *результате* запроса `SELECT`.
+```sql
+-- схема
+SELECT <column_name> AS <name> FROM <table_name>;
+```
+
+```sql
+SELECT MAX(seconds) AS max_seconds FROM timers;
+```
+![SQL Example](./assets/SQL_as.png)
+
+## Группировка значений при помощи GROUP BY
+
+**Ключевое слово GROUP BY** используется для *группировки значений* в *столбце*. 
+
+*Несколько строк группируются* в *одну*, что *позволяет* использовать *агрегатные функции* для *каждой* получившейся *группы*.
+```SQL
+SELECT *, COUNT(ID) AS rows_count FROM notes
+  GROUP BY description;
+```
+![SQL Example](./assets/SQL_groupby.png)
+

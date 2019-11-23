@@ -165,7 +165,7 @@ SELECT DISTINCT title, description FROM notes;
 
 ![SQL Example](./assets/SQL_4.png)
  
-### Запросы SELECT с условиями WHERE
+## Запросы SELECT с условиями WHERE
 
 Для *указания условий* в *запросе* `SELECT` используется *ключевое слово* `WHERE`.
 ```SQL
@@ -174,7 +174,7 @@ SELECT <column_name>, <another_column_name>, /* ... */
   FROM <table_name>
   WHERE <condition>; 
 ```
-В условии `condition` можно *производить сравнение текста* и *чисел*, а также *использовать логические операции* `AND`, `OR`, `NOT`.
+В условии `condition` можно *производить сравнение текста* и *чисел*, а также *использовать логические операторы* `AND`, `OR`, `NOT`.
 ```SQL
 SELECT * FROM notes
   WHERE title = "Article #4" OR title = "Article #5";
@@ -190,3 +190,20 @@ SELECT * FROM timers
   WHERE seconds > 30;
 ```
 ![SQL Example](./assets/SQL_7.png)
+
+### BETWEEN, IN, LIKE
+С помощью *оператора* `BETWEEN` можно задать *промежуток значений* (*число*, *строка*, *дата*).
+```SQL
+SELECT * FROM notes
+  WHERE ID BETWEEN 2 AND 5;
+```
+С помощью *оператора* `IN` можно задать *несколько возможных значений*.
+```SQL
+SELECT * FROM notes
+  WHERE ID IN (1, 2, 4);
+```
+С помощью *оператора* `LIKE` можно задать *шаблон для поиска* (`%` — любое количество символов, `_` — один символ).
+```SQL
+SELECT * FROM notes
+  WHERE title LIKE "Article___" AND description LIKE "DESCRIPTION%";
+```

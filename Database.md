@@ -167,7 +167,8 @@ SELECT DISTINCT title, description FROM notes;
  
 ## Запросы SELECT с условиями WHERE
 
-Для *указания условий* в *запросе* `SELECT` используется *ключевое слово* `WHERE`.
+*Ключевое слово* `WHERE` используется для *указания условий* в *запросе* `SELECT`.
+
 ```SQL
 -- схема
 SELECT <column_name>, <another_column_name>, /* ... */
@@ -207,3 +208,33 @@ SELECT * FROM notes
 SELECT * FROM notes
   WHERE title LIKE "Article___" AND description LIKE "DESCRIPTION%";
 ```
+## Сортировка при помощи ORDER BY
+
+*Ключевое слово* `ORDER BY` используется для *сортировки результатов запроса* `SELECT`.
+
+Можно указать *порядок сортировки*: `ASC` (ascending) — *по возрастанию*, используется *по умолчанию*; `DESC` (descending) — *по убыванию*.
+```SQL
+SELECT * FROM notes
+  ORDER BY description;
+```
+![SQL Example](./assets/SQL_orderby.png)
+```SQL
+SELECT * FROM notes
+  ORDER BY ID DESC;
+```
+![SQL Example](./assets/SQL_orderby_2.png)
+
+## Агрегатные функции
+
+**Агрегатные функции** *применяются* к *столбцу* и *возвращают единое значение*.
+
+* `AVG (column_name)` — среднее значение столбца `column_name`.
+* `COUNT (column_name)` — количество строк.
+* `MAX (column_name)` — наибольшее значение столбца.
+* `MIN (column_name)` — наименьшее значение столбца.
+* `SUM (column_name)` — сумма значений в столбце.
+
+```SQL
+SELECT COUNT(ID), MIN(ID), AVG(ID), MAX(ID), SUM(ID) FROM notes;
+```
+![SQL Example](./assets/SQL_aggregate.png)

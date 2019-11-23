@@ -48,9 +48,7 @@ USE test;
 DROP DATABASE test; 
 ```
 
-## Работа с таблицами
-
-### Создание таблицы
+## Создание таблицы
 ```SQL
 -- схема
 CREATE TABLE <table_name> (
@@ -86,7 +84,7 @@ CREATE TABLE timers (
   PRIMARY KEY(ID)
 );
 ```
-### Вставка в таблицу
+## Вставка в таблицу
 ```SQL
 -- схема
 INSERT INTO <table_name> (<column_name>, <another_column_name>, /* ... */)
@@ -130,15 +128,15 @@ INSERT INTO timers (ID)
   VALUES ("timer4");
 ```
 
-### Запросы SELECT
+## Запросы SELECT
 
-Получение данных из таблиц происходит при помощи запросов `SELECT`.
+*Получение данных* из *таблицы* происходит при помощи *запросов* `SELECT`.
 ```SQL
 -- схема
 SELECT <column_name>, <another_column_name>, /* ... */
   FROM <table_name>;
 ```
-Можно выбрать сразу все столбцы при помощи `*`.
+Можно *выбрать определённые столбцы таблицы*, а можно *выбрать* сразу *все* при помощи `*`.
 ```SQL
 SELECT * FROM notes;
 
@@ -149,18 +147,46 @@ SELECT * FROM timers;
 ```
 ![SQL Example](./assets/SQL_2.png)
 
-Чтобы запрос не выдавал повторяющиеся данные, есть `SELECT DISTINCT`.
+### SELECT DISTINCT
 
-Например, в таблице `notes` столбец `description` содержит два `null` и мы хотим, чтобы вывелся только один.
+Чтобы запрос *не выдавал повторяющиеся строки*, существует `SELECT DISTINCT`.
+
+Например, в таблице `notes` две строки содержат `null` в `description`.
 ```SQL
 SELECT DISTINCT description FROM notes;
 ```
 
 ![SQL Example](./assets/SQL_3.png)
 
-Это работает только тогда, когда все значения в строках совпадают.
+*Строка пропускается* только, если *все её значения совпадают* со *значеними другой строки*.
 ```SQL
 SELECT DISTINCT title, description FROM notes;
 ```
 
 ![SQL Example](./assets/SQL_4.png)
+ 
+### Запросы SELECT с условиями WHERE
+
+Для *указания условий* в *запросе* `SELECT` используется *ключевое слово* `WHERE`.
+```SQL
+-- схема
+SELECT <column_name>, <another_column_name>, /* ... */
+  FROM <table_name>
+  WHERE <condition>; 
+```
+В условии `condition` можно *производить сравнение текста* и *чисел*, а также *использовать логические операции* `AND`, `OR`, `NOT`.
+```SQL
+SELECT * FROM notes
+  WHERE title = "Article #4" OR title = "Article #5";
+```
+![SQL Example](./assets/SQL_5.png)
+```SQL
+SELECT * FROM notes
+  WHERE title != "Article #1" AND description NOT NULL;
+```
+![SQL Example](./assets/SQL_6.png)
+```SQL
+SELECT * FROM timers
+  WHERE seconds > 30;
+```
+![SQL Example](./assets/SQL_7.png)

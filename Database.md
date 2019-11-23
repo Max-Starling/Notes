@@ -58,18 +58,31 @@ CREATE TABLE <table_name> (
   FOREIGN KEY (<another_column_name>) REFERENCES <another_table_name>(<another_column_name>)
 ); 
 ```
-`PRIMARY KEY` — *первичный ключ* (уникальный идентификатор в таблице), `FOREIGN KEY` — *внешний ключ* (ссылка на другую таблицу).
-
 ```SQL
 -- пример
 CREATE TABLE notes (
-  ID CHAR(6),
-  title VARCHAR(16) NOT NULL,
-  description VARCHAR(32),
+  ID INT,
+  title VARCHAR(255) NOT NULL,
+  description VARCHAR(255),
   PRIMARY KEY (ID)
 ); 
 ```
-Можно указывать ограничения на столбцы таблицы: `NOT NULL`.
+### Ограничения
+Столбцам таблицы можно устанавливать **ограничения** (constraints).
+* `NOT NULL` — столбец не может иметь значение `NULL`.
+* `UNIQUE` — каждое значение в столбце должно быть уникальным.
+* `PRIMARY KEY (<key>)` — *первичный ключ*; уникальный идентификатор строки (row) таблицы. Комбинирует в себе ограничения `NOT NULL` и `UNIQUE`. 
+* `FOREIGN KEY (<key>) REFERENCES <table>(<key>)` — *внешний ключ*; уникальный идентификатор строки в другой таблице.
+* `CHEK (<condition>)` — проверка удовлетворения заданному условию `condition`.
+* `DEFAULT <value>` — задаёт значение по умолчанию.
+
+```sql
+CREATE TABLE timers (
+  ID CHAR(5),
+  seconds INT CHECK (seconds < 60) DEFAULT 0,
+  PRIMARY KEY(ID)
+);
+```
 ### Вставка в таблицу
 ```SQL
 -- схема
@@ -98,4 +111,19 @@ INSERT INTO notes (ID, title)
 -- error (NOT NULL constraint failed)
 INSERT INTO notes (ID, title, description)
   VALUES (6, NULL, "Description 6");
+```
+```SQL
+-- error (CHECK constraint failed)
+INSERT INTO timers
+  VALUES ("timer1", 61)
+
+INSERT INTO timers
+  VALUES ("timer2", 59)
+
+-- error (1 value for 2 columns)
+INSERT INTO timers
+  VALUES ("timer3")
+
+INSERT INTO timers (ID)
+  VALUES ("timer4")
 ```

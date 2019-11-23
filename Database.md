@@ -171,23 +171,26 @@ SELECT DISTINCT title, description FROM notes;
 
 ```SQL
 -- схема
-SELECT <column_name>, <another_column_name>, /* ... */
+SELECT <column_names>
   FROM <table_name>
   WHERE <condition>; 
 ```
 В условии `condition` можно *производить сравнение текста* и *чисел*, а также *использовать логические операторы* `AND`, `OR`, `NOT`.
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   WHERE title = "Article #4" OR title = "Article #5";
 ```
 ![SQL Example](./assets/SQL_5.png)
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   WHERE title != "Article #1" AND description NOT NULL;
 ```
 ![SQL Example](./assets/SQL_6.png)
 ```SQL
-SELECT * FROM timers
+SELECT *
+  FROM timers
   WHERE seconds > 30;
 ```
 ![SQL Example](./assets/SQL_7.png)
@@ -195,17 +198,20 @@ SELECT * FROM timers
 ### BETWEEN, IN, LIKE
 С помощью *оператора* `BETWEEN` можно задать *промежуток значений* (*число*, *строка*, *дата*).
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   WHERE ID BETWEEN 2 AND 5;
 ```
 С помощью *оператора* `IN` можно задать *несколько возможных значений*.
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   WHERE ID IN (1, 2, 4);
 ```
 С помощью *оператора* `LIKE` можно задать *шаблон для поиска* (`%` — любое количество символов, `_` — один символ).
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   WHERE title LIKE "Article___" AND description LIKE "DESCRIPTION%";
 ```
 ## Сортировка при помощи ORDER BY
@@ -214,12 +220,14 @@ SELECT * FROM notes
 
 Можно указать *порядок сортировки*: `ASC` (ascending) — *по возрастанию*, используется *по умолчанию*; `DESC` (descending) — *по убыванию*.
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   ORDER BY description;
 ```
 ![SQL Example](./assets/SQL_orderby.png)
 ```SQL
-SELECT * FROM notes
+SELECT *
+  FROM notes
   ORDER BY ID DESC;
 ```
 ![SQL Example](./assets/SQL_orderby_2.png)
@@ -255,11 +263,123 @@ SELECT MAX(seconds) AS max_seconds FROM timers;
 ## Группировка значений при помощи GROUP BY
 
 **Ключевое слово GROUP BY** используется для *группировки значений* в *столбце*. 
+```SQL
+-- схема
+SELECT <column_names>
+  FROM <table_name>
+  GROUP BY <column_name>;
+```
 
 *Несколько строк группируются* в *одну*, что *позволяет* использовать *агрегатные функции* для *каждой* получившейся *группы*.
 ```SQL
-SELECT *, COUNT(ID) AS rows_count FROM notes
+SELECT *, COUNT(ID) AS rows_count
+  FROM notes
   GROUP BY description;
 ```
 ![SQL Example](./assets/SQL_groupby.png)
 
+### GROUP BY с условиями HAVING
+
+*Ключевое слово* `WHERE` *не может использоваться* с *агрегатными функциями*, поэтому ввели **ключевое слово HAVING**.
+```SQL
+-- схема
+SELECT <column_names>
+  FROM <table_name>
+  GROUP BY <column_name>
+  HAVING <condition>;
+```
+
+```SQL
+SELECT *, COUNT(ID) AS rows_count
+  FROM notes
+  GROUP BY description
+  HAVING COUNT(description) = 1;
+```
+
+## Связь таблиц при помощи JOIN
+
+**Ключевое слово JOIN** используется для связи нескольких таблиц в одну по их общим атрибутам.
+```sql
+-- схема
+SELECT <column_names>
+  FROM <table_A>
+  JOIN <table_B>
+  ON <table_A.column_name_1> = <table_B.column_name_2>; 
+```
+
+С `JOIN` удобно использовать **псевдонимы** — *сокращённые названия таблиц*.
+```sql
+-- схема
+SELECT <column_names>
+  FROM <table_A> A
+  JOIN <table_B> B
+  ON A.<column_name_1> = B.<column_name_2>; 
+```
+
+Создадим и заполним ещё одну таблицу для примера.
+```sql
+CREATE TABLE seconds (
+  ID INT,
+  value INT CHECK (value < 60) DEFAULT 0,
+  PRIMARY KEY(ID)
+);
+
+INSERT INTO seconds VALUES(1, 0);
+INSERT INTO seconds VALUES(2, 30);
+INSERT INTO seconds VALUES(3, 59);
+
+INSERT INTO timers VALUES ("timer5", 15);
+
+SELECT * FROM timers;
+SELECT * FROM seconds;
+```
+![SQL Example](./assets/SQL_join_1.png)
+![SQL Example](./assets/SQL_join_2.png)
+
+* `JOIN`, `INNER JOIN` (внутреннее объединение) — строки, содержащиеся и в A, и в B.
+
+```sql
+SELECT *
+  FROM seconds A
+  JOIN timers B
+  ON A.value = B.seconds;
+```
+![SQL Example](./assets/SQL_join_3.png)
+
+* `LEFT JOIN` (левосторонее объединение) — строки, содержащиеся в A, даже при их отсутствии в B.
+```sql
+SELECT A.ID AS a_id, B.ID AS b_id, A.value, B.seconds
+  FROM seconds A
+  LEFT JOIN timers B
+  ON A.value = B.seconds;
+```
+![SQL Example](./assets/SQL_join_4.png)
+
+* `LEFT JOIN` без пересечения — строки, содержащиеся в A, но не содержащиеся в B.
+```sql
+SELECT *
+  FROM seconds A
+  LEFT JOIN timers B
+  ON A.value = B.seconds
+  WHERE B.seconds IS NULL;
+```
+![SQL Example](./assets/SQL_join_5.png)
+
+*Аналогично* определяются `FULL OUTER JOIN` (все строки в A и все в B), `FULL OUTER JOIN` без пересечения, `RIGHT JOIN` (правостороннее объединение), `RIGHT JOIN` без пересечения.
+
+* `FULL OUTER JOIN` без пересечения.
+```sql
+SELECT *
+  FROM seconds A
+  FULL OUTER JOIN timers B
+  ON A.value = B.seconds
+  WHERE B.seconds IS NULL AND A.value IS NULL;
+```
+
+Можно также объединять больше таблиц.
+```sql
+SELECT A.column_1, B.column_2, C.column_3
+  FROM table_A A 
+  JOIN table_B B ON A.column_1 = B.column_2 
+  JOIN table_C C ON B.column_2 = C.column_3;
+```

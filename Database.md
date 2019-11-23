@@ -142,5 +142,10 @@ SELECT <column_name>, <another_column_name>, /* ... */
 ```SQL
 -- пример
 SELECT * FROM notes;
+
+```
+![SQL Example](./assets/SQL_1.png)
+```SQL
 SELECT * FROM timers;
 ```
+![SQL Example](./assets/SQL_2.png)

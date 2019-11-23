@@ -31,3 +31,71 @@
 * **Долговечность** (Durability). Если пользователь получил подтверждение от системы, что транзакция выполнена, он может быть уверен, что сделанные им изменения не будут отменены из-за какого-либо сбоя. Изменения, сделанные успешно завершённой транзакцией, должны остаться сохранёнными после возвращения системы в работу.
 
 Пусть деньги переводятся с одного счёта на другой. Используются две основные операции: вывод денег с одного счёта `1000$ - 100$ = 400$`, зачисление их на другой счёт `500$ + 100$ = 600$`. Если первая операция удалась, а вторая нет, то происходит откат, поскольку в противном случае имеем несогласованность (inconsistency) данных до и после транзакции: до транзакции на счетах в сумме было `1500$`, после — `1400$`.
+
+# Основы SQL
+
+**Structured Query Language** (SQL) — язык структурированных запросов; предназначен для управления данными в системе реляционных баз данных (RDBMS).
+
+## Работа с базами данных
+```SQL
+CREATE DATABASE test; -- создание бд
+SHOW DATABASES; -- просмотр имеющихся бд
+USE test; -- выбор конкретной бд для использования
+DROP DATABASE notes; -- удаление бд
+```
+
+## Работа с таблицами
+
+### Создание таблицы
+```SQL
+-- схема
+CREATE TABLE <table_name> (
+  <column_name> <column_type>,
+  <another_column_name> <another_column_type>,
+  <one_more_column_name> <one_more_column_type>,
+  /* ... */,
+  PRIMARY KEY (<column_name>),
+  FOREIGN KEY (<another_column_name>) REFERENCES <another_table_name>(<another_column_name>)
+); 
+```
+`PRIMARY KEY` — *первичный ключ* (уникальный идентификатор в таблице), `FOREIGN KEY` — *внешний ключ* (ссылка на другую таблицу).
+
+```SQL
+-- пример
+CREATE TABLE notes (
+  ID CHAR(6),
+  title VARCHAR(16) NOT NULL,
+  description VARCHAR(32),
+  PRIMARY KEY (ID)
+); 
+```
+Можно указывать ограничения на столбцы таблицы: `NOT NULL`.
+### Вставка в таблицу
+```SQL
+-- схема
+INSERT INTO <table_name> (<column_name>, <another_column_name>, /* ... */)
+  VALUES (<value>, <another_value>, /* ... */);
+```
+Если в `VALUES` перечислены значения для каждого столбца и в правильном порядке, то столбцы можно не указывать.
+```SQL
+-- пример
+INSERT INTO notes (ID, title, description)
+  VALUES (1, "Article #1", "Description 1");
+
+INSERT INTO notes
+  VALUES (2, "Article #2", "Description 2");
+
+-- error (2 values for 3 columns)
+INSERT INTO notes (ID, title, description)
+  VALUES (3, "Article #3"); 
+
+INSERT INTO notes (ID, title, description)
+  VALUES (4, "Article #4", NULL);
+
+INSERT INTO notes (ID, title)
+  VALUES (5, "Article #5"); 
+
+-- error (NOT NULL constraint failed)
+INSERT INTO notes (ID, title, description)
+  VALUES (6, NULL, "Description 6");
+```

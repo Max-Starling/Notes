@@ -63,7 +63,6 @@ CREATE TABLE <table_name> (
 ); 
 ```
 ```SQL
--- пример
 CREATE TABLE notes (
   ID INT,
   title VARCHAR(255) NOT NULL,
@@ -95,7 +94,6 @@ INSERT INTO <table_name> (<column_name>, <another_column_name>, /* ... */)
 ```
 Если в `VALUES` перечислены значения для каждого столбца и в правильном порядке, то столбцы можно не указывать.
 ```SQL
--- пример
 INSERT INTO notes (ID, title, description)
   VALUES (1, "Article #1", "Description 1");
 
@@ -133,6 +131,8 @@ INSERT INTO timers (ID)
 ```
 
 ### Запросы SELECT
+
+Получение данных из таблиц происходит при помощи запросов `SELECT`.
 ```SQL
 -- схема
 SELECT <column_name>, <another_column_name>, /* ... */
@@ -140,7 +140,6 @@ SELECT <column_name>, <another_column_name>, /* ... */
 ```
 Можно выбрать сразу все столбцы при помощи `*`.
 ```SQL
--- пример
 SELECT * FROM notes;
 
 ```
@@ -149,3 +148,19 @@ SELECT * FROM notes;
 SELECT * FROM timers;
 ```
 ![SQL Example](./assets/SQL_2.png)
+
+Чтобы запрос не выдавал повторяющиеся данные, есть `SELECT DISTINCT`.
+
+Например, в таблице `notes` столбец `description` содержит два `null` и мы хотим, чтобы вывелся только один.
+```SQL
+SELECT DISTINCT description FROM notes;
+```
+
+![SQL Example](./assets/SQL_3.png)
+
+Это работает только тогда, когда все значения в строках совпадают.
+```SQL
+SELECT DISTINCT title, description FROM notes;
+```
+
+![SQL Example](./assets/SQL_4.png)

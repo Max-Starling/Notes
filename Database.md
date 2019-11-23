@@ -38,10 +38,14 @@
 
 ## Работа с базами данных
 ```SQL
-CREATE DATABASE test; -- создание бд
-SHOW DATABASES; -- просмотр имеющихся бд
-USE test; -- выбор конкретной бд для использования
-DROP DATABASE notes; -- удаление бд
+-- создание бд
+CREATE DATABASE test;
+-- просмотр имеющихся бд
+SHOW DATABASES;
+-- выбор конкретной бд для использования
+USE test;
+-- удаление бд
+DROP DATABASE test; 
 ```
 
 ## Работа с таблицами
@@ -113,17 +117,30 @@ INSERT INTO notes (ID, title, description)
   VALUES (6, NULL, "Description 6");
 ```
 ```SQL
+INSERT INTO timers
+  VALUES ("timer1", 59);
+
 -- error (CHECK constraint failed)
 INSERT INTO timers
-  VALUES ("timer1", 61)
-
-INSERT INTO timers
-  VALUES ("timer2", 59)
+  VALUES ("timer2", 61);
 
 -- error (1 value for 2 columns)
 INSERT INTO timers
-  VALUES ("timer3")
+  VALUES ("timer3");
 
 INSERT INTO timers (ID)
-  VALUES ("timer4")
+  VALUES ("timer4");
+```
+
+### Запросы SELECT
+```SQL
+-- схема
+SELECT <column_name>, <another_column_name>, /* ... */
+  FROM <table_name>;
+```
+Можно выбрать сразу все столбцы при помощи `*`.
+```SQL
+-- пример
+SELECT * FROM notes;
+SELECT * FROM timers;
 ```

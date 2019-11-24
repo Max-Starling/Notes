@@ -425,14 +425,14 @@ UPDATE <table_name>
   SET <column_name> = <value>, <another_column_name> = <another_value>, /* ... */
   WHERE <condition>; 
 ```
-Удаление всех строк в таблице.
-```SQL
-DELETE FROM <table_name>; 
-```
 Удаление строк в таблице по какому-то условию.
 ```SQL
 DELETE FROM <table_name>
   WHERE <condition>;
+```
+Удаление таблицы.
+```SQL
+DROP TABLE <table_name>; 
 ```
 Удаление `VIEW`.
 ```SQL
@@ -443,7 +443,7 @@ DROP VIEW <view_name>;
 
 *Удалить все строки* из *таблицы* можно *двумя способами*.
 ```SQL
-DROP TABLE <table_name>;
+DELETE FROM <table_name>;
 -- или (Transact-SQL)
 TRUNCATE TABLE <table_name>;
 ```

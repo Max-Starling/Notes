@@ -376,10 +376,69 @@ SELECT *
   WHERE B.seconds IS NULL AND A.value IS NULL;
 ```
 
-Можно также объединять больше таблиц.
+Можно *объединить большее количество таблиц*.
 ```sql
 SELECT A.column_1, B.column_2, C.column_3
   FROM table_A A 
   JOIN table_B B ON A.column_1 = B.column_2 
   JOIN table_C C ON B.column_2 = C.column_3;
+```
+
+## View
+
+**View** — *виртуальная таблица*. 
+
+Виртуальная таблица похожа на обычную таблицу, но ей не является, поскольку не хранит реальные данные, а лишь ссылается на них. По этой причине данные в виртуальной таблице нельзя изменить.
+
+Создаётся на основании результата выполнения выражения (обычно результат запроса `SELECT`). Может содержать данные из нескольких таблиц одновременно.
+```SQL
+-- схема
+CREATE VIEW <view_name> AS
+  SELECT <column_names>
+  FROM <table_name>; 
+```
+
+```SQL
+CREATE VIEW timers_less_30sec AS
+  SELECT *
+  FROM timers
+  WHERE seconds < 30;
+
+SELECT * FROM timers_less_30sec;
+```
+![SQL Example](./assets/SQL_view_1.png)
+
+Поскольку `VIEW` хранит ссылки на реальные данные, он знает всё об их изменениях и всегда отображает последнюю версию.
+```SQL
+INSERT INTO timers VALUES ("timer7", 25);
+
+SELECT * FROM timers_less_30sec;
+```
+![SQL Example](./assets/SQL_view_2.png)
+
+
+## Изменение и удаление данных в таблицах
+
+Обновление строк таблицы
+```SQL
+UPDATE <table_name>
+  SET <column_name> = <value>, <another_column_name> = <another_value>, /* ... */
+  WHERE <condition>; 
+```
+Удаление всех строк в таблице.
+```SQL
+DELETE FROM <table_name>; 
+```
+Удаление строк в таблице по какому-то условию.
+```SQL
+DELETE FROM <table_name>
+  WHERE <condition>;
+```
+Удаление таблицы.
+```SQL
+DROP TABLE <table_name>; 
+```
+Удаление `VIEW`.
+```SQL
+DROP VIEW <view_name>; 
 ```

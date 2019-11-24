@@ -453,3 +453,19 @@ TRUNCATE TABLE <table_name>;
 * Не отрабатывают триггеры (в том числе на удаление).
 * `TRUNCATE` не работает, если на удаляемую таблицу имеется ссылка по внешнему ключу.
 * Не журнализируется удаление отдельных строк таблицы.
+
+## Вложенные запросы
+
+*Запросы* `SELECT` могут быть **вложенными** (nested). *Вложенный запрос* называется **подзапросом** (subquery).
+```SQL
+SELECT <column_names>
+  FROM  <table_name>
+  WHERE <value> IN (SELECT <column-name>
+                      FROM <another_table_name>
+                      WHERE <condition>)
+```
+```SQL
+SELECT <column_name> = (SELECT <column_name> FROM <table_name> WHERE <condition>)
+  FROM <table_name>
+  WHERE <condition>
+```

@@ -434,11 +434,22 @@ DELETE FROM <table_name>;
 DELETE FROM <table_name>
   WHERE <condition>;
 ```
-Удаление таблицы.
-```SQL
-DROP TABLE <table_name>; 
-```
 Удаление `VIEW`.
 ```SQL
 DROP VIEW <view_name>; 
 ```
+
+### TRUNKATE vs DELETE
+
+*Удалить все строки* из *таблицы* можно *двумя способами*.
+```SQL
+DROP TABLE <table_name>;
+-- или (Transact-SQL)
+TRUNCATE TABLE <table_name>;
+```
+
+`TRUNCATE` работает быстрее, но имеет следующие ограничения.
+* Отсутствие условий `WHERE`.
+* Не отрабатывают триггеры (в том числе на удаление).
+* `TRUNCATE` не работает, если на удаляемую таблицу имеется ссылка по внешнему ключу.
+* Не журнализируется удаление отдельных строк таблицы.

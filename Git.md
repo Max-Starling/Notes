@@ -25,3 +25,28 @@
 * Ветка `hotfix/name` сливается с веткой `master`.
 * Ветка `hotfix/name` сливается с веткой `develop`.
 * Ветка `hotfix/name` удаляется.
+
+
+## SSH Github + Gitlab
+
+* Открыть Bash.
+
+* Сгенерировать ключ для Github при помощи `ssh-keygen -t rsa -C "email" -f ~/.ssh/id_rsa_github`, где нужно заменить `email` на свой. `id_rsa_github` - название файла, где будет лежать приватный ключ. Также будет сгенерирован публичный ключ `id_rsa_github.pub` в той же папке.
+* Ввести ключевую фразу и повторить её.
+
+* Сгенерировать ключ для Gitlab при помощи `ssh-keygen -t rsa -C "email" -f ~/.ssh/id_rsa_gitlab`, где нужно заменить `email` на свой.
+* Ввести ключевую фразу и повторить её.
+
+* Скопировать публичный ключ `~/.ssh/id_rsa_github` для Github. Например, вывести его на экран при помощи `cat ~/.ssh/id_rsa_github.pub` и скопировать через `Ctrl + C`.
+* Открыть на Github [Settings > SSH keys](https://github.com/settings/keys) и нажать на добавление нового ключа.
+* Вставить скопированный ключ, придумать название для него и сохранить.
+
+* Скопировать публичный ключ `~/.ssh/id_rsa_gitlab` для Gitlab.
+* Открыть на Gitlab `Settings > SSH keys`.
+* Вставить скопированный ключ, придумать название для него и сохранить.
+
+* Добавить SSH-ключ для GitHub в SSH-agent `ssh-add ~/.ssh/id_rsa_github`. Если он не запущен, то нужно сперва его запустить `eval $(ssh-agent -s)` или `ssh-agent bash`.
+* Добавить SSH-ключ для GitLab в SSH-agent `ssh-add ~/.ssh/id_rsa_gitlab`.
+* Проверить, что ключи добавлены через `ssh-add -L`.
+
+* Попробовать сделать `git pull` через SSH.

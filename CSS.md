@@ -575,7 +575,7 @@ div {
 ```css
 .parent {
   font-size: 24px;
-  line-height: 2em;
+  line-height: 2em; /* 48px (считается от font-size текущего элемента) */
 }
 
 .child {

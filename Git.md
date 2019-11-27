@@ -1,3 +1,5 @@
+- [Git flow](#git-flow)
+- [SSH Github & Gitlab](#ssg-github-&-gitlab)
 
 ## Git flow
 
@@ -27,7 +29,7 @@
 * Ветка `hotfix/name` удаляется.
 
 
-## SSH Github + Gitlab
+## SSH Github & Gitlab
 
 * Открыть Bash.
 

@@ -1,5 +1,6 @@
 - [Git flow](#git-flow)
 - [SSH Github & Gitlab](#ssg-github-&-gitlab)
+- [Git Bash](#git-bash)
 
 ## Git flow
 
@@ -77,3 +78,14 @@ Host gitlab.com
 * Попробовать сделать `git pull` через SSH.
 * Дополнительная проверка для Github: `ssh -T git@github.com` (режим отладки: `ssh -T git@github.com`).
 * Дополнительная проверка для Gitlab: `ssh -T git@gitlab.com` (режим отладки: `ssh -T git@gitlab.com`).
+
+## Git Bash
+
+**Bash** (Bourne again shell, "Born again shell", "возрождённый" shell) — усовершенствованная версия ранней командной оболочки *Bourne shell*, исполняющей `.sh` файлы в `UNIX`.
+
+Чтобы на *определённом порте* *убить запущенный процесс*, нужно узнать его **PID** (Process Identifier).
+```css
+netstat -ano | findstr :PORT /* например, :3000 */
+/* Скопировать PID из последнего стобца результата и вставить в команду ниже */
+tskill PID
+```

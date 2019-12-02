@@ -52,7 +52,7 @@
 * Вставить скопированный ключ, придумать название для него и сохранить.
 
 ### Добавление ключа в SSH-agent
-* Добавить SSH-ключ для GitHub в SSH-agent `ssh-add ~/.ssh/id_rsa_github`. Если он не запущен, то нужно сперва его запустить `eval $(ssh-agent -s)` или `ssh-agent bash`.
+* Добавить SSH-ключ для GitHub в SSH-agent `ssh-add ~/.ssh/id_rsa_github`. Если агент не запущен, то нужно сперва его запустить `eval $(ssh-agent -s)` или `ssh-agent bash`.
 * Добавить SSH-ключ для GitLab в SSH-agent `ssh-add ~/.ssh/id_rsa_gitlab`.
 * Проверить, что ключи добавлены через `ssh-add -L`.
 

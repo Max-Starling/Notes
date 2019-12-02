@@ -1,5 +1,6 @@
 - [Git flow](#git-flow)
 - [SSH Github & Gitlab](#ssh-github--gitlab)
+- [Git Config](#git-config)
 - [Git Bash](#git-bash)
 
 ## Git flow
@@ -78,6 +79,22 @@ Host gitlab.com
 * Попробовать сделать `git pull` через SSH.
 * Дополнительная проверка для Github: `ssh -T git@github.com` (режим отладки: `ssh -T git@github.com`).
 * Дополнительная проверка для Gitlab: `ssh -T git@gitlab.com` (режим отладки: `ssh -T git@gitlab.com`).
+
+## Git Config
+
+### Обновить 
+* Установить имя пользователя.
+```shell
+git config --global user.name "Your Username"
+```
+* Установить электронную почту.
+```shell
+git config --global user.email "your@email"
+```
+* Проверить.
+```shell
+git config -l
+```
 
 ## Git Bash
 **Командная оболочка** (Shell) — терминальное приложение (terminal app), используемое для взаимодействия с ОС посредством письменных команд.

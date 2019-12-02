@@ -1,5 +1,5 @@
 - [Git flow](#git-flow)
-- [SSH Github & Gitlab](#ssg-github-&-gitlab)
+- [SSH Github & Gitlab](#ssh-github--gitlab)
 - [Git Bash](#git-bash)
 
 ## Git flow

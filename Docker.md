@@ -44,3 +44,37 @@ Volume даёт контейнеру доступ к какой-то локал�
 ### Почему следует использовать Volume
 
 Volume хранится вне контейнера. Поэтому он не увеличивает размер контейнера, а также не подвержен влиянию жизненного цикла контейнера.
+
+
+## Композиция контейнеров
+
+**Docker Compose** - инструмент, позволяющий запускать приложения, состоящие из нескольких контейнеров.
+
+Например, приложение имеет 3-tier архитектуру и состоит из клиента, сервера и бэкенда.
+```yaml
+version: '3.7'
+services:
+  mongo:
+    command: mongod
+    image: mongo:3.6.3
+    ports:
+      - "27017:27017" # map port to none standard port, to avoid conflicts with locally installed mongodb
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sockt
+  client:
+    build:
+      context: "./client"
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - "4000:4000"
+  server:
+    build:
+      context: "./server"
+      dockerfile: Dockerfile
+    volumes: 
+      - "./shared-folder:/app/shared-folder"
+    ports:
+      - "4001:4001"
+```

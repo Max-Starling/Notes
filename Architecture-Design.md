@@ -1676,6 +1676,39 @@ let library = new Library();
 library = null; // сборщик мусора удалит книги
 ```
 
+Пример композиции в React.
+```jsx
+/* Экземпляр компонента Title создаётся внутри Article. */
+const Article = ({ title }) => (<Title>{title}</Title>);
+
+class App {
+  state = {
+    isShown: false,
+  };
+
+  render() {
+    return (
+      <div>
+        { this.state.isShown
+          ? <Article title="notes" />
+          : null }
+      </div>
+    );
+  }
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+```js
+this.setState({ isShown: true });
+/* Когда экземпляр компонента Article создаётся,
+экземляр компонента Title создаётся вместе с ним. */
+
+this.setState({ isShown: false });
+/* Когда экземпляр компонента Article уничтожается (unmount),
+экземляр компонента Title уничтожается вместе с ним. */
+```
+
 ### Абстракция
 
 **Абстрагировать** объект означает отбросить его маловажные, несущественные детали, чтобы выделить самую важную часть. Что войдёт в "самую важную часть", зависит от решаемой задачи.

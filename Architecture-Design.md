@@ -1628,7 +1628,10 @@ shapes.forEach(shape => shape.draw());
 Агрегация не подразумевает владения: оба объекта могут существовать независимо друг от друга. Уничтожение контейнера не означает уничтожение содержащегося в нём объекта.
 ```js
 class Book {
-  constructor(name, author)
+  constructor(name, author) {
+    this.name = name;
+    this.author = author;
+  }
 }
 
 /* книги созданы вне класса Library, поэтому они не зависят
@@ -1647,7 +1650,7 @@ class Library {
   }
 }
 
-let library = new Library();
+let library = new Library(books);
 library = null; // уничтожение экземпляра класса Library 
 console.log(books); // книги продолжают существовать
 ```

@@ -23,6 +23,10 @@ const fn = (param: string): void => {
 }
 ```
 - `Array` — **массив** (`number[]`, `Array<string>`).
+```ts
+let array: number[];
+array = [1, 2, 3];
+```
 - `Typle` — **кортеж** (`[string, number]`).
 - `Enum` — **перечисление**.
 

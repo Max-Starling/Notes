@@ -52,7 +52,7 @@ const createError = (message: string): never {
   throw new Error(message);
 };
 ```
-- `Array` — **массив** (`number[]`, `Array<string>`).
+- `Array` — **массив** (`number[]`).
 ```ts
 let foo: number[];
 foo = [1, 2, 3];
@@ -60,6 +60,15 @@ let bar: Array<string>;
 bar = ['n', 'o', 't', 'e', 's'];
 ```
 - `Typle` — **кортеж** (`[string, number]`).
-- `Enum` — **перечисление**.
-
+```ts
+let foo: [string, number, boolean];
+foo = ['notes', 17, true];
+/* порядок важен */
+foo = [17, 'notes', true]; // error
+```
+- `Enum` — **перечисление** (более дружелюбные имена для множества числовых значений).
+```ts
+enum Visibility { Visible, Hidden }
+const state: Visibility = Visibility.Visible;
+```
 

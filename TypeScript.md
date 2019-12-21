@@ -9,6 +9,16 @@
 - `string` — **строковое значение** (`"notes"`, `'123'`).
 - `null` — *специальное значение* **null**.
 - `undefined` — *специальное значение* **undefined**.
+- `symbol` — **символ**.
+```ts
+const symbol = Symbol('key');
+const obj = {
+    [symbol]: 'value'
+};
+console.log(obj[sym]); // "value"
+console.log(Symbol('key') === symbol); // false
+console.log(obj[Symbol('key')]) // undefined
+```
 - `any` — **произвольный тип** (ставится по умолчанию).
 ```ts
 let foo: any;

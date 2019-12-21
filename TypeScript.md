@@ -46,6 +46,12 @@ const fn = (param: string): void => {
   // return отсутствует
 }
 ```
+- `never` — **значение**, которое **никогда не наступит** (обычно функции, возвращающие ошибку)
+```ts
+const createError = (message: string): never {
+  throw new Error(message);
+};
+```
 - `Array` — **массив** (`number[]`, `Array<string>`).
 ```ts
 let foo: number[];

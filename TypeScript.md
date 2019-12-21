@@ -33,11 +33,26 @@ console.log(obj[sym]); // "value"
 console.log(Symbol('key') === symbol); // false
 console.log(obj[Symbol('key')]) // undefined
 ```
-- `any` — **произвольный тип** (ставится по умолчанию).
+### Остальные типы
+- `object` — **непримитивный тип** (всё, кроме типов выше).
+```ts
+let foo: object;
+foo = { prop: 'value' };
+foo = ['value'];
+foo = ():void => console.log('notes');
+```
+- `Array` — **массив** (`number[]`).
+```ts
+let foo: number[];
+foo = [1, 2, 3];
+let bar: Array<string>;
+bar = ['n', 'o', 't', 'e', 's'];
+```
+- `any` — **произвольный тип** (используется по умолчанию, если тип не указан).
 ```ts
 let foo: any;
 foo = 1;
-foo = ''; // ошибки не будет
+foo = '';
 ```
 - `void` — **отсутствие конкретного значения** (обычно возвращаемый тип функции).
 ```ts
@@ -51,13 +66,6 @@ const fn = (param: string): void => {
 const createError = (message: string): never {
   throw new Error(message);
 };
-```
-- `Array` — **массив** (`number[]`).
-```ts
-let foo: number[];
-foo = [1, 2, 3];
-let bar: Array<string>;
-bar = ['n', 'o', 't', 'e', 's'];
 ```
 - `Typle` — **кортеж** (`[string, number]`).
 ```ts

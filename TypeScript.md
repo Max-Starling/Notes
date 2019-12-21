@@ -1,6 +1,20 @@
 
 ## Интерфейсы
 
+```ts
+interface IAuthor {
+  id: string;
+  username: string;
+}
+
+interface IArticle {
+  id: string;
+  title: string;
+  description?: string;
+  getAuthor: () => Author;
+}
+```
+
 ## Типы данных
 
 ### Примитивные типы

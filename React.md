@@ -16,7 +16,26 @@ const element = React.createElement('span', null, 'Notes');
 
 Параметрами компонента выступает объект, называющийся **Props** (properties, свойства).
 ```jsx
+/* функциональный компонент */
 const Title = props => (<span>{props.text}</span>);
+```
+```jsx
+/* классовый компонент */
+class Title extends React.Component {
+  render() {
+    return (
+      <span>{props.text}</span>  
+    );
+  }
+}
+```
+JSX позволяет использовать компоненты как элементы. 
+```jsx
+<Title text="Notes" />
+```
+Такой синтаксис эквивалентен вызову функции `Title` или созданию экземпляра класса `Title` и преобразуется в
+```jsx
+React.createElement('span', null, 'Notes');
 ```
 
 ## Жизненный цикл компонента

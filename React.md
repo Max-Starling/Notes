@@ -71,7 +71,7 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 
 Компонент высшего порядка `memo` служит заменой метода `shouldComponentUpdate` и `PureComponent` для функциональных компонент.
 ```js
-const Article = title => (<div>{title}</div>);
+const Article = ({ title }) => (<div>{title}</div>);
 
 const areEqual = (props, nextProps) => {
   if (props.title === nextProps.title) {
@@ -80,9 +80,66 @@ const areEqual = (props, nextProps) => {
   return false; // компонент будет перерендерен
 };
 
-const React.memo(Article,  areEqual);
+const React.memo(Article, areEqual);
 ```
 
+### useCallback
+Все действия в функциональном компоненте (не считая React Hooks) проделываются каждый раз, когда он рендерится. В том числе и создание переменных.
+```js
+const Form = ({ title }) => {
+  /* функция onSubmit пересоздаётся в компоненте Form на каждый рендер */
+  const onSubmit = () => console.log('submit', { title });
+  /* console.log запускается каждый раз, когда рендерится компонента */
+  console.log('rerender!');
+  return (<button onClick={onSubmit}>{title}</button>);
+};
+```
+Можно столкнуться со следующей проблемой.  
+Пусть есть список из 100 элементов, состояние которых меняется по клику.
+```jsx
+import React, { memo, useState, useCallback } from "react";
+import ReactDOM from "react-dom";
+
+const ListItem = ({ value, index, onClick } => {
+  console.log("rendered!");
+  const onButtonClick = () => onClick(index, 1);
+  return <button onClick={onButtonClick}>{value}</button>;
+};
+
+const List = () => {
+  const [items, setItems] = useState(Array.from(Array(100).fill(0)));
+
+  const onClick = (index, value) =>
+    setItems(items => items.map((item, i) => (i === index ? value : item))),
+  );
+
+  const renderItem = (value, index) => (
+    <ListItem key={index} index={index} value={value} onClick={onClick} />
+  );
+  return <div>{items.map(renderItem)}</div>;
+};
+
+ReactDOM.render(<List />, document.getElementById("root"));
+```
+При клике на любой элемент списка в консоли можно увидеть `(100) rendered!`. Это означает, что клик по одному элементу заставить перерендериться все остальные. Попробуем это исправить.
+
+Обернём компонент `ListItem` в `memo`, чтобы он перерендеривался не каждый раз при рендере родительского компонента, а только при обновлении его `props`.
+```jsx
+const ListItem = memo({ value, index, onClick }) => {
+  console.log("rendered!");
+  const onButtonClick = () => onClick(index, 1);
+  return <button onClick={onButtonClick}>{value}</button>;
+});
+```
+При клике на любой элемент списка всё ещё можно видеть `(100) rendered!`. Это связано с тем, что функция `onClick` пересоздаётся каждый раз и в `Props` каждому элементу приходит её новая версия. Пересоздания функции можно избежать, если мемоизировать функцию при помощи `useCallback`.
+```jsx
+const onClick = useCallback(
+  (index, value) =>
+    setItems(items => items.map((item, i) => (i === index ? value : item))),
+  []
+);
+```
+`useCallback(callback, [dependencies])`.
 
 ### Инициализация
 

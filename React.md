@@ -1,5 +1,6 @@
 - [Элементы и компоненты](#элементы-и-компоненты)
 - [Жизненный цикл компонента](#жизненный-цикл-компонента)
+- [React Hooks](#react-hooks)
 
 ## Элементы и компоненты
 
@@ -63,6 +64,25 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 - [Создание]
 - [Обновление]
 - [Уничтожение]
+
+## React Hooks
+
+### Мемоизация с useMemo, useCallback, memo
+
+Компонент высшего порядка `memo` служит заменой метода `shouldComponentUpdate` и `PureComponent` для функциональных компонент.
+```js
+const Article = title => (<div>{title}</div>);
+
+const areEqual = (props, nextProps) => {
+  if (props.title === nextProps.title) {
+    return true; // компонент не будет перерендерен
+  }
+  return false; // компонент будет перерендерен
+};
+
+const React.memo(Article,  areEqual);
+```
+
 
 ### Инициализация
 

@@ -34,13 +34,6 @@ console.log(Symbol('key') === symbol); // false
 console.log(obj[Symbol('key')]) // undefined
 ```
 ### Остальные типы
-- `object` — **непримитивный тип** (всё, кроме типов выше).
-```ts
-let foo: object;
-foo = { prop: 'value' };
-foo = ['value'];
-foo = ():void => console.log('notes');
-```
 - `Array` — **массив** (`number[]`).
 ```ts
 let foo: number[];
@@ -80,3 +73,26 @@ enum Visibility { Visible, Hidden }
 const state: Visibility = Visibility.Visible;
 ```
 
+### object vs Object vs {}
+- `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы)*.
+```ts
+let foo: object;
+foo = { prop: 'value' };
+foo = ['value'];
+foo = ():void => console.log('notes');
+```
+- `Object` — любой **JavaScript-объект** (интерфейс `Object` включает в себя `toString()`, `valueOf()`, `hasOwnProperty()` и другие методы.
+```ts
+interface Object {
+  toString(): string;
+  hasOwnProperty(v: string): boolean;
+  /* ... */
+}
+```
+- `{}` — **пустой тип**, **пустой объект**.
+Обращение к его свойствам приведёт к ошибке, но остаётся возможность использовать все методы `Object`.
+```ts
+const foo = {};
+foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
+console.log(foo.toString()); // '[object Object]'
+```

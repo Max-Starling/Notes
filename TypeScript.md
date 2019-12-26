@@ -74,7 +74,38 @@ interface IFlyingFish extends Fish {
   fly: () => void;
 };
 ```
-Такая
+
+Такая возможность связана с тем, что в TypeScript есть возможность создать объект без класса.
+```ts
+class Human {
+  sex: string;
+  constructor(sex: string) {
+    this.sex = sex;
+  }
+
+  run():void {
+    console.log('run');
+  }
+}
+/* объекты human1 и human2 реализуют один и тот же интерфейс */
+const human1 = new Human('male');
+const human2 = {
+  sex: 'male',
+  run():void {
+    console.log('run');
+  }
+};
+```
+В этом и есть смысл: можно взять интерфейс класса и расширить его.
+```ts
+interface IHuman extends Human {}
+let human3: IHuman;
+human3 = { ...human2 };
+```
+
+Интерфейсы наследуют всё, включая приватные и защищённые члены базового класса.
+
+Если базовый класс содержит приватные или защищённые свойства и методы, то наследующий от него интерфейс может быть реализован только базовым классом или его наследником.
 
 ## Типы данных
 

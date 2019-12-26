@@ -1,5 +1,10 @@
 
+## Классы
+
 ## Интерфейсы
+
+**Интерфейс** (Interface) является абстрактным описанием того, что должен включать в себя объект. 
+
 
 ```ts
 interface IAuthor {
@@ -14,6 +19,34 @@ interface IArticle {
   getAuthor: () => Author;
 }
 ```
+
+Использование интерфейсов похоже на утиную типизацию.
+```ts
+interface IDuck {
+  quack(): void;
+}
+
+const obj: IDuck = {
+  quack(): void {
+    console.log('quack!');
+  }
+}
+```
+
+
+### Наследование интерфейса от класса
+
+В TypeScript есть возможность наследовать интерфейс от класса. 
+```ts
+class Fish {
+  private age(): string;
+  swim(): void;
+}
+interface IFlyingFish extends Fish {
+  fly: () => void;
+};
+```
+Такая
 
 ## Типы данных
 

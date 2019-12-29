@@ -1,3 +1,8 @@
+- [Основы HTML](#основы-html)
+  - [Docktype](#docktype)
+  - [Типы HTML-тегов](#типы-html-тегов)
+  - [Фреймы и встроенные фреймы](#фреймы-и-встроенные-фреймы)
+
 # Основы HTML
 
 Схема HTML-тега:
@@ -6,6 +11,34 @@
 <tagName attribute="value"></tagName>
 <tagName attribute="value">
 ```
+
+## Doctype
+
+Элемент <!DOCTYPE> предназначен для указания типа документа. 
+
+Браузер по-разному интерпретирует докумер в зависимости от его типа.
+
+**Document Type Definition** (DTD) -описание типа документа
+
+### Схема
+```html
+<!DOCTYPE [Элемент верхнего уровня] [Публичность] "[Регистрация]//[Организация]//[Тип] [Имя]//[Язык]" "[URL]"
+```
+
+### Разновидности Docktype
+* HTML 5 (воспринимает все типы документов).
+```html
+<!DOCTYPE html>
+```
+* HTML 4.01.
+```html
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+```
+* XHTML 1.1
+```html
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+```
+
 ## Типы HTML-тегов
 
 ### Парные и одиночные теги

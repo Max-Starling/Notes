@@ -14,35 +14,73 @@
 
 ## Doctype
 
-Элемент <!DOCTYPE> предназначен для указания типа документа. 
+Элемент `<!DOCTYPE>` предназначен для указания типа документа. 
 
 Браузер по-разному интерпретирует докумер в зависимости от его типа. 
 
 Наличие Docktype выступает гарантией того, что разные браузеры обработают документ одинаково.
 
-**Document Type Definition** (DTD) - описание типа документа.
+**Document Type Definition** (DTD, определение типа документа) — язык, использующийся для записи синтаксических правил SGML-подобных языков разметки (HTML, XML, SGML, GML). 
 
-### Схема
+DTD определяет *структуру документа*, *список валидных элементов* и их *атрибутов*.
+
+Отрывок из DTD-файла для HTML 4
+```DTD
+<!--=================== Generic Attributes ===============================-->
+
+<!ENTITY % coreattrs
+ "id          ID             #IMPLIED  -- document-wide unique id --
+  class       CDATA          #IMPLIED  -- space-separated list of classes --
+  style       %StyleSheet;   #IMPLIED  -- associated style info --
+  title       %Text;         #IMPLIED  -- advisory title --"
+  >
+
+<!ENTITY % i18n
+ "lang        %LanguageCode; #IMPLIED  -- language code --
+  dir         (ltr|rtl)      #IMPLIED  -- direction for weak/neutral text --"
+  >
+
+<!ENTITY % events
+ "onclick     %Script;       #IMPLIED  -- a pointer button was clicked --
+  ondblclick  %Script;       #IMPLIED  -- a pointer button was double clicked--
+  onmousedown %Script;       #IMPLIED  -- a pointer button was pressed down --
+  onmouseup   %Script;       #IMPLIED  -- a pointer button was released --
+  onmouseover %Script;       #IMPLIED  -- a pointer was moved onto --
+  onmousemove %Script;       #IMPLIED  -- a pointer was moved within --
+  onmouseout  %Script;       #IMPLIED  -- a pointer was moved away --
+  onkeypress  %Script;       #IMPLIED  -- a key was pressed and released --
+  onkeydown   %Script;       #IMPLIED  -- a key was pressed down --
+  onkeyup     %Script;       #IMPLIED  -- a key was released --"
+  >
+
+<!ENTITY % attrs "%coreattrs; %i18n; %events;">
+
+<!--================ Forms ===============================================-->
+<!ELEMENT FORM - - (%block;|SCRIPT)+ -(FORM) -- interactive form -->
+<!ATTLIST FORM
+  %attrs;                              -- %coreattrs, %i18n, %events --
+  action      %URI;          #REQUIRED -- server-side form handler --
+  method      (GET|POST)     GET       -- HTTP method used to submit the form--
+  enctype     %ContentType;  "application/x-www-form-urlencoded"
+  accept      %ContentTypes; #IMPLIED  -- list of MIME types for file upload --
+  name        CDATA          #IMPLIED  -- name of form for scripting --
+  onsubmit    %Script;       #IMPLIED  -- the form was submitted --
+  onreset     %Script;       #IMPLIED  -- the form was reset --
+  accept-charset %Charsets;  #IMPLIED  -- list of supported charsets --
+  >
+```
+
+### Схема Doctype
 ```html
 <!DOCTYPE [Элемент верхнего уровня] [Публичность] "[Регистрация]//[Организация]//[Тип] [Имя]//[Язык]" "[URL]"
 ```
 * *Элемент верхнего уровня*: в HTML — `<html>`, в SVG — `<svg>`.
-* *Публичность*: публичный ресурс — `PUBLIC`, системный локальный — `SYSTEM`. `HTML`, `XHTML` — всегда PUBLIC.
+* *Публичность*: публичный ресурс — `PUBLIC`, системный локальный — `SYSTEM`. `HTML`, `XHTML` — всегда `PUBLIC`.
 * *Регистрация*: зарегистрирован ли разработчик текущего DTD в международной организации по стандартизации (ISO). `+` — да, `-` — нет. W3C не зарегистрирован.
 * *Тип описываемого документа*. `DTD`.
 * *Уникальное имя описания документа в DTD*.
 * *Язык описания*.
-* *URL документа с DTD*.
-
-Пример с SVG:
-```HTML
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-```
-
-Пример с MathML:
-```HTML
-<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
-```
+* *URL документа формата DTD*.
 ### Разновидности Docktype
 * HTML 5 (воспринимает все типы документов).
 ```html
@@ -55,6 +93,14 @@
 * XHTML 1.1
 ```html
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+```
+* SVG
+```HTML
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+```
+* MathML
+```HTML
+<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
 ```
 
 ## Типы HTML-тегов

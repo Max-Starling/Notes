@@ -79,7 +79,7 @@ interface IFlyingFish extends Fish {
 };
 ```
 
-Такая возможность связана с тем, что в TypeScript есть возможность создать объект без класса.
+Такая возможность связана с тем, что в TypeScript (как и в JavaScript) можно создать объект без класса.
 ```ts
 class Human {
   sex: string;
@@ -100,11 +100,29 @@ const human2 = {
   }
 };
 ```
-В этом и есть смысл: можно взять интерфейс класса и расширить его.
+В этом и есть смысл: можно взять интерфейс класса и использовать его.
 ```ts
 interface IHuman extends Human {}
+
 let human3: IHuman;
 human3 = { ...human2 };
+```
+Более того, мы можем расширить этот интерфейс. И таким образом заменить наследование композицией (*Composite Reuse Principle*), реализуя расширенный интерфейс вместо переопределения методов родительского класса.
+```ts
+class Bird { /* ... */ };
+
+interface IFlyingBird extends Bird {
+  fly: () => void;
+}
+
+class FlyingBird implements IFlyingBird { /* ... */ }
+```
+Можно также найти применение наследованию интерфейса от класса при использовании Generics.
+```ts
+class Translator<From, To> { /* ... */ }
+interface EngRusTranslator extends Translator<Russian, English> {}
+
+const translate = (translator: EngRusTranslator) => { /* ... */ }
 ```
 
 Интерфейсы наследуют всё, включая приватные и защищённые члены базового класса.

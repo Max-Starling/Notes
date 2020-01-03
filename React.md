@@ -432,7 +432,7 @@ console.log(deepEqual(foo, bar)); // true
 console.log(deepEqual(foo, bar)); // took from memory!, true
 console.log(memory.get(equal)); // { '{"a":{"b":1}}__{"a":{"b":1}}': true }
 ```
-Для массивов можно заменить в генерации `toString()` на `join(separator)`, если есть необходимость, чтобы.
+Для массивов можно заменить в генерации `toString()` на `join(separator)`, если есть необходимость, чтобы наборы параметров `[1], [2, 3]` и `[1, 2], [3]` считались различными при подсчётах.
 ```js
 const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 const sumMemo = memo(sum);

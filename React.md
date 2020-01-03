@@ -351,19 +351,31 @@ console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
 sum = null; // удаляем функцию
 console.log(memory[sumKey]); // { "1,2,3": 6 } (данные о sum остались)
 ```
-
+Если бы мы использовали в качестве `fnKey` не строковое представление функции, а саму функцию, то результат был бы таким же: ключ обычного объекта всегда приводится к стровокому значению. Будем использовать `WeakMap`, созданный специально для таких случаев.
 ```js
 let memory = new WeakMap();
 
 const memo = fn => (...args) => {
-  const fnKey = fn.toString();
-  memory[fnKey] = memory[fnKey] || {};
+  if (!memory.get(fn)) {
+    memory.set(fn, {});
+  }
+  console.log(memory.get(fn))
   const argsKey = args.toString();
-  if (memory[fnKey][argsKey] === void 0) {
-    memory[fnKey][argsKey] = fn(...args);
+  if (memory.get(fn)[argsKey] === void 0) {
+     memory.get(fn)[argsKey] = fn(...args);
   } else {
     console.log('took from memory!');
   }
-  return memory[fnKey][argsKey];
+  return memory.get(fn)[argsKey];
 };
+
+let sum = (...args) => args.reduce((acc, val) => acc + val, 0);
+
+const sumMemo = memo(sum);
+
+console.log(sumMemo(1, 2, 3)); // 6
+console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
+console.log(memory.get(sum)); // { "1,2,3": 6 }
+sum = null;
+console.log(memory.get(sum)); // undefined
 ```

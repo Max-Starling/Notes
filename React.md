@@ -293,6 +293,8 @@ console.log(decMemo(6)); // 'took from memory!', 5
 ```
 Перепишем функцию `memo` таким образом, чтобы она могла принимать несколько параметров.
 ```js
+let memory = {};
+
 const memo = fn => (...args) => {
   const key = args.toString();
   if (memory[key] === void 0) {
@@ -306,7 +308,6 @@ const memo = fn => (...args) => {
 ```js
 const mul = (a, b) => a * b;
 
-memory = {};
 const mulMemo = memo(mul);
 console.log(mulMemo(3, 7)); // 21
 console.log(memory); // { "3, 7": 21 }
@@ -320,6 +321,8 @@ console.log(mul); // "(a, b) => a * b"
 ```
 Будем использовать это представление в качестве ключа в хранилище `memory`. Этому ключу будет соответствовать хранилище для конкретной функции `fn`.
 ```js
+let memory = {};
+
 const memo = fn => (...args) => {
   const fnKey = fn.toString();
   memory[fnKey] = memory[fnKey] || {};
@@ -334,8 +337,7 @@ const memo = fn => (...args) => {
 ```
 ```js
 const divide = (a, b) => a / b;
-
-memory = {};
+ 
 const divideMemo = memo(divide);
 console.log(divideMemo(21, 7)); // 3
 console.log(memory); // { "(a, b) => a * b": { "3,7": 21 } }
@@ -354,7 +356,7 @@ console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
 sum = null; // удаляем функцию
 console.log(memory[sumKey]); // { "1,2,3": 6 } (данные о sum остались)
 ```
-Если бы мы использовали в качестве `fnKey` не строковое представление функции, а саму функцию, то результат был бы таким же: любое значение (в том числе непримитивное), используемое как ключ, приводится к стровокому значению. Будем использовать `WeakMap`, принимающий объект в качестве ключа и очищающий ячейку хранилища, когда этот объект удаляется (как вручную, так и сборщиком мусора).
+Если бы мы использовали в качестве `fnKey` не строковое представление функции, а саму функцию, то результат был бы тем же: любое значение (в том числе непримитивное), используемое как ключ, приводится к стровокому значению. Будем использовать `WeakMap`, принимающий объект в качестве ключа и очищающий ячейку хранилища, когда этот объект удаляется (как вручную, так и сборщиком мусора).
 ```js
 let memory = new WeakMap();
 
@@ -382,7 +384,7 @@ console.log(memory.get(sum)); // { "1,2,3": 6 }
 sum = null;
 console.log(memory.get(sum)); // undefined
 ```
-А что, если параметрами функции `fn` будут являться объекты, массивы, функции?
+Рассмотрим параметры функции `fn`. Что, если ими будут являться объекты, массивы, функции?
 ```js
 let args = [{ foo: 1 }, { bar: 2 }];
 console.log(args.toString()); // "[object Object],[object Object]"
@@ -414,11 +416,23 @@ const memo = (fn, keyGerenator) => (...args) => {
   return memory.get(fn)[argsKey];
 };
 ```
+Тогда для объектов.
+```js
+import equal from 'deep-equal';
+
+const deepEqual = memo(
+  (objA, objB) => equal(objA, objB), // fn
+  args => args.map(item => JSON.stringify(item)).join('__'), // key generator
+);
+```
+Для массивов.
 ```js
 const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 const sumMemo = memo(sum, args => args.join('--'));
 
-const sumArrays = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sumMemo(...val) : val));
+const sumArrays = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sumMemo(...val) : val), 0);
 
-sumArrays
+sumArrays([1,2,3], [2,3], [1,2,3]);
 ```
+
+## Каррирование

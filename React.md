@@ -281,7 +281,7 @@ const decMemo = memo(dec);
 console.log(decMemo(6)); // 5
 console.log(decMemo(6)); // 'took from memory!', 5
 ```
-Перепишем ее таким образом, чтобы она могла принимать несколько параметров.
+Перепишем функцию `memo` таким образом, чтобы она могла принимать несколько параметров.
 ```js
 const memo = fn => (...args) => {
   const key = args.toString();
@@ -300,4 +300,17 @@ const mulMemo  = memo(mul);
 console.log(mulMemo(3, 7)); // 21
 console.log(memory); // {"3, 7": 21}
 console.log(mulMemo(3, 7)); // 'took from memory!', 21
+```
+В пример выше пришлось очистить хранилище, прежде чем использовать его, поскольку в нем хранятся результаты вычислений других функций. Перепишем функцию `memo` таким образом, чтобы у каждой функции было своё хранилище.
+```js
+const memo = fn => (...args) => {
+  const fnKey = fn.toString();
+  const argsKey = args.toString();
+  if (memory[fnKey][argsKey] === void 0) {
+    memory[fnKey][argsKey] = fn(...args);
+  } else {
+    console.log('took from memory!');
+  }
+  return memory[key];
+};
 ```

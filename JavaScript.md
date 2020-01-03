@@ -1099,6 +1099,7 @@ const notes = {
 for (i of notes) {
   console.log(i); // n, o, t, e, s
 }
+console.log(notes.length); // undefined
 ```
 
 Из *любого итерируемого объекта* можно *сделать массив*.

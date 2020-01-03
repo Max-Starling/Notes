@@ -244,7 +244,7 @@ const renderItem = item => (<li key={item}>{item}</li>);
 
 Напишем простую функцию инкремента.
 ```js
-const inc = val => val++;
+const inc = val => val + 1;
 console.log(inc(5)); // 6
 ```
 Мемоизируем её.
@@ -261,7 +261,7 @@ const incMemo = (val) => {
 };
 
 console.log(incMemo(5)); // 6
-console.log(memory); {5: 6}
+console.log(memory); // {5: 6}
 console.log(incMemo(5)); // 'took from memory!', 6
 ```
 Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного аргумента.
@@ -275,7 +275,7 @@ const memo = fn => (val) => {
   return memory[val];
 };
 
-const dec = val => val--;
+const dec = val => val - 1;
 
 const decMemo = memo(dec);
 console.log(decMemo(6)); // 5
@@ -301,16 +301,32 @@ console.log(mulMemo(3, 7)); // 21
 console.log(memory); // {"3, 7": 21}
 console.log(mulMemo(3, 7)); // 'took from memory!', 21
 ```
-В пример выше пришлось очистить хранилище, прежде чем использовать его, поскольку в нем хранятся результаты вычислений других функций. Перепишем функцию `memo` таким образом, чтобы у каждой функции было своё хранилище.
+В пример выше пришлось очистить хранилище, прежде чем использовать его, поскольку в нем хранятся результаты вычислений других функций. Перепишем функцию `memo` таким образом, чтобы у каждой функции `fn` было своё хранилище.
+
+Для этого используем метод `toString()`, возвращающий строковое представление функции.
+```js
+console.log(mul); // "(a, b) => a * b"
+```
+Будем использовать это представление в качестве ключа в хранилище `memory`. Этому ключу будет соответствовать хранилище для конкретной функции `fn`, являющееся объектом.
 ```js
 const memo = fn => (...args) => {
   const fnKey = fn.toString();
+  memory[fnKey] = memory[fnKey] || {};
   const argsKey = args.toString();
   if (memory[fnKey][argsKey] === void 0) {
     memory[fnKey][argsKey] = fn(...args);
   } else {
     console.log('took from memory!');
   }
-  return memory[key];
+  return memory[fnKey][argsKey];
 };
+
+const divide = (a, b) => a / b;
+
+memory = {};
+const divideMemo = memo(divide);
+console.log(divideMemo(21, 7)); // 3
+console.log(memory); // { "(a, b) => a * b": { "3,7": 21 } }
+console.log(divideMemo(21, 7)); // 'took from memory!', 3
 ```
+

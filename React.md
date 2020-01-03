@@ -285,11 +285,10 @@ const memo = fn => (val) => {
 };
 ```
 ```js
-const dec = val => val - 1;
+const dec = memo(val => val - 1);
 
-const decMemo = memo(dec);
-console.log(decMemo(6)); // 5
-console.log(decMemo(6)); // 'took from memory!', 5
+console.log(dec(6)); // 5
+console.log(dec(6)); // 'took from memory!', 5
 ```
 Перепишем функцию `memo` таким образом, чтобы она могла принимать несколько параметров.
 ```js
@@ -306,18 +305,18 @@ const memo = fn => (...args) => {
 };
 ```
 ```js
-const mul = (a, b) => a * b;
+const mulFn = (a, b) => a * b;
+const mul = memo(mulFn);
 
-const mulMemo = memo(mul);
-console.log(mulMemo(3, 7)); // 21
+console.log(mul(3, 7)); // 21
 console.log(memory); // { "3, 7": 21 }
-console.log(mulMemo(3, 7)); // 'took from memory!', 21
+console.log(mul(3, 7)); // 'took from memory!', 21
 ```
 В примерах выше используется общее хранилище для всех мемоизируемых функций. Перепишем функцию `memo` таким образом, чтобы у каждой функции `fn` было своё хранилище.
 
 Для этого используем метод `toString()`, возвращающий строковое представление функции.
 ```js
-console.log(mul); // "(a, b) => a * b"
+console.log(mulFn); // "(a, b) => a * b"
 ```
 Будем использовать это представление в качестве ключа в хранилище `memory`. Этому ключу будет соответствовать хранилище для конкретной функции `fn`.
 ```js
@@ -336,24 +335,24 @@ const memo = fn => (...args) => {
 };
 ```
 ```js
-const divide = (a, b) => a / b;
- 
-const divideMemo = memo(divide);
-console.log(divideMemo(21, 7)); // 3
+const divideFn = (a, b) => a / b;
+const divide = memo(divideFn);
+
+console.log(divide(21, 7)); // 3
 console.log(memory); // { "(a, b) => a * b": { "3,7": 21 } }
-console.log(memory[divide.toString()]); // { "3,7": 21 }
-console.log(divideMemo(21, 7)); // 'took from memory!', 3
+console.log(memory[divideFn.toString()]); // { "3,7": 21 }
+console.log(divide(21, 7)); // 'took from memory!', 3
 ```
 Сейчас хранилище `memory` очищается только вручную: результаты вычислений остаются даже тогда, когда функция больше не используется.
 ```js
-let sum = (...args) => args.reduce((acc, val) => acc + val, 0);
-const sumKey = sum.toString();
+let sumFn = (...args) => args.reduce((acc, val) => acc + val, 0);
+const sumKey = sumFn.toString();
 
-const sumMemo = memo(sum);
-console.log(sumMemo(1, 2, 3)); // 6
-console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
+const sum = memo(sum);
+console.log(sum(1, 2, 3)); // 6
+console.log(sum(1, 2, 3)); // 'took from memory!', 6
 
-sum = null; // удаляем функцию
+sumFn = null; // удаляем функцию
 console.log(memory[sumKey]); // { "1,2,3": 6 } (данные о sum остались)
 ```
 Если бы мы использовали в качестве `fnKey` не строковое представление функции, а саму функцию, то результат был бы тем же: любое значение (в том числе непримитивное), используемое как ключ, приводится к стровокому значению. Будем использовать `WeakMap`, принимающий объект в качестве ключа и очищающий ячейку хранилища, когда этот объект удаляется (как вручную, так и сборщиком мусора).
@@ -374,15 +373,15 @@ const memo = fn => (...args) => {
 };
 ```
 ```js
-let sum = (...args) => args.reduce((acc, val) => acc + val, 0);
+let sumFn = (...args) => args.reduce((acc, val) => acc + val, 0);
 
-const sumMemo = memo(sum);
+const sum = memo(sumFn);
 
-console.log(sumMemo(1, 2, 3)); // 6
-console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
-console.log(memory.get(sum)); // { "1,2,3": 6 }
-sum = null;
-console.log(memory.get(sum)); // undefined
+console.log(sum(1, 2, 3)); // 6
+console.log(sum(1, 2, 3)); // 'took from memory!', 6
+console.log(memory.get(sumFn)); // { "1,2,3": 6 }
+sumFn = null;
+console.log(memory.get(sumFn)); // undefined
 ```
 Рассмотрим параметры функции `fn`. Что, если ими будут являться объекты, массивы, функции?
 ```js
@@ -434,16 +433,16 @@ console.log(memory.get(equal)); // { '{"a":{"b":1}}__{"a":{"b":1}}': true }
 ```
 Для массивов можно заменить в генерации `toString()` на `join(separator)`, если есть необходимость, чтобы наборы параметров `[1], [2, 3]` и `[1, 2], [3]` считались различными при подсчётах.
 ```js
-const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
-const sumMemo = memo(sum);
+const sumFn = (...args) => args.reduce((acc, val) => acc + val, 0);
+const sum = memo(sumFn);
 
-const sumArrays = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sumMemo(...val) : val), 0);
-const sumArraysMemo = memo(sumArrays, args => args.join('__'));
+const sumArraysFn = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sum(...val) : val), 0);
+const sumArrays = memo(sumArrays, args => args.join('__'));
 
-console.log(sumArraysMemo([1,2,3], [2,3], [1,2,3])) // took from memory!, 17 (подсчёт [1, 2, 3] берётся из памяти)
-console.log(memory.get(sum)); // { "1,2,3": 6, "2,3": 5 }
-console.log(sumArraysMemo([1,2,3], [2,3], [1,2,3])); // took from memory!, 17
-console.log(memory.get(sumArrays)); { "1,2,3__2,3__1,2,3": 17 }
+console.log(sumArrays([1,2,3], [2,3], [1,2,3])) // took from memory!, 17 (подсчёт [1, 2, 3] берётся из памяти)
+console.log(memory.get(sumFn)); // { "1,2,3": 6, "2,3": 5 }
+console.log(sumArrays([1,2,3], [2,3], [1,2,3])); // took from memory!, 17
+console.log(memory.get(sumArraysFn)); // { "1,2,3__2,3__1,2,3": 17 }
 ```
 
 ## Каррирование

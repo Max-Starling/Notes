@@ -276,5 +276,7 @@ const memo = fn => (val) => {
 };
 
 const incMemo2 = memo(inc);
+console.log(incMemo2(6)); // 7
+console.log(incMemo2(6)); // 'took from memory!', 7
 
 ```

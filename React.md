@@ -390,7 +390,7 @@ let args = [{ foo: 1 }, { bar: 2 }];
 console.log(args.toString()); // "[object Object],[object Object]"
 
 args = [[1], [2, 3]];
-console.log(args.toString()); // "1,2,3,"
+console.log(args.toString()); // "1,2,3"
 args = [1, 2, 3];
 console.log(args.toString()); // "1,2,3"
 
@@ -416,23 +416,34 @@ const memo = (fn, keyGerenator) => (...args) => {
   return memory.get(fn)[argsKey];
 };
 ```
-Тогда для объектов.
+Тогда для объектов можно использовать генератор, использующий их JSON-представления.
 ```js
 import equal from 'deep-equal';
 
 const deepEqual = memo(
-  (objA, objB) => equal(objA, objB), // fn
+  equal,
   args => args.map(item => JSON.stringify(item)).join('__'), // key generator
 );
+
+const foo = { a: { b: 1 } };
+const bar = { a: { b: 1 } };
+
+console.log(deepEqual(foo, bar)); // true
+console.log(deepEqual(foo, bar)); // took from memory!, true
+console.log(memory.get(equal)); // { '{"a":{"b":1}}__{"a":{"b":1}}': true }
 ```
-Для массивов.
+Для массивов можно заменить в генерации `toString()` на `join(separator)`, если есть необходимость, чтобы.
 ```js
 const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
-const sumMemo = memo(sum, args => args.join('--'));
+const sumMemo = memo(sum);
 
 const sumArrays = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sumMemo(...val) : val), 0);
+const sumArraysMemo = memo(sumArrays, args => args.join('__'));
 
-sumArrays([1,2,3], [2,3], [1,2,3]);
+console.log(sumArraysMemo([1,2,3], [2,3], [1,2,3])) // took from memory!, 17 (подсчёт [1, 2, 3] берётся из памяти)
+console.log(memory.get(sum)); // { "1,2,3": 6, "2,3": 5 }
+console.log(sumArraysMemo([1,2,3], [2,3], [1,2,3])); // took from memory!, 17
+console.log(memory.get(sumArrays)); { "1,2,3__2,3__1,2,3": 17 }
 ```
 
 ## Каррирование

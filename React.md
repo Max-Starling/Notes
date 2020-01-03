@@ -437,7 +437,7 @@ const sumFn = (...args) => args.reduce((acc, val) => acc + val, 0);
 const sum = memo(sumFn);
 
 const sumArraysFn = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sum(...val) : val), 0);
-const sumArrays = memo(sumArrays, args => args.join('__'));
+const sumArrays = memo(sumArraysFn, args => args.join('__'));
 
 console.log(sumArrays([1,2,3], [2,3], [1,2,3])) // took from memory!, 17 (подсчёт [1, 2, 3] берётся из памяти)
 console.log(memory.get(sumFn)); // { "1,2,3": 6, "2,3": 5 }

@@ -283,7 +283,8 @@ const memo = fn => (val) => {
   }
   return memory[val];
 };
-
+```
+```js
 const dec = val => val - 1;
 
 const decMemo = memo(dec);
@@ -301,11 +302,12 @@ const memo = fn => (...args) => {
   }
   return memory[key];
 };
-
+```
+```js
 const mul = (a, b) => a * b;
 
 memory = {};
-const mulMemo  = memo(mul);
+const mulMemo = memo(mul);
 console.log(mulMemo(3, 7)); // 21
 console.log(memory); // { "3, 7": 21 }
 console.log(mulMemo(3, 7)); // 'took from memory!', 21
@@ -329,7 +331,8 @@ const memo = fn => (...args) => {
   }
   return memory[fnKey][argsKey];
 };
-
+```
+```js
 const divide = (a, b) => a / b;
 
 memory = {};
@@ -367,7 +370,8 @@ const memo = fn => (...args) => {
   }
   return memory.get(fn)[argsKey];
 };
-
+```
+```js
 let sum = (...args) => args.reduce((acc, val) => acc + val, 0);
 
 const sumMemo = memo(sum);
@@ -377,4 +381,44 @@ console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
 console.log(memory.get(sum)); // { "1,2,3": 6 }
 sum = null;
 console.log(memory.get(sum)); // undefined
+```
+А что, если параметрами функции `fn` будут являться объекты, массивы, функции?
+```js
+let args = [{ foo: 1 }, { bar: 2 }];
+console.log(args.toString()); // "[object Object],[object Object]"
+
+args = [[1], [2, 3]];
+console.log(args.toString()); // "1,2,3,"
+args = [1, 2, 3];
+console.log(args.toString()); // "1,2,3"
+
+args = [() => 1, () => 2];
+console.log(args.toString()); // "() => 1,() => 2"
+```
+Чтобы сделать функцию `memo` более расширяемой, следует добавить возможность генерации ключей.
+```js
+let memory = new WeakMap();
+
+const defaultKeyGenerator = args => args.toString();
+
+const memo = (fn, keyGerenator) => (...args) => {
+  if (!memory.has(fn)) {
+    memory.set(fn, {});
+  }
+  const argsKey = keyGerenator ? keyGerenator(args) : defaultKeyGenerator(args);
+  if (memory.get(fn)[argsKey] === void 0) {
+     memory.get(fn)[argsKey] = fn(...args);
+  } else {
+    console.log('took from memory!');
+  }
+  return memory.get(fn)[argsKey];
+};
+```
+```js
+const sum = (...args) => args.reduce((acc, val) => acc + val, 0);
+const sumMemo = memo(sum, args => args.join('--'));
+
+const sumArrays = (...args) => args.reduce((acc, val) => acc + (Array.isArray(val) ? sumMemo(...val) : val));
+
+sumArrays
 ```

@@ -261,7 +261,7 @@ const incMemo = (val) => {
 };
 
 console.log(incMemo(5)); // 6
-console.log(memory); // {5: 6}
+console.log(memory); // { 5: 6 }
 console.log(incMemo(5)); // 'took from memory!', 6
 ```
 Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного аргумента.
@@ -298,7 +298,7 @@ const mul = (a, b) => a * b;
 memory = {};
 const mulMemo  = memo(mul);
 console.log(mulMemo(3, 7)); // 21
-console.log(memory); // {"3, 7": 21}
+console.log(memory); // { "3, 7": 21 }
 console.log(mulMemo(3, 7)); // 'took from memory!', 21
 ```
 В пример выше пришлось очистить хранилище, прежде чем использовать его, поскольку в нем хранятся результаты вычислений других функций. Перепишем функцию `memo` таким образом, чтобы у каждой функции `fn` было своё хранилище.
@@ -327,6 +327,18 @@ memory = {};
 const divideMemo = memo(divide);
 console.log(divideMemo(21, 7)); // 3
 console.log(memory); // { "(a, b) => a * b": { "3,7": 21 } }
+console.log(memory[divide.toString()]); // { "3,7": 21 }
 console.log(divideMemo(21, 7)); // 'took from memory!', 3
 ```
+Хранилище выше очищается только вручную: результаты вычислений остаются даже тогда, когда функция больше не используется.
+```js
+let sum = (...args) => args.reduce((acc, val) => acc + val, 0);
+const sumKey = sum.toString();
 
+const sumMemo = memo(sum);
+console.log(sumMemo(1, 2, 3)); // 6
+console.log(sumMemo(1, 2, 3)); // 'took from memory!', 6
+
+sum = null; // удаляем функцию
+console.log(memory[sumKey]); // { "1,2,3": 6 } (данные о sum остались)
+```

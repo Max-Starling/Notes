@@ -359,7 +359,6 @@ const memo = fn => (...args) => {
   if (!memory.get(fn)) {
     memory.set(fn, {});
   }
-  console.log(memory.get(fn))
   const argsKey = args.toString();
   if (memory.get(fn)[argsKey] === void 0) {
      memory.get(fn)[argsKey] = fn(...args);

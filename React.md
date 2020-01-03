@@ -241,3 +241,23 @@ const renderItem = item => (<li key={item}>{item}</li>);
 **Мемоизация** (memoization, запоминание) — сохранение результатов выполнения функций для предотвращения повторных вычислений.
 
 Помимо сохранения результата выполнения функции, мемоизация подразумевает проверку перед каждым очередным вызовом этой функции: если она ранее вызывалась с такими же параметрами — вернуть результат из памяти.
+
+```js
+const inc = val => val++;
+inc(5); // 6
+```
+```js
+const memory = {};
+
+const incMemo = (val) => {
+  if (memory[val] === void 0) {
+    memory[val] = inc(val);
+  } else {
+    console.log('took from memory!');
+  }
+  return memory[val];
+};
+
+incMemo(5); // 6
+incMemo(5) // 6, took from memory!
+```

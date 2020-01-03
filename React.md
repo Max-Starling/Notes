@@ -242,10 +242,12 @@ const renderItem = item => (<li key={item}>{item}</li>);
 
 Помимо сохранения результата выполнения функции, мемоизация подразумевает проверку перед каждым очередным вызовом этой функции: если она ранее вызывалась с такими же параметрами — вернуть результат из памяти.
 
+Напишем простую функцию инкремента.
 ```js
 const inc = val => val++;
-inc(5); // 6
+console.log(inc(5)); // 6
 ```
+Мемоизируем её.
 ```js
 const memory = {};
 
@@ -258,6 +260,21 @@ const incMemo = (val) => {
   return memory[val];
 };
 
-incMemo(5); // 6
-incMemo(5) // 6, took from memory!
+console.log(incMemo(5)); // 6
+console.log(memory); {5: 6}
+console.log(incMemo(5)); // 'took from memory!', 6
+```
+Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного армгумента.
+```js
+const memo = fn => (val) => {
+  if (memory[val] === void 0) {
+    memory[val] = fn(val);
+  } else {
+    console.log('took from memory!');
+  }
+  return memory[val];
+};
+
+const incMemo2 = memo(inc);
+
 ```

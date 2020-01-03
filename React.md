@@ -249,7 +249,7 @@ console.log(inc(5)); // 6
 ```
 Мемоизируем её.
 ```js
-const memory = {};
+let memory = {};
 
 const incMemo = (val) => {
   if (memory[val] === void 0) {
@@ -264,7 +264,7 @@ console.log(incMemo(5)); // 6
 console.log(memory); {5: 6}
 console.log(incMemo(5)); // 'took from memory!', 6
 ```
-Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного армгумента.
+Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного аргумента.
 ```js
 const memo = fn => (val) => {
   if (memory[val] === void 0) {
@@ -275,8 +275,29 @@ const memo = fn => (val) => {
   return memory[val];
 };
 
-const incMemo2 = memo(inc);
-console.log(incMemo2(6)); // 7
-console.log(incMemo2(6)); // 'took from memory!', 7
+const dec = val => val--;
 
+const decMemo = memo(dec);
+console.log(decMemo(6)); // 5
+console.log(decMemo(6)); // 'took from memory!', 5
+```
+Перепишем ее таким образом, чтобы она могла принимать несколько параметров.
+```js
+const memo = fn => (...args) => {
+  const key = args.toString();
+  if (memory[key] === void 0) {
+    memory[key] = fn(...args);
+  } else {
+    console.log('took from memory!');
+  }
+  return memory[key];
+};
+
+const mul = (a, b) => a * b;
+
+memory = {};
+const mulMemo  = memo(mul);
+console.log(mulMemo(3, 7)); // 21
+console.log(memory); // {"3, 7": 21}
+console.log(mulMemo(3, 7)); // 'took from memory!', 21
 ```

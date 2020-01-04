@@ -458,3 +458,10 @@ const curry = (fn) => {
  return curried; 
 }
 ```
+Или короче
+```js
+const curry = fn => curried = (...args) => 
+  args.length === fn.length
+   ? fn(...args)
+   : nextArg => curried(...args, nextArg);
+```

@@ -446,3 +446,15 @@ console.log(memory.get(sumArraysFn)); // { "1,2,3__2,3__1,2,3": 17 }
 ```
 
 ## Каррирование
+```js
+const curry = (fn) => { 
+ const curried = (...args) => { 
+   if (args.length === fn.length) { 
+     return fn(...args); 
+   } else { 
+     return nextArg => curried(...args, nextArg); 
+   } 
+ }; 
+ return curried; 
+}
+```

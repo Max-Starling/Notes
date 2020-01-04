@@ -446,6 +446,17 @@ console.log(memory.get(sumArraysFn)); // { "1,2,3__2,3__1,2,3": 17 }
 ```
 
 ## Каррирование
+**Каррирование**, **карринг** (currying) — преобразование функции несокольких аргументов в цепочку функций одного аргумента.
+
+```js
+const sum = (x, y) => x + y;
+sum(1, 3); // 4
+
+const curriedSum = x => y => x + y;
+curriedSum(1)(3); // 4
+
+```
+
 ```js
 const curry = (fn) => { 
  const curried = (...args) => { 

@@ -454,9 +454,13 @@ sum(1, 3); // 4
 
 const curriedSum = x => y => x + y;
 curriedSum(1)(3); // 4
-
 ```
-
+Каждый вызов преобразованной функции возвращает новую функцию, в которой один параметр фиксируется.
+```js
+const tmp = curriedSum(1); //  y => 1 + y
+tmp(3); // 4
+```
+Функцию преобразования можно написать следующим образом.
 ```js
 const curry = (fn) => { 
  const curried = (...args) => { 
@@ -469,7 +473,7 @@ const curry = (fn) => {
  return curried; 
 }
 ```
-Или короче
+Или можно записать ещё короче.
 ```js
 const curry = fn => curried = (...args) => 
   args.length === fn.length

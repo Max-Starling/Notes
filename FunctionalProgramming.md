@@ -30,10 +30,11 @@ console.log(bar); // 2
 ```js
 console.log(incrementTwice(increment(decrement(incrementDecrement(increment(0)))))); // 3
 ```
-Если в *композиции* участвуют *много функций*, а их *названия длинные*, то такую композицию *трудно прочитать*. Можно написать *функцию* `compose`, которая *составляет композицию* из *любого числа функций*.
+Если в *композиции* участвует слишком *много функций*, то её код становится *трудно читаемым* (смотреть пример выше). Для таких случаев можно использовать *функцию* `compose`, которая *составляет композицию* из *любого числа функций*.
 ```js
 const compose = (...functions) => args => functions.reduceRight((arg, fn) => fn(arg), args);
-
+```
+```js
 console.log(compose(
   incrementTwice,
   increment,

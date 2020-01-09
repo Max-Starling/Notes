@@ -1,6 +1,7 @@
 - [Элементы и компоненты](#элементы-и-компоненты)
 - [Жизненный цикл компонента](#жизненный-цикл-компонента)
 - [React Hooks](#react-hooks)
+- [Компоненты высшего порядка](#компоненты-высшего-порядка)
 
 ## Элементы и компоненты
 
@@ -235,4 +236,50 @@ const renderItem = item => (<li key={item}>{item}</li>);
 `index` элемента в массиве использовать не рекомендуется. При его использовании в примере выше произойдёт аналогичная ситуация (под индексом 0 в старом массиве лежит 0, а в новом 1). Использовать индекс можно только в том случае, когда порядок элементов не меняется (например, когда элементы могут добавляться только в конец и оттуда же).
 
 *Ключи* должны быть *стабильными*, *предсказуемыми* и *уникальными*. *Нестабильные ключи* (например, `key={Math.random()}`) вызовут необязательное пересоздание экземпляров компонента и DOM-узлов, что приводит к потере состояния дочерних компонентов и падению производительности.
+
+## Компоненты высшего порядка
+
+Минимальная реализация компонента высшего порядка `withRouter`.
+```jsx
+const router = { route: 'qq' };
+const withRouter = Component => props => (
+  <Component {...props} router={router} />
+);
+```
+```jsx
+const Navbar = withRouter(props => <div>Route: {props.router.route}</div>));
+
+const render = () => (<Navbar />); // <div> Route: qq </div>
+```
+Минимальная реализация компонента высшего порядка `connect`.
+```jsx
+const state = { username: 'Max' };
+const dispatch = action => console.log(action);
+
+const connect = (mapStateToProps, mapDispatchToProps) => Component => props => (
+  <Component
+    {...props}
+    {...mapStateToProps(state, props)}
+    {...mapDispatchToProps(dispatch)}
+  />
+));
+```
+```jsx
+const ProfileComponent = props => (
+  <div>
+    <p>{props.username}</p>
+    <button onClick={props.changeUsername}>Change name</button>
+  </div>
+);
+
+const mapStateToProps = state => state.username;
+
+const mapDispatchToProps = dispatch => ({
+  changeUsername: name => dispatch({ type: 'SET_USERNAME', payload: name }),
+});
+
+const Profile = connect(ProfileComponent)(mapStateToProps, mapDispatchToProps);
+
+const render = () => (<Profile >/);
+```
 

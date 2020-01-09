@@ -89,6 +89,47 @@ const render = () => (
   </main>
 );
 ```
+Минимальная реализация компонента высшего порядка `withRouter`.
+```jsx
+const router = { route: 'qq' };
+const withRouter = Component => props => (<Component {...props} router={router} />);
+```
+```jsx
+const Navbar = withRouter(props => <div>Route: {props.router.route}</div>));
+
+const render = () => (<Navbar />); // <div> Route: qq </div>
+```
+Минимальная реализация компонента высшего порядка `connect`.
+```jsx
+const state = { username: 'Max' };
+const dispatch = action => console.log(action);
+
+const connect = (mapStateToProps, mapDispatchToProps) => Component => props => (
+  <Component
+    {...props}
+    {...mapStateToProps(state, props)}
+    {...mapDispatchToProps(dispatch)}
+  />
+));
+```
+```jsx
+const ProfileComponent = props => (
+  <div>
+    <p>{props.username}</p>
+    <button onClick={props.changeUsername}>Change name</button>
+  </div>
+);
+
+const mapStateToProps = state => state.username;
+
+const mapDispatchToProps = dispatch => ({
+  changeUsername: name => dispatch({ type: 'SET_USERNAME', payload: name }),
+});
+
+const Profile = connect(ProfileComponent)(mapStateToProps, mapDispatchToProps);
+
+const render = () => (<Profile >/);
+```
 ## Функции обратного вызова
 
 ## Композиция

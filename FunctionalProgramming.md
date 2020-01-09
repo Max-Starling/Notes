@@ -4,7 +4,7 @@
 - [Мемоизация](#мемоизация)
 - [Каррирование](#каррирование)
 
-# Thunk
+## Thunk
 
 https://en.wikipedia.org/wiki/Thunk
 
@@ -42,6 +42,25 @@ const speaker = {
 ## Функции высшего порядка
 
 **Функция высшего порядка** (Higher-order Function) —  *функция*, *принимающая другую функцию* в *качестве аргумента* или *возвращающая функцию* в *качестве результата* своего выполнения.
+
+*JavaScript* является *событийно-ориентированным* (Event-driven) языком. Многие *действия выполняются* по *наступлению определённых событий* или выполняются *строго после других действий*. *Функции высшего порядка*, принимающие в *качестве параметра другие функции*, помогают добиться такого поведения. *Функции-параметры* называют **функциями обратного вызова**.
+```js
+const callback = () => console.log('done');
+
+document.addEventListener('onClick', callback);
+
+setTimeout(callback, 1000);
+
+const p = new Promise(res => res());
+p.then(callback);
+
+const calculate = (cb) => {
+  const result = 1 + 2;
+  cb();
+  return result;
+};
+calculate(callback);
+```
 
 Пример *функции высшего порядка*, реализующей *замыкание*. Она замыкает переменную `count` и возвращает другую функцию, изменяющую замкнутую переменную.
 ```js
@@ -85,7 +104,6 @@ const Text = () => (<span>Notes</span>);
 const AlwayRenderingText = createConditionalComponent(true)(Text);
 const NeverRenderingText = createConditionalComponent(false)(Text);
 ```
-## Функции обратного вызова
 
 ## Композиция
 

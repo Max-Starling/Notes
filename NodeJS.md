@@ -45,15 +45,20 @@ setTimeout(() => console.log('before'), 0);
 Promise.resolve('after').then(console.log);
 // выведет "after", "before"
 ```
-Чтобы симулировать синхронное поведение (выполнить инструкции с логированием в правильном порядке), можно использовать
+Чтобы симулировать синхронное поведение (выполнить инструкции с логированием в правильном порядке), можно написать следующее.
 ```js
-const before = () => console.log('before');
 const after = () => console.log('after');
 
-const do = (after) => {
-  before()
+Promise.resolve('before')
+  .then(console.log)
+  .then(after);
+// выведет "before", "after"
+
+setTimeout((after) => {
+  console.log('before');
   after();
-};
+}, 0, after);
+// выведет "before", "after"
 ```
 
 ## Promise

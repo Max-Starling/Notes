@@ -67,32 +67,30 @@ console.log(concat('Simple')('notes')); // "Simple notes"
 ```
 Пример *функции высшего подярка*, принимающей и возвращающей React-компонент (компоненты в React являются функциями), которая называется **компонентом высшего порядка** (High-order Component, HOC).
 ```jsx
-const Header = props => (<h1>{props.children}</h1>);
+const user = { name: 'Max' };
 
-const Title = props => (<p>{props.children}</p>);
-
-const createWelcomeTextComponent = TextComponent => props => (
-  <TextComponent {...props}>Welcome</TextComponent>
-); // компонент высшего порядка
-
-const WelcomeHeader = createWelcomeTextComponent(Header);
-const WelcomeTitle = createWelcomeTextComponent(Title);
-
-const render = () => (
-  <header>
-    <WelcomeHeader />
-  </header>
-  <main>
-    <article>
-      <WelcomeTitle />
-    </article>
-  </main>
+const withUser = Component => props => (
+  <Component {...props} user={user} />
 );
+
+const Article = withUser(props => <div>{props.user.name}</div>);
+```
+```jsx
+const createConditionalComponent => condition => Component => props => (
+  condition ? <Component {...props} /> : null;
+);
+
+const Text = () => (<span>Notes</span>);
+
+const AlwayRenderingText = createConditionalComponent(true)(Text);
+const NeverRenderingText = createConditionalComponent(false)(Text);
 ```
 Минимальная реализация компонента высшего порядка `withRouter`.
 ```jsx
 const router = { route: 'qq' };
-const withRouter = Component => props => (<Component {...props} router={router} />);
+const withRouter = Component => props => (
+  <Component {...props} router={router} />
+);
 ```
 ```jsx
 const Navbar = withRouter(props => <div>Route: {props.router.route}</div>));

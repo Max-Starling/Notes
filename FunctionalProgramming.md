@@ -1,3 +1,5 @@
+- [Объекты и функции первого класса](#объекты-и-функции-первого-класса)
+- [Функции высшего порядка](#функции-высшего-порядка)
 - [Композиция](#композиция)
 - [Мемоизация](#мемоизация)
 - [Каррирование](#каррирование)
@@ -6,11 +8,13 @@
 
 https://en.wikipedia.org/wiki/Thunk
 
+## Объекты и функции первого класса
+
 ## Функции высшего порядка
 
 **Функция высшего порядка** (High-Order Function) —  *функция*, *принимающая другую функцию* в *качестве аргумента* или *возвращающая функцию* в *качестве результата* своего выполнения.
 
-Пример *функции высшего порядка*, реализующей *замыкание* (замыкает переменную `count`).
+Пример *функции высшего порядка*, реализующей *замыкание* (она замыкает переменную `count`).
 ```js
 /* счётчик */
 const createCounter = () => {
@@ -34,10 +38,29 @@ console.log(concat('Simple')('notes')); // "Simple notes"
 ```
 Пример *функции высшего подярка*, принимающей и возвращающей компонент в React (компоненты в React являются функциями), которая называется **компонентом высшего порядка** (High-Order Component, HOC).
 ```jsx
-const WelcomeText = Text => props => <Text {...props}>Welcome</Text>
-/* ... */
-<WelcomeText />
+const Header = props => (<h1>{props.children}</h1>);
+
+const Title = props => (<p>{props.children}</p>);
+
+const createWelcomeTextComponent = TextComponent => props => (
+  <TextComponent {...props}>Welcome</TextComponent>
+); // принимает и возвращает компонент
+
+const WelcomeHeader = createWelcomeTextComponent(Header);
+const WelcomeTitle = createWelcomeTextComponent(Title);
+
+const render = () => (
+  <header>
+    <WelcomeHeader />
+  </header>
+  <main>
+    <article>
+      <WelcomeTitle />
+    </article>
+  </main>
+);
 ```
+## Функции обратного вызова
 
 ## Композиция
 

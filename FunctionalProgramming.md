@@ -43,12 +43,12 @@ const speaker = {
 
 **Функция высшего порядка** (High-order Function) —  *функция*, *принимающая другую функцию* в *качестве аргумента* или *возвращающая функцию* в *качестве результата* своего выполнения.
 
-Пример *функции высшего порядка*, реализующей *замыкание* (она замыкает переменную `count`).
+Пример *функции высшего порядка*, реализующей *замыкание*. Она замыкает переменную `count` и возвращает другую функцию, изменяющую замкнутую переменную.
 ```js
 /* счётчик */
 const createCounter = () => {
   let count = 0;
-  return () => count += 1; // возвращается функция
+  return () => count += 1;
 }
 
 const counter = createCounter();
@@ -58,14 +58,14 @@ console.log(counter()); // 2
 const anotherCounter = createCounter();
 console.log(anotherCounter()); // 1
 ```
-Пример *функции высшего порядка*, реализующей *[каррирование](#каррирование)*.
+Пример *функции высшего порядка*, реализующей *[каррирование](#каррирование)*. Она возвращает другую функцию, использующую свой параметр `y` и параметр функции высшего порядка `x`, доступный из замыкания.
 ```js
 /* конкатенация двух строк */
-const concat = x => y => `${x} ${y}`; // возвращается функция
+const concat = x => y => `${x} ${y}`;
 
 console.log(concat('Simple')('notes')); // "Simple notes"
 ```
-Пример *функции высшего подярка*, принимающей и возвращающей компонент в React (компоненты в React являются функциями), которая называется **компонентом высшего порядка** (High-order Component, HOC).
+Пример *функции высшего подярка*, принимающей и возвращающей React-компонент (компоненты в React являются функциями), которая называется **компонентом высшего порядка** (High-order Component, HOC).
 ```jsx
 const Header = props => (<h1>{props.children}</h1>);
 
@@ -73,7 +73,7 @@ const Title = props => (<p>{props.children}</p>);
 
 const createWelcomeTextComponent = TextComponent => props => (
   <TextComponent {...props}>Welcome</TextComponent>
-); // принимает и возвращает компонент
+); // компонент высшего порядка
 
 const WelcomeHeader = createWelcomeTextComponent(Header);
 const WelcomeTitle = createWelcomeTextComponent(Title);

@@ -1,6 +1,7 @@
 - [Элементы и компоненты](#элементы-и-компоненты)
 - [Жизненный цикл компонента](#жизненный-цикл-компонента)
 - [React Hooks](#react-hooks)
+- [Контролируемые и неконтролируемые компоненты](#контролируемые-и-неконтролируемые-компоненты)
 - [Компоненты высшего порядка](#компоненты-высшего-порядка)
 
 ## Элементы и компоненты
@@ -151,7 +152,7 @@ const onClick = useCallback(
 
 ## Контролируемые и неконтролируемые компоненты
 
-**Контролируемый компонент** (Controlled component) контролирует данные форм при помощи возможностей React. Происходит двухстороннее связывание при помощи `value` и `onChange` с полями ввода, а данные этих полей должны где-то сохранятся (например, в React State или Redux Store).
+**Контролируемый компонент** (Controlled component) *контролирует данные форм* при помощи возможностей *React*. Происходит *двухстороннее связывание* при помощи `value` и `onChange` с *полями ввода*, а *данные* этих полей *должны* где-то *сохранятся* (например, в React State или Redux Store).
 ```jsx
 const Form = ({ onSend, value, onChange }) => (
   <form onSubmit={onSend}>
@@ -164,7 +165,7 @@ const Form = ({ onSend, value, onChange }) => (
   </form>
 );
 ```
-**Неконтролируемый компонент** (Uncontrolled component) контролирует свои данные при помощи DOM. Данные полей ввода сохраняются в их атрибутах.
+**Неконтролируемый компонент** (Uncontrolled component) *контролирует данные форм* при помощи *DOM*. *Данные полей ввода сохраняются* в *атрибутах* их *DOM-элементов*.
 ```jsx
 const Form = ({ onSend }) => (
   <form onSubmit={onSend}>
@@ -173,10 +174,10 @@ const Form = ({ onSend }) => (
   </form>
 );
 ```
-Можно получить текущее значение некотролируемого компонента, используя `ref`.
+Можно задать *значение по умолчанию* для *некотролируемого компонента* при помощи свойства `defaultValue` и *получить текущее значение*, используя `ref`.
 ```jsx
 const Form = ({ onSend }) => {
-  const inputRef = useRef(null);
+  const inputRef = React.useRef(null);
   
   const onSubmit = (event) => {
     event.preventDefault();
@@ -185,12 +186,69 @@ const Form = ({ onSend }) => {
   }
 
   return(
-    <form onSubmit={onSend}>
-      <input ref={inputRef} type="text" />
+    <form onSubmit={onSubmit}>
+      <input
+        ref={inputRef}
+        defaultValue="Text"
+        type="text"
+      />
       <button type="submit">Send</button>
     </form>
   );
 };
+```
+*Неконтролируемые компоненты* могут использоваться
+* когда нужно написать код быстро (например, что-то проверить).
+* когда нет необходимости контролировать промежуточное состояние полей ввода, важен только конечный результат при нажатии на `submit`.
+* когда нужно интегрировать в приложение не React-код (HTML + JavaScript, Web Components или что-то ещё).
+* всегда в случае `<input type="file" />`, поскольку его значение нельзя контролировать программно.
+
+Во всех остальных случаях не рекомендуется использовать неконтролируемые компоненты, поскольку они хранят свои данные в DOM и React перестаёт быть единственным местом хранения данных.
+
+## Компоненты высшего порядка
+
+Минимальная реализация компонента высшего порядка `withRouter`.
+```jsx
+const router = { route: 'qq' };
+const withRouter = Component => props => (
+  <Component {...props} router={router} />
+);
+```
+```jsx
+const Navbar = withRouter(props => <div>Route: {props.router.route}</div>));
+
+const render = () => (<Navbar />); // <div> Route: qq </div>
+```
+Минимальная реализация компонента высшего порядка `connect`.
+```jsx
+const state = { username: 'Max' };
+const dispatch = action => console.log(action);
+
+const connect = (mapStateToProps, mapDispatchToProps) => Component => props => (
+  <Component
+    {...props}
+    {...mapStateToProps(state, props)}
+    {...mapDispatchToProps(dispatch)}
+  />
+));
+```
+```jsx
+const ProfileComponent = props => (
+  <div>
+    <p>{props.username}</p>
+    <button onClick={props.changeUsername}>Change name</button>
+  </div>
+);
+
+const mapStateToProps = state => state.username;
+
+const mapDispatchToProps = dispatch => ({
+  changeUsername: name => dispatch({ type: 'SET_USERNAME', payload: name }),
+});
+
+const Profile = connect(ProfileComponent)(mapStateToProps, mapDispatchToProps);
+
+const render = () => (<Profile >/);
 ```
 
 ## Согласование
@@ -279,50 +337,3 @@ const renderItem = item => (<li key={item}>{item}</li>);
 `index` элемента в массиве использовать не рекомендуется. При его использовании в примере выше произойдёт аналогичная ситуация (под индексом 0 в старом массиве лежит 0, а в новом 1). Использовать индекс можно только в том случае, когда порядок элементов не меняется (например, когда элементы могут добавляться только в конец и оттуда же).
 
 *Ключи* должны быть *стабильными*, *предсказуемыми* и *уникальными*. *Нестабильные ключи* (например, `key={Math.random()}`) вызовут необязательное пересоздание экземпляров компонента и DOM-узлов, что приводит к потере состояния дочерних компонентов и падению производительности.
-
-## Компоненты высшего порядка
-
-Минимальная реализация компонента высшего порядка `withRouter`.
-```jsx
-const router = { route: 'qq' };
-const withRouter = Component => props => (
-  <Component {...props} router={router} />
-);
-```
-```jsx
-const Navbar = withRouter(props => <div>Route: {props.router.route}</div>));
-
-const render = () => (<Navbar />); // <div> Route: qq </div>
-```
-Минимальная реализация компонента высшего порядка `connect`.
-```jsx
-const state = { username: 'Max' };
-const dispatch = action => console.log(action);
-
-const connect = (mapStateToProps, mapDispatchToProps) => Component => props => (
-  <Component
-    {...props}
-    {...mapStateToProps(state, props)}
-    {...mapDispatchToProps(dispatch)}
-  />
-));
-```
-```jsx
-const ProfileComponent = props => (
-  <div>
-    <p>{props.username}</p>
-    <button onClick={props.changeUsername}>Change name</button>
-  </div>
-);
-
-const mapStateToProps = state => state.username;
-
-const mapDispatchToProps = dispatch => ({
-  changeUsername: name => dispatch({ type: 'SET_USERNAME', payload: name }),
-});
-
-const Profile = connect(ProfileComponent)(mapStateToProps, mapDispatchToProps);
-
-const render = () => (<Profile >/);
-```
-

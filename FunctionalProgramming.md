@@ -105,7 +105,7 @@ const NeverRenderingText = createConditionalComponent(false)(Text);
 
 **Композиция функций** (Function Composition) — *применение одной функции* к *результату другой*. 
 
-Функция `h` — *композиция* функций `g` и `f`, если `h(x) = g(f(x))`. Обозначение: `h = g ∘ f`.
+Функция `h` — *композиция* функций `g` и `f`, если `h(x) = g(f(x))`. Обозначение: `h(x) = (g ∘ f)(x)`.
 
 ```js
 const increment = val => val + 1;
@@ -117,33 +117,39 @@ const bar = increment(increment(0)); // композиция
 console.log(bar); // 2
 ```
 
-При помощи композиции можно составлять из простых функций довольно сложные выражения.
+При помощи композиции можно составлять из простых функций выражения любой сложности.
 ```js
 const divide = (dividend, divider) => dividend / divider;
 const pow = (value, deg) => value ** deg;
-divive(pow(3, pow(2, 2)), 3); // 27 = (3 ^ (2 * 2)) / 3
+divide(pow(3, pow(2, 2)), 3); // 27 = (3 ^ (2 * 2)); / 3
 ```
-
-Композицию можно составлять из любого количества функций.
+Если в *композиции* участвует слишком *много функций*, то её код становится *трудно читаемым*. Для таких случаев можно использовать *функцию* `compose`, которая принимает функции в качестве параметров через запятую и составляет из них композицию, последовательно вызывая их справа налево.
 ```js
-console.log(incrementTwice(increment(decrement(incrementDecrement(increment(0)))))); // 3
-```
-Если в *композиции* участвует слишком *много функций*, то её код становится *трудно читаемым* (смотреть пример выше). Для таких случаев можно использовать *функцию* `compose`, которая принимает функции в качестве параметров через запятую и составляет из них композицию, последовательно вызывая их справа налево.
-```js
-const compose = (...functions) => args => functions.reduceRight((arg, fn) => fn(arg), args);
+const compose = (...functions) => initialArgs => functions.reduceRight((arg, fn) => fn(arg), initialArgs);
 ```
 ```js
 console.log(compose(
-  incrementTwice,
+  increment,
   increment,
   decrement,
-  incrementDecrement,
   increment,
-)(0)); // 3
+  increment,
+)(4)); // 7
 
 /* массив из 10 функций increment */
 const fns = Array(10).fill(increment); // [ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ, ƒ]
 console.log(compose(...fns)(0)); // 10
+```
+В случае, если некоторые функции имеют больше одного параметра, можно их обернуть ещё одной функцией и вызвать в её теле.
+```js
+divide(pow(3, pow(2, 2)), 3); // 27 = (3 ^ (2 * 2))
+
+/* при помощи функции compose может быть преобразован к */
+compose(
+  arg => divide(arg, 3),
+  arg => pow(3, arg),
+  arg => pow(2, 2),
+)();
 ```
 
 ## Pipe

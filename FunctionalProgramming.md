@@ -125,7 +125,7 @@ divide(pow(3, pow(2, 2)), 3); // 27 = (3 ^ (2 * 2)) / 3
 ```
 Если в *композиции* участвует слишком *много функций*, то её код становится *трудно читаемым*. Для таких случаев можно использовать *функцию* `compose`, которая принимает функции как аргументы и составляет из них композицию справа налево (начинает с последней и заканчивает первой).
 ```js
-const compose = (...functions) => initialArgs => functions.reduceRight((arg, fn) => fn(arg), initialArgs);
+const compose = (...fns) => initialValue => fns.reduceRight((value, fn) => fn(value), initialValue);
 ```
 ```js
 console.log(compose(
@@ -158,21 +158,22 @@ compose(
   ([value, power]) => pow(value, power),
 )([2, 2]);
 ```
-Важно ещё раз отметить, что функция `compose` начинается с последней переданной функции, а не с первой.
-
-<!-- ```js
-compose(
-  value => divide(value, 3),
-  value => pow(3, value),
-  ({ value, coeff }) => pow(value, coeff),
-)({ value: 2, coeff: 2 });
-``` -->
+Стоит ещё раз отметить, что функция `compose` начинается с последней переданной функции, а не с первой.
 
 ### Pipe
-
+Функция `pipe` работает аналогично функции `compose`, но составляет композицию из своих функций-аргументов слева направо.
 ```js
-const pipe = (...functions) => args => functions.reduce((arg, fn) => fn(arg), args);
+const pipe = (...fns) => initialValue => fns.reduce((value, fn) => fn(value), initialValue);
 ```
+Её использование выглядит более естественным.
+```js
+pipe(
+  ([value, power]) => pow(value, power),
+  value => pow(3, value),
+  value => divide(value, 3),
+)([2, 2]);
+```
+
 
 ## Мемоизация
 

@@ -151,9 +151,9 @@ const onClick = useCallback(
 
 ## Контролируемые и неконтролируемые компоненты
 
-**Контролируемый компонент** (Controlled component) контролирует данные форм при помощи возможностей React. Происходит двухстороннее связывание при помощи `value` и `onChange` с полями ввода, а их данные должны где-то сохранятся (например, в React State или Redux Store).
+**Контролируемый компонент** (Controlled component) контролирует данные форм при помощи возможностей React. Происходит двухстороннее связывание при помощи `value` и `onChange` с полями ввода, а данные этих полей должны где-то сохранятся (например, в React State или Redux Store).
 ```jsx
-const render = ({ onSend, value, onChange }) => (
+const Form = ({ onSend, value, onChange }) => (
   <form onSubmit={onSend}>
     <input
       type="text"
@@ -164,9 +164,34 @@ const render = ({ onSend, value, onChange }) => (
   </form>
 );
 ```
+**Неконтролируемый компонент** (Uncontrolled component) контролирует свои данные при помощи DOM. Данные полей ввода сохраняются в их атрибутах.
+```jsx
+const Form = ({ onSend }) => (
+  <form onSubmit={onSend}>
+    <input type="text" />
+    <button type="submit">Send</button>
+  </form>
+);
+```
+Можно получить текущее значение некотролируемого компонента, используя `ref`.
+```jsx
+const Form = ({ onSend }) => {
+  const inputRef = useRef(null);
+  
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log('value', inputRef.current.value);
+    onSend(event);
+  }
 
-**Неконтролируемый компонент** (Uncontrolled component) контролирует свои данные при помощи DOM.
-
+  return(
+    <form onSubmit={onSend}>
+      <input ref={inputRef} type="text" />
+      <button type="submit">Send</button>
+    </form>
+  );
+};
+```
 
 ## Согласование
 

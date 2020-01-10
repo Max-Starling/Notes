@@ -4,10 +4,6 @@
 - [Мемоизация](#мемоизация)
 - [Каррирование](#каррирование)
 
-## Thunk
-
-https://en.wikipedia.org/wiki/Thunk
-
 ## Объекты и функции первого класса
 
 *Объект* называется **объектом первого класса** (First-class Object/Entity/Citizen), если он 
@@ -115,13 +111,17 @@ const NeverRenderingText = createConditionalComponent(false)(Text);
 const increment = val => val + 1;
 const decrement = val => val - 1;
 
-const incrementDecrement = val => decrement(increment(val)); // композиция
-const incrementTwice = val => increment(increment(val)); // композиция
-
-const foo = incrementDecrement(0);
+const foo = decrement(increment(0)); // композиция
 console.log(foo); // 0
-const bar = incrementTwice(0);
+const bar = increment(increment(0)); // композиция
 console.log(bar); // 2
+```
+
+При помощи композиции можно составлять из простых функций довольно сложные выражения.
+```js
+const divide = (dividend, divider) => dividend / divider;
+const pow = (value, deg) => value ** deg;
+divive(pow(3, pow(2, 2)), 3); // 27 = (3 ^ (2 * 2)) / 3
 ```
 
 Композицию можно составлять из любого количества функций.
@@ -394,3 +394,7 @@ const curry = fn => curried = (...args) =>
    ? fn(...args)
    : nextArg => curried(...args, nextArg);
 ```
+
+## Thunk
+
+https://en.wikipedia.org/wiki/Thunk

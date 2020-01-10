@@ -59,7 +59,6 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 * `props` — аттрибуты элемента или Props компонента.
 * `children` — список дочерних элементом элемента или компонента. 
 
-
 ## Жизненный цикл компонента
 - [Инициализация]
 - [Создание]
@@ -149,6 +148,25 @@ const onClick = useCallback(
 ### Создание (Mounting)
 
 ### Обновнение (Updating)
+
+## Контролируемые и неконтролируемые компоненты
+
+**Контролируемый компонент** (Controlled component) контролирует данные форм при помощи возможностей React. Происходит двухстороннее связывание при помощи `value` и `onChange` с полями ввода, а их данные должны где-то сохранятся (например, в React State или Redux Store).
+```jsx
+const render = ({ onSend, value, onChange }) => (
+  <form onSubmit={onSend}>
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}
+    />
+    <button type="submit">Send</button>
+  </form>
+);
+```
+
+**Неконтролируемый компонент** (Uncontrolled component) контролирует свои данные при помощи DOM.
+
 
 ## Согласование
 

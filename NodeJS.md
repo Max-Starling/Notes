@@ -146,3 +146,16 @@ const removeFile = filePath => new Promise((resolve, reject) => {
   }
 })();
 ```
+Начиная с Node v11.0.0 можно использовать встроенное решение.
+```js
+const fs = require('fs').promises;
+
+(async () => {
+  try {
+    const data = await fs.readFile('input.txt');
+    await fs.unlink('input.txt');
+  } catch (e) {
+    console.log(e);
+  }
+})();
+```

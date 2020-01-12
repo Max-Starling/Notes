@@ -72,15 +72,17 @@ setTimeout((after) => {
 * Если *операция завершается ошибкой*, *первым аргументом функции обратного вызова* станет *экземпляр* `Error`. 
 * Если *операция завершается успешно*, *первым аргументом* станет `null`, а *результат операции* (данные) будет передан *вторым аргументом*.
 
-*Обработка ошибок* выглядит следующим образом
+*Обработка ошибок* и *данных* выглядит следующим образом
 ```js
 const fs = require('fs');
 
 const readFileCallback = (err, data) => {
   if (err) {
-    console.error('There was an error', err);
+    console.error('Read file error occured: ', err);
+    /* обработать ошибку здесь */
   } else {
     console.log(data);
+    /* обработать данные здесь */
   }
 };
 
@@ -88,7 +90,7 @@ const readFileCallback = (err, data) => {
 fs.readFile('/* ... */', readFileCallback);
 ```
 
-Попытка выбросить ошибку `err` из функции обратного вызова является распространённой ошибкой, поскольку к моменту вызова `readFileCallback` код вокруг `fs.readFile` завершит своё выполнение. Ошибка не попадёт в `try..catch` и, скорее всего, произойдёт крушение всего приложения.
+Попытка выбросить ошибку `err` из функции обратного вызова является распространённой ошибкой, поскольку к моменту вызова `readFileCallback` код вокруг `fs.readFile` завершит своё выполнение. Ошибка не попадёт в `try..catch` и, скорее всего, приведёт к краху всего приложения.
 ```js
 const readFileCallback = (err, data) => {
   if (err) {
@@ -105,9 +107,30 @@ try {
   console.log(err);
 }
 ```
+Аналогичная ситуация с данными `data`. Их возврат при помощи `return` ничего не даст. Функция `fs.readFile` просто вызовет операцию чтения, но код не будет ждать её выполнения и пойдёт дальше. Поэтому возвращённое значение будет `undefined`.
 
+Есть *другой способ*: *промиссифицировать асинхронную функцию*. Например, промиссифицируем функции чтения и удаления файла.
+```js
+const fs = require('fs');
 
+const readFile = filePath => new Promise((resolve, reject) => {
+  fs.readFile(filePath, (err, data) => err ? reject(err) : resolve(data));
+});
 
+const removeFile = filePath => new Promise((resolve, reject) => {
+  fs.unlink(filePath, err => err ? reject(err) : resolve());
+});
+```
+```js
+(async () => {
+  try {
+    const data = await readFile('input.txt');
+    await removeFile('input.txt');
+  } catch (e) {
+    console.log(e);
+  }
+})();
+```
 ## Promise
 
 

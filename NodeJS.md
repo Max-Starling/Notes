@@ -108,6 +108,21 @@ try {
 }
 ```
 Аналогичная ситуация с данными `data`. Их возврат при помощи `return` ничего не даст. Функция `fs.readFile` просто вызовет операцию чтения, но код не будет ждать её выполнения и пойдёт дальше. Поэтому возвращённое значение будет `undefined`.
+```js
+const readFileCallback = (err, data) => {
+  if (err) {
+    console.error('Read file error occured: ', err);
+  } else {
+    console.log(data);
+    return data;
+  }
+};
+
+const data = fs.readFile('/* ... */', readFileCallback);
+console.log(data); // undefined
+```
+
+## Промиссификация
 
 Есть *другой способ*: *промиссифицировать асинхронную функцию*. Например, промиссифицируем функции чтения и удаления файла.
 ```js
@@ -130,18 +145,4 @@ const removeFile = filePath => new Promise((resolve, reject) => {
     console.log(e);
   }
 })();
-```
-## Promise
-
-
-## Работа с файлами
-
-### Удаление файла
-
-```js
-const fs = require('fs');
-
-const removeFile = (filePath) => new Promise((resolve, reject) => {
-  fs.unlink(filePath, err => err ? reject(err) : resolve());
-});
 ```

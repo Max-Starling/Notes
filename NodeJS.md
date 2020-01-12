@@ -74,6 +74,8 @@ setTimeout((after) => {
 
 *Обработка ошибок* выглядит следующим образом
 ```js
+const fs = require('fs');
+
 const readFileCallback = (err, data) => {
   if (err) {
     console.error('There was an error', err);
@@ -82,8 +84,28 @@ const readFileCallback = (err, data) => {
   }
 };
 
+/* асинхронное чтение файла */
 fs.readFile('/* ... */', readFileCallback);
 ```
+
+Попытка выбросить ошибку `err` из функции обратного вызова является распространённой ошибкой, поскольку к моменту вызова `readFileCallback` код вокруг `fs.readFile` завершит своё выполнение. Ошибка не попадёт в `try..catch` и, скорее всего, произойдёт крушение всего приложения.
+```js
+const readFileCallback = (err, data) => {
+  if (err) {
+    throw err; // так лучше не делать
+  } else {
+    console.log(data);
+  }
+};
+
+try {
+  fs.readFile('/* ... */', readFileCallback);
+} catch (err) {
+  /* ошибка сюда не попадёт */
+  console.log(err);
+}
+```
+
 
 
 ## Promise
@@ -94,9 +116,9 @@ fs.readFile('/* ... */', readFileCallback);
 ### Удаление файла
 
 ```js
-const fs = require('fs')
+const fs = require('fs');
 
 const removeFile = (filePath) => new Promise((resolve, reject) => {
-  fs.unlink(path, err => err ? reject(err) : resolve());
+  fs.unlink(filePath, err => err ? reject(err) : resolve());
 });
 ```

@@ -245,6 +245,7 @@ console.log(incMemo(5)); // 6
 console.log(memory); // { 5: 6 }
 console.log(incMemo(5)); // 'took from memory!', 6
 ```
+### Обобщение (простейшая реализация)
 Обобщим функцию мемоизации, чтобы её можно было переиспользовать для любой функции одного аргумента.
 ```js
 const memo = fn => (val) => {
@@ -358,21 +359,22 @@ console.log(memory.get(sumFn)); // { "1,2,3": 6 }
 sumFn = null;
 console.log(memory.get(sumFn)); // undefined
 ```
-### Объекты как аргументы и гибкая генерация ключей
-Рассмотрим аргументы функции `fn`. Что, если ими будут являться объекты, массивы, функции?
+### Гибкая генерация ключей
+Что, если *аргументами функции* `fn` будут являться *объекты*, *массивы*, другие *функции*?
 ```js
+/* объекты */
 let args = [{ foo: 1 }, { bar: 2 }];
 console.log(args.toString()); // "[object Object],[object Object]"
-
+/* массивы */
 args = [[1], [2, 3]];
 console.log(args.toString()); // "1,2,3"
 args = [1, 2, 3];
 console.log(args.toString()); // "1,2,3"
-
+/* другие функции */
 args = [() => 1, () => 2];
 console.log(args.toString()); // "() => 1,() => 2"
 ```
-Чтобы сделать функцию `memo` более расширяемой, следует добавить возможность генерации ключей.
+Чтобы сделать функцию `memo` более расширяемой, следует добавить возможность *генерации ключей*.
 ```js
 let memory = new WeakMap();
 
@@ -391,14 +393,13 @@ const memo = (fn, keyGerenator) => (...args) => {
   return memory.get(fn)[argsKey];
 };
 ```
-Тогда для объектов можно использовать генератор, использующий их JSON-представления.
+Для *объектов* можно использовать их *JSON-представления*.
 ```js
 import equal from 'deep-equal';
 
-const deepEqual = memo(
-  equal,
-  args => args.map(item => JSON.stringify(item)).join('__'), // key generator
-);
+const keyGenerator = args => args.map(item => JSON.stringify(item)).join('__');
+
+const deepEqual = memo(equal, arrayKeyGenerator);
 
 const foo = { a: { b: 1 } };
 const bar = { a: { b: 1 } };
@@ -407,7 +408,8 @@ console.log(deepEqual(foo, bar)); // true
 console.log(deepEqual(foo, bar)); // took from memory!, true
 console.log(memory.get(equal)); // { '{"a":{"b":1}}__{"a":{"b":1}}': true }
 ```
-Для массивов можно заменить в генерации `toString()` на `join(separator)`, если есть необходимость, чтобы наборы параметров `[1], [2, 3]` и `[1, 2], [3]` считались различными при подсчётах.
+Для массивов можно использовать `join(separator)` вместо стандартного `toString()`.
+<!--
 ```js
 const sumFn = (...args) => args.reduce((acc, val) => acc + val, 0);
 const sum = memo(sumFn);
@@ -420,6 +422,7 @@ console.log(memory.get(sumFn)); // { "1,2,3": 6, "2,3": 5 }
 console.log(sumArrays([1,2,3], [2,3], [1,2,3])); // took from memory!, 17
 console.log(memory.get(sumArraysFn)); // { "1,2,3__2,3__1,2,3": 17 }
 ```
+-->
 
 ## Каррирование
 **Каррирование**, **карринг** (currying) — преобразование функции несокольких аргументов в цепочку функций одного аргумента.

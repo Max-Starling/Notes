@@ -174,6 +174,23 @@ pipe(
 )([2, 2]);
 ```
 
+### Несколько аргументов
+Можно переписать `compose` и `pipe` таким образом, чтобы первая функция принимала несколько аргументов.
+```js
+const compose = (...fns) => fns.reduceRight((f, g) => (...args) => g(f(...args)));
+const pipe = (...fns) => fns.reduce((f, g) => (...args) => g(f(...args)));
+/* или */
+const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)));
+const pipe = (...fns) => fns.reduceRight((f, g) => (...args) => f(g(...args)));
+```
+```js
+pipe(
+  (value, power) => pow(value, power),
+  value => pow(3, value),
+  value => divide(value, 3),
+)(2, 2);
+```
+Но промежуточные функции по-прежнему не смогут принять больше одного параметра.
 
 ## Мемоизация
 

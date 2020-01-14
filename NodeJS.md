@@ -6,7 +6,7 @@
 - [Функция обратного вызова](#функция-обратного-вызова)
   - [Error-first callback](#error-first-callback)
   - [Callback hell](#callback-hell)
-- [Промиссификация](#промиссификация)
+- [Промиссы](#промиссы)
 - [Цикл событий NodeJS](#цикл-событий-nodejs)
 
 ## Что такое NodeJS
@@ -247,15 +247,35 @@ fs.writeFile('./input.txt', 'Hello!', 'utf8', (writeErr) => {
 ```
 Такое ветвление называют **Callback Hell**, а в других языках программирования можно встретить аналогичное понятие **Pyramid of doom**. Чем больше последовательных асинхронных операций, тем сложнее работать с таким кодом.
 
+### Способы разрешения Callback Hell
 
-## Промиссификация
+На сегодняшний день эффективным решением проблемы является использование `Promise` и `async..await` 
 
-Есть *другой способ*: *промиссифицировать асинхронную функцию*. Например, промиссифицируем функции чтения и удаления файла.
+До их появляения разработчики пытались уменьшить негативное влияние *Callback Hell*, вынося функции обратного вызова в переменные или даже в отдельные модули.
+
+Размещение функций обратного вызова в переменных работает только, если не используются переменные из замыкания.
+
+Если вынести функцию не удаётся, можно попытаться использовать именованные функции, чтобы отметить предназначение функции обратного вызова. Это особенно может помочь, если функция принимает несколько функций обратного вызова.
+```js
+fs.writeFile('./input.txt', 'Hello!', 'utf8', function writeFileCallback {
+  /* ... */
+});
+```
+
+## Промиссы
+
+Есть *другой способ разрешения Callback Hell*: *промиссификация асинхронных функций* и объединение их в цепочку промиссов (promise chaining). 
+
+Например, промиссифицируем асинхронные функции создания, чтения и удаления файла.
 ```js
 const fs = require('fs');
 
-const readFile = filePath => new Promise((resolve, reject) => {
-  fs.readFile(filePath, (err, data) => err ? reject(err) : resolve(data));
+const writeFile = (filePath, fileData, encoding) => new Promise((resolve, reject) => {
+  fs.writeFile(filePath, fileData, encoding, (err, data) => err ? reject(err) : resolve(data));
+});
+
+const readFile = (filePath, encoding) => new Promise((resolve, reject) => {
+  fs.readFile(filePath, encoding, (err, data) => err ? reject(err) : resolve(data));
 });
 
 const removeFile = filePath => new Promise((resolve, reject) => {
@@ -263,23 +283,31 @@ const removeFile = filePath => new Promise((resolve, reject) => {
 });
 ```
 ```js
+writeFile('input.txt', 'Notes', 'utf-8')
+  .then(() => readFile('input.txt', 'utf-8');
+  .catch(writeErr => console.error('Write file error occured: ', writeErr))
+  .then(() => removeFile('input.txt')
+  .catch(readErr => console.error('Read file error occured: ', readErr))
+  .catch(removeErr => console.error('Remove file error occured: ', readErr));
+```
+
+
+Начиная с Node v11.0.0 можно использовать встроенные обёртки.
+```js
+const fs = require('fs').promises;
+
+fs.readFile('input.txt')
+  .then(() => { /* ... */ })
+  .catch(() => { /* ... */ });
+```
+
+## async..await
+
+```js
 (async () => {
   try {
     const data = await readFile('input.txt');
     await removeFile('input.txt');
-  } catch (e) {
-    console.log(e);
-  }
-})();
-```
-Начиная с Node v11.0.0 можно использовать встроенное решение.
-```js
-const fs = require('fs').promises;
-
-(async () => {
-  try {
-    const data = await fs.readFile('input.txt');
-    await fs.unlink('input.txt');
   } catch (e) {
     console.log(e);
   }

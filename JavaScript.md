@@ -1420,10 +1420,9 @@ promise.catch(console.log);
 
 Обычно *промисифицируют асинхронные функции*, построенные на *функциях обратного вызова* (callbacks).
 ```js
-const callback = (err, result) => err ? reject(err) : resolve(result);
-
 /* Принимается функция fn и возвращается функция-обёртка, возвращающая Promise. */
 const promisify = fn => (...args) => new Promise((resolve, reject) => {    
+  const callback = (err, data) => err ? reject(err) : resolve(data);
   fn(...args, callback);
 });
 ```

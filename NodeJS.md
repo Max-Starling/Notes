@@ -75,7 +75,7 @@ console.log('3');
 // выведет 1, 3, 2
 ```
 
-Понятие **асинхронный** (asyncronous, async) подразумевает, что *операция займёт какое-то время*, *выполнится в будущем, не прямо сейчас*.
+Понятие **асинхронной** (asyncronous, async) **операции** подразумевает, что *операция займёт какое-то время*, *выполнится в будущем, не прямо сейчас*.
 
 ## Блокирующие и неблокирующие операции ввода-вывода
 
@@ -250,21 +250,24 @@ fs.writeFile('./input.txt', 'Hello!', 'utf8', function writeFileCallback(err) {
 
 Есть *другой способ разрешения Callback Hell*: *промиссификация асинхронных функций* и объединение их в цепочку промиссов (promise chaining). 
 
+Promise не заменяет функции обратного вызова совсем (они всё ещё передаются в `then` и `catch`), но код читать становится намного проще.
+
 Например, промиссифицируем асинхронные функции создания, чтения и удаления файла.
 ```js
 const fs = require('fs');
 
+/* промиссификация вручную */
 const writeFile = (filePath, fileData, encoding) => new Promise((resolve, reject) => {
   fs.writeFile(filePath, fileData, encoding, (err, data) => err ? reject(err) : resolve(data));
 });
 
-const readFile = (filePath, encoding) => new Promise((resolve, reject) => {
-  fs.readFile(filePath, encoding, (err, data) => err ? reject(err) : resolve(data));
+/* промиссификация с помощью promisify */
+const promisify = fn => (...args) => new Promise((resolve, reject) => {    
+  const callback = (err, data) => err ? reject(err) : resolve(data);
+  fn(...args, callback);
 });
-
-const removeFile = filePath => new Promise((resolve, reject) => {
-  fs.unlink(filePath, err => err ? reject(err) : resolve());
-});
+const readFile = promisify(fs.readFile);
+const removeFile = promisify(fs.unlink);
 ```
 ```js
 writeFile('input.txt', 'Notes', 'utf-8')
@@ -275,8 +278,7 @@ writeFile('input.txt', 'Notes', 'utf-8')
   .catch(removeErr => console.error('Remove file error occured: ', readErr));
 ```
 
-
-Начиная с Node v11.0.0 можно использовать встроенные обёртки.
+Начиная с Node v11.0.0 можно использовать встроенные промиссы.
 ```js
 const fs = require('fs').promises;
 

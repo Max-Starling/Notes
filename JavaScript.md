@@ -1088,6 +1088,44 @@ foo.b = 17; // мутация
 
 ### Object.observe()
 Для отслеживания мутаций раньше был доступен метод `Object.observe()`. Сейчас он запрещен (deprecated), но добавили другие способы отслеживать мутации.
+```js
+Object.observe(obj, callback);
+```
+* `obj` —  объект под надлюдением.
+* `callback` — функция обратного вызова, принимающая массив объектов с изменениями.
+
+```js
+const foo = {
+  a: 17,
+  b: 'notes',
+};
+
+const callback = changes => console.log(changes);
+Object.observe(foo, callback);
+
+foo.c = 'mutations';
+/* changes: [{
+  name: 'c',
+  object: <foo>,
+  type: 'add',
+}] */
+
+foo.a = 7;
+/* changes: [{
+  name: 'a',
+  object: <foo>,
+  type: 'update',
+  oldValue: 17,
+}] */
+
+delete foo.b;
+/* changes: [{
+  name: 'b',
+  object: <foo>,
+  type: 'delete',
+  oldValue: 'notes',
+}] */
+```
 
 ### MutationObserver
 

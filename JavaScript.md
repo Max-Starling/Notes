@@ -1094,6 +1094,7 @@ Object.observe(obj, callback);
 * `obj` —  объект под надлюдением.
 * `callback` — функция обратного вызова, принимающая массив объектов с изменениями.
 
+Метод `Object.observe` работал асинхронно. Он возвращал массив всех изменений в том порядке, в котором они происходили при выполнении скрипта.
 ```js
 const foo = {
   a: 17,
@@ -1103,23 +1104,20 @@ const foo = {
 const callback = changes => console.log(changes);
 Object.observe(foo, callback);
 
-foo.c = 'mutations';
+foo.c = 'mutations'; // добавление
+foo.a = 7; // изменение
+delete foo.b; // удаление
+
 /* changes: [{
   name: 'c',
   object: <foo>,
   type: 'add',
-}] */
-
-foo.a = 7;
-/* changes: [{
+}, {
   name: 'a',
   object: <foo>,
   type: 'update',
   oldValue: 17,
-}] */
-
-delete foo.b;
-/* changes: [{
+}, {
   name: 'b',
   object: <foo>,
   type: 'delete',

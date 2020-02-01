@@ -33,6 +33,10 @@
 – I have lived in Australia ~for~ 3 years. /* Я живу в Австралии 3 года */
 – I have studied English ~since~ childhood. /* Я изучал английский с детства */
 ```
+* *Действия, которые завершились, но период ещё не закончен* (`today`, `this week`, `this year`).
+```css
+– I have read the book ~this week~.
+```
 * *Недавно (только что) завершённые действия* (`just`, `already`, `yet`).
 ```css
 – Have you finished your task ~yet~? /* Ты уже закончил свою задачу? */

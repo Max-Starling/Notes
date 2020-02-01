@@ -1139,12 +1139,14 @@ observer.observe(el);
 Отловленные изменения называют **mutation records**.
 
 ### Proxy
-**Proxy** (прокси) — встроенный объект, позволяющий не только отлавливать все совершаемые действия над объектом, но влиять на их исход.
+**Proxy** (прокси) — встроенный объект, позволяющий не только отслеживать все совершаемые над объектом действия, но влиять на них.
+
+При помощи `Proxy` можно делать очень много чего: откладывать совершение действие, валидировать и отменять его при необходимости, возвращать значение или устанавливать по умолчанию.
 ```js
 const proxy = new Proxy(target, handler);
 ```
-* `target` — проксирующийся объект.
-* `handler`— объект с **методами-ловушками** (traps), каждый из которых отвечает за определённый тип действия над объектом.
+* `target` — **проксируемый объект**.
+* `handler`— объект с **методами-ловушками** (traps), каждый из которых отвечает за определённый тип действий над объектом.
 
 *Основные методы-ловушки*
 * `set` — запись свойства (внутренний метод `[[Set]]`).
@@ -1155,7 +1157,35 @@ const proxy = new Proxy(target, handler);
 * `apply` — вызов функции (внутренний метод `[[Call]]`).
 * `getOwnPropertyDescriptor` — переборы через `Object.keys`, `Object.values`, `Object.entries`, `for..in` и `Object.getOwnPropertyDescriptor` (внутренний метод `[[GetOwnProperty]]`).
 
-Пример логирования функции при помощи `apply`.
+
+JavaScript накладывает условия на использование некоторых ловушек. Например, методы `set` и `delete` должны возвращать `true`, если изменения вступили в силу, и `false` иначе.
+
+Пример валидации перед установкой свойства проксируемому объекту (ловушка `set`).
+```js
+const storage = {};
+
+const isObject = value => typeof value === 'object' && value !== null;
+
+const proxy = new Proxy(storage, {
+  set(target, property, value) {
+    if (isObject(value)) {
+      target[property] = value;
+      return true;
+    }
+    return false;
+  },
+});
+
+proxy.a = 17;
+console.log(proxy.a); // undefined
+console.log(storage); // {}
+
+proxy.b = { name: 'Alen' };
+console.log(proxy.b); // { name: "Alen" }
+console.log(storage); // { b: { name: "Alen" } }
+```
+
+Пример логирования проксируемой функции при её вызове (ловушка `apply`).
 ```js
 const increment = a => a + 1;
 
@@ -1165,7 +1195,7 @@ const proxy = new Proxy(increment, {
     const result = target(...args);
     console.log(`Result: "${result}"`);
     return result;
-  }
+  },
 });
 
 increment(5); 
@@ -1176,6 +1206,31 @@ proxy(5);
 Result: "6" */
 ```
 На примере выше стоит отметить, что прямое взаимодействие с проксируемым объектом не имеет никакого эффекта — нужно использовать созданный `Proxy` вместо него.
+
+### Reflect
+
+Пример получения значения по умолчанию.
+```js
+const guest = { type: 'guest' }; // default user
+
+const userTable = {
+  tom: { type: 'user', username: 'Tom' },
+  max: { type: 'user', username: 'Max' },
+  frank: { type: 'user', username: 'Frank' }
+};
+
+const proxy = new Proxy(userTable, {
+  get: (target, property) {
+    if (property in target) {
+      return Reflect.get(target, property); // эквивалетно target[property];
+    } else {
+      return guest;
+    }
+  },
+});
+
+console.log(proxy['garry']); // { type: "guest" }
+```
 
 ## Иммутабельность
 

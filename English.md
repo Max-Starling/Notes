@@ -22,10 +22,11 @@
 * (?) `Have + you + V3?` и `Has + he + V3?` 
 
 ### Случаи употребления Present Perfect
-* *Жизненный опыт* (`ever`, `never`).
+* *Жизненный опыт* (`ever`, `never`, `before`).
 ```css
-– Have you ~ever~ eaten pizza before? /* Ты когда-нибудь ел пиццу раньше? */
+– Have you ~ever~ eaten pizza ~before~? /* Ты когда-нибудь ел пиццу раньше? */
 – I have ~never~ done this. /* Я никогда не делал этого раньше */
+– Have you heard this ~before~? /* Ты слышал подобное раньше? */
 ```
 * *Действия, которые начались в прошлом, и продолжаются сейчас* (`for`, `since`).
 ```css

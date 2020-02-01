@@ -1146,13 +1146,36 @@ const proxy = new Proxy(target, handler);
 * `target` — проксирующийся объект.
 * `handler`— объект с **методами-ловушками** (traps), каждый из которых отвечает за определённый тип действия над объектом.
 
-Основные методы-ловушки
+*Основные методы-ловушки*
 * `set` — запись свойства (внутренний метод `[[Set]]`).
 * `get` — чтение свойства (внутренний метод `[[Get]]`).
 * `deleteProperty` — удаление свойства (внутренний метод `[[Delete]]`).
-* `has` — проверка наличия свойства (внутренний метод `[[HasProperty]]`).
+* `has` — проверка наличия свойства при помощи `in` (внутренний метод `[[HasProperty]]`).
 * `construct` — создание через `new` (внутренний метод `[[Construct]]`).
 * `apply` — вызов функции (внутренний метод `[[Call]]`).
+* `getOwnPropertyDescriptor` — переборы через `Object.keys`, `Object.values`, `Object.entries`, `for..in` и `Object.getOwnPropertyDescriptor` (внутренний метод `[[GetOwnProperty]]`).
+
+Пример логирования функции при помощи `apply`.
+```js
+const increment = a => a + 1;
+
+const proxy = new Proxy(increment, {
+  apply(target, thisArg, args) {
+    console.log(`Incrementing the value "${args[0]}"`);
+    const result = target(...args);
+    console.log(`Result: "${result}"`);
+    return result;
+  }
+});
+
+increment(5); 
+/* ничего не выводится */
+
+proxy(5);
+/* Incrementing the value "5".
+Result: "6" */
+```
+На примере выше стоит отметить, что прямое взаимодействие с проксируемым объектом не имеет никакого эффекта — нужно использовать созданный `Proxy` вместо него.
 
 ## Иммутабельность
 

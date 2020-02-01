@@ -27,15 +27,20 @@
 – Have you ~ever~ eaten pizza before? /* Ты когда-нибудь ел пиццу раньше? */
 – I have ~never~ done this. /* Я никогда не делал этого раньше */
 ```
-* *Действия, которые начались в прошлом, и продолжаются сейчас* (`for`, `since`, `yet`).
+* *Действия, которые начались в прошлом, и продолжаются сейчас* (`for`, `since`).
 ```css
 – I have lived in Australia ~for~ 3 years. /* Я живу в Австралии 3 года */
 – I have studied English ~since~ childhood. /* Я изучал английский с детства */
-– I haven't finished my homework ~yet~.
 ```
-* *Недавно, только что завершённые действия* (`just`).
+* *Недавно (только что) завершённые действия* (`just`, `already`, `yet`).
 ```css
-– I have ~just~ finished my task. /* Я только что закончил свою задачу */
+– Have you finished your task ~yet~? /* Ты уже закончил свою задачу? */
+– I have ~already~ finished my task. /* Я уже закончил мою задачу */
+– I have ~just~ woken up. /* Я только что проснулся */
+```
+* *Действия, которые повторялись несколько раз в прошлом*.
+```css
+I have watched this video ~several times~. /* Я смотрел это видео несколько раз */
 ```
 
 ### Present Perfect vs Past Simple

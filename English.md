@@ -45,7 +45,7 @@
 ```
 * *Действия, которые повторялись несколько раз в прошлом*.
 ```css
-I have watched this video ~several times~. /* Я смотрел это видео несколько раз */
+– I have watched this video ~several times~. /* Я смотрел это видео несколько раз */
 ```
 
 ### Present Perfect vs Past Simple

@@ -1209,7 +1209,29 @@ Result: "6" */
 
 ### Reflect
 
-Пример получения значения по умолчанию.
+**Reflect** — встроенный JavaScript-объект, предоставляющий методы для всех тех действий, которые может перехватывать `Proxy` (для каждого метода-ловушки).
+
+**Reflect** не является функциональным объектом, его нельзя вызвать как функцию или использовать как конструктор. Все его методы статические.
+* `Reflect.get(target, property)` эквивалетно `target[property]`.
+* `Refject.set(target, property, value)` эквивалетно `target[property] = value`.
+и так далее.
+
+Пример создания экземпляра класса при помощи `Reflect.construct`.
+```js
+class Animal {
+  constructor(kind, sex, age) {
+    this.kind = kind;
+    this.sex = sex;
+    this.age = age;
+  }
+}
+
+const elephant = Reflect.construct(Animal, ['elephant', 'male', 7]);
+console.log(elephant);
+/* Animal { kind: "elephant", sex: "male", age: 7 } */
+```
+
+Пример получения значения по умолчанию при помощи `Proxy` и `Reflect`.
 ```js
 const guest = { type: 'guest' }; // default user
 

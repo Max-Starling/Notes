@@ -1231,7 +1231,7 @@ console.log(elephant);
 /* Animal { kind: "elephant", sex: "male", age: 7 } */
 ```
 
-Пример получения значения по умолчанию при помощи `Proxy` и `Reflect`.
+Пример получения значения по умолчанию при помощи `Proxy` и `Reflect.get`.
 ```js
 const guest = { type: 'guest' }; // default user
 
@@ -1242,7 +1242,7 @@ const userTable = {
 };
 
 const proxy = new Proxy(userTable, {
-  get: (target, property) {
+  get(target, property) {
     if (property in target) {
       return Reflect.get(target, property); // эквивалетно target[property];
     } else {
@@ -1252,6 +1252,7 @@ const proxy = new Proxy(userTable, {
 });
 
 console.log(proxy['garry']); // { type: "guest" }
+console.log(proxy['max']); // { type: "user", username: "Max" }
 ```
 
 ## Иммутабельность

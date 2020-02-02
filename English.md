@@ -54,12 +54,12 @@
 ```
 
 ### Present Perfect vs Past Simple
-* Если важно время выполнения действия (на него указывают такие слова, как: `last year`, `yesterday`, `3 weeks ago`). 
+* Past Simple используется, если важно время выполнения действия и период времени окончен (на него указывают такие слова, как: `last year`, `yesterday`, `3 weeks ago`). 
 ```css
 – I went to London last year. /* Я был в Лондоне 5 лет назад */
 – I saw her yesterday. /* Я видел её вчера */
 ```
-* При этом период времени должен быть окончен, иначе используется Present Perfect (`today`, `this week`, `this year`).
+* Если период времени не окончен или время выполнения действия неважно, используется Present Perfect (`today`, `this week`, `this year`).
 ```css
 – I have been to London this year. /* Я был в Париже в этом году */
 – I have seen her today. /* Я видел её сегодня */

@@ -22,10 +22,12 @@
 * (?) `Have + you + V3?` и `Has + he + V3?` 
 
 ### Случаи употребления Present Perfect
-* Если важен сам *факт произошедшего действия*, а *не время*. При этом часто просматривается *результат в настоящем* (можно сделать вывод).
+* Если важен сам *факт произошедшего действия*, а *не время*. При этом чаще всего просматриваются *результат в настоящем* (можно сделать вывод), *какое-то достижение* или *изменения со временем*.
 ```css
 – I have lost my keys. (so I can't gen into my house) /* Я потерял ключи (поэтому не могу попасть домой) */
 – I have been to London. /* Я был в Лондоне */
+– Man has walked on the Moon. /* Человек побывал на луне */
+– We have begun to understand each other better. /* Мы начали лучше понимать друг друга */
 ```
 * *Действия, которые завершились, но упомянутый период времени ещё не окончен* (`today`, `this week`, `this year`).
 ```css
@@ -48,19 +50,20 @@
 – I have ~already~ finished my task. /* Я уже закончил мою задачу */
 – I have ~just~ woken up. /* Я только что проснулся */
 ```
-* *Действия, которые повторялись несколько раз в прошлом*.
+* *Действия, которые повторялись несколько раз в прошлом* (`several times`, `twice`).
 ```css
 – I have watched this video ~several times~. /* Я смотрел это видео несколько раз */
+– I have been to the doctor ~twice~. /* Я был у врача дважды */
 ```
 
 ### Present Perfect vs Past Simple
 * Past Simple используется, если важно время выполнения действия и период времени окончен (на него указывают такие слова, как: `last year`, `yesterday`, `3 weeks ago`). 
 ```css
-– I went to London last year. /* Я был в Лондоне 5 лет назад */
-– I saw her yesterday. /* Я видел её вчера */
+– I went to London ~last year~. /* Я был в Лондоне 5 лет назад */
+– I saw her ~yesterday~. /* Я видел её вчера */
 ```
 * Если период времени не окончен или время выполнения действия неважно, используется Present Perfect (`today`, `this week`, `this year`).
 ```css
-– I have been to London this year. /* Я был в Париже в этом году */
-– I have seen her today. /* Я видел её сегодня */
+– I have been to London ~this year~. /* Я был в Париже в этом году */
+– I have seen her ~today~. /* Я видел её сегодня */
 ```

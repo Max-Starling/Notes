@@ -22,6 +22,15 @@
 * (?) `Have + you + V3?` и `Has + he + V3?` 
 
 ### Случаи употребления Present Perfect
+* Если важен сам *факт произошедшего действия*, а *не время*. При этом часто просматривается *результат в настоящем* (можно сделать вывод).
+```css
+– I have lost my keys. (so I can't gen into my house) /* Я потерял ключи (поэтому не могу попасть домой) */
+– I have been to London. /* Я был в Лондоне */
+```
+* *Действия, которые завершились, но упомянутый период времени ещё не окончен* (`today`, `this week`, `this year`).
+```css
+– I have read the book ~this week~.
+```
 * *Жизненный опыт* (`ever`, `never`, `before`).
 ```css
 – Have you ~ever~ eaten pizza ~before~? /* Ты когда-нибудь ел пиццу раньше? */
@@ -33,11 +42,7 @@
 – I have lived in Australia ~for~ 3 years. /* Я живу в Австралии 3 года */
 – I have studied English ~since~ childhood. /* Я изучал английский с детства */
 ```
-* *Действия, которые завершились, но период ещё не закончен* (`today`, `this week`, `this year`).
-```css
-– I have read the book ~this week~.
-```
-* *Недавно (только что) завершённые действия* (`just`, `already`, `yet`).
+* *Недавно (только что) завершённые действия* (`just`, `already`, `yet`, `recently`).
 ```css
 – Have you finished your task ~yet~? /* Ты уже закончил свою задачу? */
 – I have ~already~ finished my task. /* Я уже закончил мою задачу */
@@ -49,4 +54,13 @@
 ```
 
 ### Present Perfect vs Past Simple
-
+* Если важно время выполнения действия (на него указывают такие слова, как: `last year`, `yesterday`, `3 weeks ago`). 
+```css
+– I went to London last year. /* Я был в Лондоне 5 лет назад */
+– I saw her yesterday. /* Я видел её вчера */
+```
+* При этом период времени должен быть окончен, иначе используется Present Perfect (`today`, `this week`, `this year`).
+```css
+– I have been to London this year. /* Я был в Париже в этом году */
+– I have seen her today. /* Я видел её сегодня */
+```

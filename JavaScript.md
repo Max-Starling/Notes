@@ -1129,14 +1129,29 @@ delete foo.b; // удаление
 
 **MutationObserver** — встроенный объект, отслеживающий изменения DOM-элементов. В случае изменений он запускает указанный колбэк.
 ```js
-const callback = mutationRecords => console.log(mutationRecords);
-const observer = new MutationObserver(callback);
+const callback = (mutationList) => {
+  for (let mutation of mutationList) {
+    if (mutation.type === 'childList') {
+      console.log('Дочерний элемент добавлен или удален');
+      /* mutation: { type, addedNodes, deletedNodes } */
+    } else if (mutation.type === 'attributes') {
+      console.log(`Атрибут ${mutation.attributeName} был изменён`);
+      /* mutation: { type, target, attributeName, oldValue } */
+    }
+  }
+};
+
+const observerOptions = {
+  childList: true,
+  attributes: true,
+  subtree: true, // false - только родительская вершина, true - родительская и дочерние
+};
+
+const observer = new MutationObserver(callback, observerOptions);
 
 const el = document.querySelector('.elem');
 observer.observe(el);
 ```
-
-Отловленные изменения называют **mutation records**.
 
 ### Proxy
 **Proxy** (прокси) — встроенный объект, позволяющий не только отслеживать все совершаемые над объектом действия, но влиять на них.

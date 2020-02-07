@@ -727,8 +727,7 @@ console.log(bar); // ƒ bar () {}
   - [Глубокое сравнение](#глубокое-сравнение)
 - [Отслеживание мутаций](#отслеживание-мутаций)
 - [Иммутабельность](#иммутабельность)
-- [Итерируемые объекты и коллекции](#итерируемые-объекты-и-коллекции)
-- [Итерируемые объекты и коллекции](#итерируемые-объекты-и-коллекции)
+- [Итерируемые объекты](#итерируемые-объекты)
 
 ## Перечисление свойств объекта
 
@@ -1292,7 +1291,7 @@ console.log(proxy['max']); // { type: "user", username: "Max" }
 Иммутабельность затрагивает только сам объект, но не его свойства. Это работает как неглубокое копирование: ссылки на объекты-свойства остаются прежними.
 
 
-## Итерируемые объекты и коллекции
+## Итерируемые объекты
 
 **Итерируемый объект** (iterable) — *любой* объект, *элементы* которого можно *перебрать* в *цикле for..of*.  
 
@@ -1327,62 +1326,60 @@ for (i of notes) {
 }
 console.log(notes.length); // undefined
 ```
-
-Из *любого итерируемого объекта* можно *сделать массив*.
-```js
-let array = Array.from(notes); // ['n', 'o', 't', 'e', 's']
-array = [...notes]; // ['n', 'o', 't', 'e', 's']
-
-array = Array.from('notes'); // ['n', 'o', 't', 'e', 's']
-array = [...'notes']; // ['n', 'o', 't', 'e', 's']
-```
-
-**Псевдомассив** (pseudo-array) — обычный *объект*, который аналогично массиву в качестве свойств имеет индексы `0, 1, 2, ...`, а также свойство `length`.
-
-Псевдомассив, являясь обычным объектом, не имеет доступа к методам `Array` (`find`, `includes`, `forEach`, `slice`, ...).
-
-По умолчанию *псевдомассив не является итерируемым объектом*, но это можно реализовать. 
-
-Примером псевдомассива с итератором выступает `arguments`, позволяющий получить все аргументы функции, доступный внутри `function`.
-```js
-(function fn() {
-  console.log(arguments instanceof Array); // false
-  console.log(arguments instanceof Object); // true
-  console.log(arguments); // { 0: 1, 1: 2, 2: 3 callee: f, length: 3, Symbol(Symbol.iterator): f }
-  for (i of arguments) {
-    console.log(i); // 1, 2, 3
-  }
-})(1, 2, 3);
-```
  
 # Массивы
 
-**Массив** (Array) — встроенный объект, который обладает характеристиками итерируемого объекта (`for..or`) и псевдомассива (индексы и свойство `length`), но помимо них также имеет доступ к методам `Array.prototype`.
+**Массив** (Array) — *встроенный итерируемый объект* (можно перебрать через `for..or`), который хранит элементы по индексам `0, 1, 2, ...`, имеет свойство `length`, а также имеет доступ к методам `Array.prototype` (`find`, `includes`, `reduce` и другие).
 
 ## Создание массива
 
+Создать массив можно двумя способами: через синтаксис `[]` или при помощи класса `Array` и его методов.
 ```js
-const arr = [0, 1, 2]; // [0, 1, 2]
-const arr = [0, 1, 2, ]; // [0, 1, 2]
-const arr = [, 0, 1, 2]; // [empty, 0, 1, 2]
-const arr = Array(0, 1, 2); // [0, 1, 2]
-const arr = Array.from('012'); // ['0', '1', '2']
-const arr = [...'012']; // ['0', '1', '2']
+const foo = [1, 3, 7];
+console.log(foo); // [1, 3, 7];
 
-const arr = [];
-arr[2] = 3; // [empty × 2, 3]
+const bar = Array(1, 3, 7);
+console.log(bar); // [1, 3, 7];
+```
 
-const arr = [,,,,,]; // [empty × 5]
-const arr = Array(100); // [empty × 100]
+В массиве по некоторым индекстам могут лежать пустые элементы (`empty`).
+```js
+const foo = [, 0, 1, 2]; 
+console.log(foo); // [empty, 0, 1, 2]
+console.log(foo[0]); // undefined
 
-const arr = Array(100).fill(); // [undefined × 100]
-const arr = [...Array(100)]; // [undefined × 100]
-const arr = Array.from(Array(100)) // [undefined × 100]
+const bar = [,,,,,];
+console.log(bar); // [empty × 5]
 
-const arr = Array(100).fill(1); // [1 x 100]
+const baz = Array(100); // пустой массив длины 100
+console.log(baz); // [empty × 100]
 
-const arr = Array.from(Array(100).keys()); // [0, 1, 2, ..., 99]
-const arr = Array.from({ length: 100 }, (item, index) => index + 1); // [1, 2, 3, ..., 100]
+const qaz = [];
+qaz[1000] = 7; 
+console.log(qaz); // [empty × 1000, 7]
+```
+
+Массив можно создать из любого итерируемого объекта при помощи `Array.from(iterable)` или оператора `...`.
+```js
+const iterable = 'notes'; /* строка - итерируемый объект */
+
+const foo = Array.from(iterable);
+console.log(foo); // ['n', 'o', 't', 'e', 's']
+
+const bar = [...iterable);
+console.log(bar); //['n', 'o', 't', 'e', 's']
+```
+
+Интересные примеры создания массивов.
+```js
+const foo = Array(100).fill(0);
+console.log(foo); // [0 x 100]
+
+const bar = Array.from(Array(100).keys());
+console.log(bar); // [0, 1, 2, ..., 99]
+
+const baz = Array.from({ length: 100 }, (item, index) => index + 1); 
+console.log(baz); // [1, 2, 3, ..., 100]
 ```
 
 ## Добавление и удаление элементов в массив
@@ -1394,6 +1391,34 @@ arr.pop(); // [0, 1, 2]
 delete arr[0]; // [empty, 1, 2]
 arr.shift(); // [1, 2]
 arr = [0, ...arr]; // [0, 1, 2]
+```
+
+## Ключи массива
+
+Как и у обычного объекта, ключи массива являются строками.
+```js
+const foo = [1, 3, 7];
+console.log(Object.keys(foo)); // ["0", "1", "2"]
+console.log(foo[1]); // 3
+console.log(foo["1"]); // 3
+```
+
+## Псевдомассивы
+
+**Псевдомассив** (pseudo-array) — обычный *объект*, который как и массив, в качестве ключей имеет индексы `0, 1, 2, ...` и свойство `length`, но при этом не является итерируемым и не имеет доступа к методам `Array.prototype`.
+
+*Псевдомассив можно сделать итерируемым объектом*. 
+
+Примером итерируемого псевдомассива является `arguments`, хранящий все аргументы функции `function`, в которой он используется.
+```js
+(function fn() {
+  console.log(arguments instanceof Array); // false
+  console.log(arguments instanceof Object); // true
+  console.log(arguments); // { 0: 1, 1: 2, 2: 3 callee: f, length: 3, Symbol(Symbol.iterator): f }
+  for (i of arguments) {
+    console.log(i); // 1, 2, 3
+  }
+})(1, 2, 3);
 ```
 
 ## Сортировка

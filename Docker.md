@@ -8,7 +8,7 @@
 
 **Docker-клиент** (Docker client) использует CLI-команды, чтобы общаться с *Docker daemon*, выступающим в роли *сервера*.
 ```js
-// CLI-команды
+/* примеры CLI-команд */
 docker run
 docker build
 docker pull

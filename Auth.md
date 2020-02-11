@@ -46,6 +46,10 @@ npm i uuid
 
 # Виды аутентификации
 
+```http
+Authorization: <type> <credentials>
+```
+
 ## Basic
 
 **Базовая** (Basic) аутентификация подразумевает передачу имени пользователя и пароля в виде строки `username:password`, зашифрованной в base64.

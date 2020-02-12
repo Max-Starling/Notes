@@ -56,5 +56,15 @@ Authorization: <type> <credentials>
 
 **Базовая** (Basic) **аутентификация** подразумевает передачу в заголовок имени пользователя и пароля в виде строки следующего вида `username:password`, зашифрованной в Base64.
 ```http
-Authorization: Basic <base64-credentials>
+Authorization: Basic <encodedCredentials>
+```
+В JavaScript можно кодировать и декорировать Base64 следующим образом.
+```js
+const credentials = 'admin:admin';
+/* кодировка */
+const encodedCredentials = btoa('admin:admin');
+console.log(encodedCredentials); // 'YWRtaW46YWRtaW4='
+/* декодировка */
+const decodedCredentials = atob('YWRtaW46YWRtaW4=');
+console.log(decodedCredentials); // 'admin:admin'
 ```

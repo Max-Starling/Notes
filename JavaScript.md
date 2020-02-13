@@ -745,12 +745,16 @@ console.log(bar); // ƒ bar () {}
 ```js
 const isObject = value => typeof value === 'object' && !Array.isArray(value) && value !== null;
 ```
-Такая реализация обусловлена следующим поведением [оператора typeof](#оператор-typeof):
+Такая реализация обусловлена следующим поведением [оператора typeof](#оператор-typeof).
 ```js
 typeof({}) === 'object' // true
 typeof([]) === 'object' // true
 typeof(() => {}) === 'function' // true
 typeof(null) === 'object' // true
+```
+Можно проще.
+```js
+({}) instanceof Object // true
 ```
 
 ## Клонирование объектов
@@ -1399,14 +1403,57 @@ console.log(foo["1"]); // 3
 ```
 
 ## Добавление и удаление элементов
+
+*Массив* в JavaScript имеет методы, характерные **двухсторонней очереди** (deque, double ended queue), что позволяет достаточно просто добавлять и удалять элементы на обоих концах массива.
 ```js
-let arr = [1]; // [1]
-arr.push(2, 3); // [1, 2, 3]
-arr.unshift(0); // [0, 1, 2, 3]
-arr.pop(); // [0, 1, 2]
-delete arr[0]; // [empty, 1, 2]
-arr.shift(); // [1, 2]
-arr = [0, ...arr]; // [0, 1, 2]
+let foo = [2];
+
+/* добавление элемента в конец */
+foo.push(3);
+console.log(foo); // [2, 3]
+
+/* добавление элемента в начало */
+foo.unshift(1);
+console.log(foo); // [1, 2, 3]
+
+/* удаление последнего элемента */
+const lastElem = foo.pop();
+console.log(lastElem); // 3
+console.log(foo); // [1, 2]
+
+/* удаление первого элемента */
+const firstElem = foo.shift();
+console.log(firstElem); // 1
+console.log(foo); // [2]
+```
+
+Добавлять элементы можно и при помощи оператора `...`.
+```js
+let bar = [2];
+
+/* добавление элемента в начало */
+bar = [1, ...bar];
+console.log(bar); // [1, 2]
+
+/* добавление элемента в конец */
+bar = [...bar, 3];
+console.log(bar); // [1, 2, 3]
+```
+
+Удаление при помощи `delete` создаёт пустую ячейку в массиве.
+```js
+let baz = [3];
+delete baz[0];
+console.log(baz); // [empty]
+console.log(baz[0]); // undefined
+```
+
+<!-- написать про split, slice, splice -->
+
+## Является ли массивом
+```js
+[] instanceof Array // true
+Array.isArray([]) // true
 ```
 
 ## Сортировка

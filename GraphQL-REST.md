@@ -47,3 +47,24 @@ query {
   }
 }
 ```
+
+# REST
+
+## REST на практике
+
+## Способы передать и получить данные
+
+### QUERY
+
+Запрос формируется следующим образом
+```
+/route?field=value&anotherField=anotherValue
+```
+### BODY
+```
+/route
+```
+### PARAMS
+```
+/route/param
+```

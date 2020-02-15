@@ -1,3 +1,6 @@
+# REST
+
+# GraphQL
 
 ## Преимущества GraphQL
 
@@ -48,35 +51,43 @@ query {
 }
 ```
 
-# REST
+# REST на практике
 
-## REST на практике
-
-## Способы передать и получить данные
-
-### QUERY
-
-Форма URL запроса на клиенте.
+## Данные в QUERY
+* Форма запроса на клиенте.
 ```
-/route?field=value&anotherField=anotherValue
+GET /route?field=value&anotherField=anotherValue
 ```
-На сервере.
+```js
+/* axios */
+axios.get('/route', params: {
+  field: 'value',
+  anotherField: 'anotherValue',
+});
+```
+* Форма запроса на сервере.
 ```
 /route
 ```
+* Получение данных из запроса на сервере.
 ```js
-const { field, anotherField } = request.query;
+/* Express */
+app.get('/route', (request, response) => {
+  const { field, anotherField } = request.query;
+});
 ```
 
 Передача массива `arr [1, 3, 7]` с клиента.
 ```
-/route?arr[]=1&arr[]=3&arr[]=7
+GET /route?arr[]=1&arr[]=3&arr[]=7
 ```
 
-### BODY
+### Данные в BODY
+* Форма запроса на клиенте.
 ```
 /route
 ```
+
 ### PARAMS
 ```
 /route/param

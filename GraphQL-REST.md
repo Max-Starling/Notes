@@ -67,7 +67,7 @@ axios.get('/route', params: {
 ```
 * Форма запроса на сервере.
 ```
-/route
+GET /route
 ```
 * Получение данных из запроса на сервере.
 ```js
@@ -85,10 +85,28 @@ GET /route?arr[]=1&arr[]=3&arr[]=7
 ### Данные в BODY
 * Форма запроса на клиенте.
 ```
-/route
+POST /route
+```
+* Форма запроса на сервере.
+```
+POST /route
+```
+* Получение данных из запроса на сервере.
+```js
+/* Express */
+app.post('/route', (request, response) => {
+  const { field, anotherField } = request.body;
+});
 ```
 
 ### PARAMS
+* Форма запроса на клиенте.
 ```
-/route/param
+GET /route/paramValue
 ```
+* Форма запроса на сервере.
+```
+
+```
+
+* Форма запроса на сервере.

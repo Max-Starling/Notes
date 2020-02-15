@@ -56,10 +56,23 @@ query {
 
 ### QUERY
 
-Запрос формируется следующим образом
+Форма URL запроса на клиенте.
 ```
 /route?field=value&anotherField=anotherValue
 ```
+На сервере.
+```
+/route
+```
+```js
+const { field, anotherField } = request.query;
+```
+
+Передача массива `arr [1, 3, 7]` с клиента.
+```
+/route?arr[]=1&arr[]=3&arr[]=7
+```
+
 ### BODY
 ```
 /route

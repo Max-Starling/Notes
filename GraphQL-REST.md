@@ -129,3 +129,9 @@ GET /route/:param
 app.post('/route/:param', (request, response) => {
   const { param } = request.params;
 });
+
+Пример отправки нескольких параметров.
+```http
+PATCH /users/17/name
+PATCH /users/:id/:field
+```

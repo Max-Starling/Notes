@@ -55,7 +55,7 @@ query {
 
 ## Данные в QUERY
 * Форма запроса на клиенте.
-```
+```http
 GET /route?field=value&anotherField=anotherValue
 ```
 ```js
@@ -68,7 +68,7 @@ axios.get('/route', {
 });
 ```
 * Форма запроса на сервере.
-```
+```http
 GET /route
 ```
 * Получение данных из запроса на сервере.
@@ -86,8 +86,9 @@ GET /route?arr[]=1&arr[]=3&arr[]=7
 
 ### Данные в BODY
 * Форма запроса на клиенте.
-```
+```http
 POST /route
+field=value&anotherField=anotherValue
 ```
 ```js
 /* axios */
@@ -97,7 +98,7 @@ axios.post('/route', {
 });
 ```
 * Форма запроса на сервере.
-```
+```http
 POST /route
 ```
 * Получение данных из запроса на сервере.
@@ -110,7 +111,7 @@ app.post('/route', (request, response) => {
 
 ### PARAMS
 * Форма запроса на клиенте.
-```
+```http
 GET /route/paramValue
 ```
 ```js
@@ -118,7 +119,7 @@ GET /route/paramValue
 axios.get(`/route/{paramValue}`);
 ```
 * Форма запроса на сервере.
-```
+```http
 GET /route/:param
 ```
 

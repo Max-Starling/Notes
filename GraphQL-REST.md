@@ -80,7 +80,7 @@ app.get('/route', (request, response) => {
 ```
 
 Передача массива `arr [1, 3, 7]` с клиента.
-```
+```http
 GET /route?arr[]=1&arr[]=3&arr[]=7
 ```
 
@@ -129,6 +129,7 @@ GET /route/:param
 app.post('/route/:param', (request, response) => {
   const { param } = request.params;
 });
+```
 
 Пример отправки нескольких параметров.
 ```http

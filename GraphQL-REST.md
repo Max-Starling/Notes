@@ -1,3 +1,11 @@
+- [REST](#rest)
+- [GraphQL](#graphql)
+  - [Преимущества GraphQL](преимущества-graphql)
+- [REST на практике](#rest-на-практике)
+  - [Данные в QUERY](#данные-в-query)
+  - [Данные в BODY](#данные-в-body)
+  - [Данные в PARAMS](#данные-в-params)
+
 # REST
 
 # GraphQL
@@ -88,7 +96,7 @@ GET /route?arr[]=1&arr[]=3&arr[]=7
 GET /route?obj[foo]=1&obj[bar]=7
 ```
 
-### Данные в BODY
+## Данные в BODY
 * Форма запроса на клиенте.
 ```http
 POST /route
@@ -113,7 +121,7 @@ app.post('/route', (request, response) => {
 });
 ```
 
-### PARAMS
+## Данные в PARAMS
 * Форма запроса на клиенте.
 ```http
 GET /route/paramValue

@@ -83,6 +83,10 @@ app.get('/route', (request, response) => {
 ```http
 GET /route?arr[]=1&arr[]=3&arr[]=7
 ```
+Передача объекта `obj { foo: '1', bar: '7' }` с клиента.
+```http
+GET /route?obj[foo]=1&obj[bar]=7
+```
 
 ### Данные в BODY
 * Форма запроса на клиенте.

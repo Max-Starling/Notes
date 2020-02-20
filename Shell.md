@@ -7,4 +7,4 @@
 which docker-compose
 # выведет /usr/bin/docker-compose
 ```
-* `echo $USER` - вывод имени текущего пользователя
+* `echo $USER`, `whoami` - вывод имени текущего пользователя

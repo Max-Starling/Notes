@@ -196,7 +196,7 @@ foo = { prop: 'value' };
 foo = ['value'];
 foo = ():void => console.log('notes');
 ```
-- `Object` — любой **JavaScript-объект** (интерфейс `Object` включает в себя `toString()`, `valueOf()`, `hasOwnProperty()` и другие методы.
+- `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, включающему в себя `toString()`, `valueOf()`, `hasOwnProperty()` и другие методы).
 ```ts
 interface Object {
   toString(): string;

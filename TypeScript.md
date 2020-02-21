@@ -1,134 +1,6 @@
-
-## Классы
-
-## Интерфейсы
-
-**Интерфейс** (Interface) является абстрактным описанием того, что должен включать в себя объект, но не содержит никакой реализации. 
-
-*Интерфейс* в *TypeScript* является *виртуальной структурой*: он *существует только* в *контексте языка*. Компилятор при помощи интерфейсов и прочих способов типизации проводит проверку типов, а затем переводит код в JavaScript, куда интерфейсы не попадают.
-
-Интерфейсы, как и классы, именуют с большой буквы. Часто можно встретить заглавную `I` в начале, чтобы разрешить конфликт имён классов и интерфейсов.
-
-```ts
-interface IAuthor {
-  id: string;
-  username: string;
-}
-
-interface IArticle {
-  id: string;
-  title: string;
-  description?: string;
-  getAuthor: () => Author;
-}
-```
-
-Использование интерфейсов похоже на утиную типизацию.
-```ts
-interface IDuck {
-  quack(): void;
-}
-
-const obj: IDuck = {
-  /* может квакать, значит утка */
-  quack(): void {
-    console.log('quack!');
-  },
-};
-```
-
-### Абстрактные классы и интерфейсы
-
-Абстрактный класс содержит какие-то абстрактыне методы, которые должны быть реализованы его потомками. Но, помимо абстрактных методов, в нём могут также содержаться и обычные методы (поведение по умолчанию).
-```ts
-abstract class Duck {
-  abstract eat(): void; // утки в разных странах могут есть разную еду
-  makeSound(): void {
-    console.log('quack!'); // но все они издают похожий звук
-  }
-}
-
-class Mallard extends Duck {
-  eat() { /* ... */ }
-  // дикая утка наследует метод quack от абстрактного родительского класса
-}
-```
-
-В отличие от классов, интерфейсы вообще не могут содержать реализации. Поэтому от них не наследуют (extends), их реализуют (implements).
-```ts
-interface IDuck {
-  eat(): void;
-  makeSound(): void;
-}
-
-class Mallard implements IDuck {
-  eat() { /* ... */ }
-  makeSound() { /* ... */ }
-};
-```
-
-### Наследование интерфейса от класса
-
-В TypeScript есть возможность наследовать интерфейс от класса. 
-```ts
-class Fish {
-  private age(): string;
-  swim(): void;
-}
-interface IFlyingFish extends Fish {
-  fly: () => void;
-};
-```
-
-Такая возможность связана с тем, что в TypeScript (как и в JavaScript) можно создать объект без класса.
-```ts
-class Human {
-  sex: string;
-  constructor(sex: string) {
-    this.sex = sex;
-  }
-
-  run():void {
-    console.log('run');
-  }
-}
-/* объекты human1 и human2 реализуют один и тот же интерфейс */
-const human1 = new Human('male');
-const human2 = {
-  sex: 'male',
-  run():void {
-    console.log('run');
-  }
-};
-```
-В этом и есть смысл: можно взять интерфейс класса и использовать его.
-```ts
-interface IHuman extends Human {}
-
-let human3: IHuman;
-human3 = { ...human2 };
-```
-Более того, мы можем расширить этот интерфейс. И таким образом заменить наследование композицией (*Composite Reuse Principle*), реализуя расширенный интерфейс вместо переопределения методов родительского класса.
-```ts
-class Bird { /* ... */ };
-
-interface IFlyingBird extends Bird {
-  fly: () => void;
-}
-
-class FlyingBird implements IFlyingBird { /* ... */ }
-```
-Можно также найти применение наследованию интерфейса от класса при использовании Generics.
-```ts
-class Translator<From, To> { /* ... */ }
-interface EngRusTranslator extends Translator<Russian, English> {}
-
-const translate = (translator: EngRusTranslator) => { /* ... */ }
-```
-
-Интерфейсы наследуют всё, включая приватные и защищённые члены базового класса.
-
-Если базовый класс содержит приватные или защищённые свойства и методы, то наследующий от него интерфейс может быть реализован только базовым классом или его наследником.
+- [Типы данных](#типы-данных)
+- [Класс](#класс)
+- [Интерфейс](#интерфейс)
 
 ## Типы данных
 
@@ -211,3 +83,134 @@ const foo = {};
 foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
 console.log(foo.toString()); // '[object Object]'
 ```
+
+## Класс
+
+## Интерфейс
+
+**Интерфейс** (Interface) является абстрактным описанием того, что должен включать в себя объект, но не содержит никакой реализации. 
+
+*Интерфейс* в *TypeScript* является *виртуальной структурой*: он *существует только* в *контексте языка*. Компилятор при помощи интерфейсов и прочих способов типизации проводит проверку типов, а затем переводит код в JavaScript, куда интерфейсы не попадают.
+
+Интерфейсы, как и классы, именуют с большой буквы. Часто можно встретить заглавную `I` в начале, чтобы разрешить конфликт имён классов и интерфейсов.
+
+```ts
+interface IAuthor {
+  id: string;
+  username: string;
+}
+
+interface IArticle {
+  id: string;
+  title: string;
+  description?: string;
+  getAuthor: () => Author;
+}
+```
+
+Использование интерфейсов похоже на утиную типизацию.
+```ts
+interface IDuck {
+  quack(): void;
+}
+
+const obj: IDuck = {
+  /* может квакать, значит утка */
+  quack(): void {
+    console.log('quack!');
+  },
+};
+```
+
+### Абстрактные классы и интерфейсы
+
+**Абстрактный класс** (Abstract class) содержит некоторые *абстрактные методы*, которые *должны быть реализованы его наследниками*. *Помимо абстрактных методов*, в нём могут также содержаться и *обычные методы*. Они характеризуют поведение по умолчанию и их реализовывать не обязательно.
+```ts
+abstract class Duck {
+  abstract eat(): void; // утки в разных странах могут есть разную еду
+  makeSound(): void {
+    console.log('quack!'); // но все они издают похожий звук
+  }
+}
+
+class Mallard extends Duck {
+  eat() { /* ... */ }
+  // дикая утка наследует метод quack от абстрактного родительского класса
+}
+```
+
+*Интерфейс*, в отличие от любого класса, вообще *не может содержать реализации*. Поэтому от него *не наследуют* (extends), а его *реализуют* (implements).
+```ts
+interface IDuck {
+  eat(): void;
+  makeSound(): void;
+}
+
+class Mallard implements IDuck {
+  eat() { /* ... */ }
+  makeSound() { /* ... */ }
+};
+```
+
+### Наследование интерфейса от класса
+
+В TypeScript есть возможность наследовать интерфейс от класса. 
+```ts
+class Fish {
+  private age(): string;
+  swim(): void;
+}
+interface IFlyingFish extends Fish {
+  fly: () => void;
+};
+```
+
+Такая возможность связана с тем, что в TypeScript (как и в JavaScript) можно создать объект без класса.
+```ts
+class Human {
+  sex: string;
+  constructor(sex: string) {
+    this.sex = sex;
+  }
+
+  run():void {
+    console.log('run');
+  }
+}
+/* объекты human1 и human2 реализуют один и тот же интерфейс */
+const human1 = new Human('male');
+const human2 = {
+  sex: 'male',
+  run():void {
+    console.log('run');
+  }
+};
+```
+В этом и есть смысл: можно взять интерфейс класса и использовать его.
+```ts
+interface IHuman extends Human {}
+
+let human3: IHuman;
+human3 = { ...human2 };
+```
+Более того, мы можем расширить этот интерфейс. И таким образом заменить наследование композицией (*Composite Reuse Principle*), реализуя расширенный интерфейс вместо переопределения методов родительского класса.
+```ts
+class Bird { /* ... */ };
+
+interface IFlyingBird extends Bird {
+  fly: () => void;
+}
+
+class FlyingBird implements IFlyingBird { /* ... */ }
+```
+Можно также найти применение наследованию интерфейса от класса при использовании Generics.
+```ts
+class Translator<From, To> { /* ... */ }
+interface EngRusTranslator extends Translator<Russian, English> {}
+
+const translate = (translator: EngRusTranslator) => { /* ... */ }
+```
+
+Интерфейсы наследуют всё, включая приватные и защищённые члены базового класса.
+
+Если базовый класс содержит приватные или защищённые свойства и методы, то наследующий от него интерфейс может быть реализован только базовым классом или его наследником.

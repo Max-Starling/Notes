@@ -30,10 +30,11 @@ interface IDuck {
 }
 
 const obj: IDuck = {
-  makeSound(): void {
+  /* может квакать, значит утка */
+  quack(): void {
     console.log('quack!');
-  }
-}
+  },
+};
 ```
 
 ### Абстрактные классы и интерфейсы

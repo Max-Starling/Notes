@@ -61,12 +61,14 @@ Volume хранится вне контейнера. Поэтому он не у
 
 **Инструкция RUN** позволяет запускать команды внутри образа (image). Эти команды запускаются один раз во время сборки (build) и записываются в образ как новый слой (layer).
 ```dockerfile
+# Dockerfile
 RUN echo "Install modules"
 RUN npm install
 ```
 
 **Инструкция CMD** описывает *команду по умолчанию*, которая должна *запускаться при запуске готового образа, то есть контейнера*. 
 ```dockerfile
+# Dockerfile
 CMD npm start
 ```
 Таким образом, несмотря на то, что CMD является инструкцией Dockerfile, он запускается не во время сборки, а уже в запущенном контейнере. Чаще всего командой в CMD выступает запуск сервера.
@@ -75,15 +77,47 @@ CMD npm start
 
 * Объявление аргументов в Dockerfile.
 ```dockerfile
+# Dockerfile
 ARG argument_name
 ARG another_argument_name=default_value # со значением по умолчанию
 ```
 * Использование в Dockerfile.
 ```dockerfile
+# Dockerfile
 RUN echo ${argument_name}
 RUN echo ${another_argument_name}
 ```
 * Передача аргументов в команду.
+```cmd
+docker-compose build --build-arg port=3000 --build-arg env="local"
+```
+```dockerfile
+# Dockerfile
+ARG port
+ARG env
+```
+
+## Пример полноценного Dockerfile
+```Dockerfile
+# Dockerfile
+FROM node:12.13.1
+
+ARG port
+ARG env
+
+EXPOSE ${port}
+COPY ./package.json /app/
+COPY ./src /app/src
+COPY ./public /app/public
+COPY ./webpack /app/webpack
+
+WORKDIR /app
+
+RUN npm install
+RUN NODE_ENV=${env} npm run build
+
+CMD npm run start
+```
 
 # Композиция контейнеров (Docker Compose)
 

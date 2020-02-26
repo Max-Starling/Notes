@@ -1,7 +1,20 @@
+- [Полезные команды Git](#полезные-команды-git)
 - [Git flow](#git-flow)
 - [SSH Github & Gitlab](#ssh-github--gitlab)
 - [Git Config](#git-config)
 - [Git Bash](#git-bash)
+
+## Полезные команды Git
+
+### Перенос коммитов из одной локальной ветки в другую
+
+Например, перенос N коммитов из ветки A и ветку B.
+```sh
+git checkout B
+git merge from A
+git checkout A
+git reset --hard HEAD~N # удаление N коммитов из ветки A
+```
 
 ## Git flow
 

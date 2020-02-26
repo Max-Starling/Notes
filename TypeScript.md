@@ -70,6 +70,10 @@ foo = ():void => console.log('notes');
 ```
 - `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, включающему в себя `toString()`, `valueOf()`, `hasOwnProperty()` и другие методы).
 ```ts
+let obj: Object;
+obj = {};
+```
+```ts
 interface Object {
   toString(): string;
   hasOwnProperty(v: string): boolean;

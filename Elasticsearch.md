@@ -201,6 +201,9 @@ GET http://localhost:9200/users/_search
 }
 ```
 * Поиск по конкретному слову (слову `ops`).
+```http
+GET http://localhost:9200/users/_search?q=ops
+```
 ```js
 {
   "took": 4,

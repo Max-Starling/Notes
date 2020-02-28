@@ -29,7 +29,7 @@ PUT http://localhost:9200/users
   "index": "users"
 }
 ```
-* Создание типа `user` и документа в нём.
+* Создание типа (`user`) и документа в нём.
 ```http
 POST http://localhost:9200/users/user
 Content-Type: application/json
@@ -53,3 +53,55 @@ Content-Type: application/json
   "_primary_term": 1
 }
 ```
+* Обновление документа (типа `user` по id).
+```http
+PUT http://localhost:9200/users/user/H3tVi3ABpFL-9AlTbAgj
+Content-Type: application/json
+
+{"name":"Richard Stone","job":"Full-stack Enginer"}
+```
+```js
+/* JSON response */
+{
+  "_index": "users",
+  "_type": "user",
+  "_id": "H3tVi3ABpFL-9AlTbAgj",
+  "_version": 3,
+  "result": "updated",
+  "_shards": {
+      "total": 2,
+      "successful": 1,
+      "failed": 0
+  },
+  "_seq_no": 2,
+  "_primary_term": 1
+}
+```
+* Удаление документа (типа `user` по id).
+```http
+DELETE http://localhost:9200/users/user/H3tVi3ABpFL-9AlTbAgj
+```
+```js
+/* JSON response */
+{
+  "_index": "users",
+  "_type": "user",
+  "_id": "H3tVi3ABpFL-9AlTbAgj",
+  "_version": 4,
+  "result": "deleted",
+  "_shards": {
+      "total": 2,
+      "successful": 1,
+      "failed": 0
+  },
+  "_seq_no": 5,
+  "_primary_term": 1
+}
+```
+
+## Получение всех документов и поиск
+* Получение всех документов.
+```http
+GET http://localhost:9200/users/_search
+```
+*

@@ -159,4 +159,76 @@ Content-Type: application/json
 ```http
 GET http://localhost:9200/users/_search
 ```
-*
+```js
+{
+  "took": 80,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 2,
+      "relation": "eq"
+    },
+    "max_score": 1.0,
+    "hits": [
+        {
+          "_index": "users",
+          "_type": "user",
+          "_id": "Jntsi3ABpFL-9AlTdggH",
+          "_score": 1.0,
+          "_source": {
+            "name": "Harry Smith",
+            "job": "Dev Ops"
+          }
+        },
+        {
+          "_index": "users",
+          "_type": "user",
+          "_id": "J3tsi3ABpFL-9AlTdggH",
+          "_score": 1.0,
+          "_source": {
+              "name": "Sam Brave",
+              "job": "QA"
+          }
+        }
+    ]
+  }
+}
+```
+* Поиск по конкретному слову (слову `ops`).
+```js
+{
+  "took": 4,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": 0.60996956,
+    "hits": [
+      {
+        "_index": "users",
+        "_type": "user",
+        "_id": "Jntsi3ABpFL-9AlTdggH",
+        "_score": 0.60996956,
+        "_source": {
+          "name": "Harry Smith",
+          "job": "Dev Ops"
+        }
+      }
+    ]
+  }
+}
+```

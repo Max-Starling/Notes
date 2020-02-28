@@ -16,7 +16,7 @@
 
 **Документ** (Document) — эквивалент строки в SQL или документа в NoSQL.
 
-## CRUD
+## Создание, изменение, удаление
 * Создание индекса (`users`).
 ```http
 PUT http://localhost:9200/users
@@ -154,7 +154,7 @@ Content-Type: application/json
 }
 ```
 
-## Получение всех документов и поиск
+## Поиск
 * Получение всех документов.
 ```http
 GET http://localhost:9200/users/_search

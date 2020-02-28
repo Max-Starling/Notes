@@ -98,6 +98,61 @@ DELETE http://localhost:9200/users/user/H3tVi3ABpFL-9AlTbAgj
   "_primary_term": 1
 }
 ```
+* Создание нескольких документов (типа `user`).  
+В конце BODY запроса обязателен переход на новую строку.
+```http
+POST http://localhost:9200/users/user/_bulk
+Content-Type: application/json
+
+{"index":{}}
+{"name":"Harry Smith","job":"Dev Ops"}
+{"index":{}}
+{"name":"Sam Brave","job":"QA"}
+   
+```
+```js
+/* JSON response */
+{
+  "took": 26,
+  "errors": false,
+  "items": [
+    {
+      "index": {
+          "_index": "users",
+          "_type": "user",
+          "_id": "Jntsi3ABpFL-9AlTdggH",
+          "_version": 1,
+          "result": "created",
+          "_shards": {
+              "total": 2,
+              "successful": 1,
+              "failed": 0
+          },
+          "_seq_no": 7,
+          "_primary_term": 1,
+          "status": 201
+      }
+    },
+    {
+      "index": {
+          "_index": "users",
+          "_type": "user",
+          "_id": "J3tsi3ABpFL-9AlTdggH",
+          "_version": 1,
+          "result": "created",
+          "_shards": {
+              "total": 2,
+              "successful": 1,
+              "failed": 0
+          },
+          "_seq_no": 8,
+          "_primary_term": 1,
+          "status": 201
+      }
+    }
+  ]
+}
+```
 
 ## Получение всех документов и поиск
 * Получение всех документов.

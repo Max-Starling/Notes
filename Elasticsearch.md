@@ -160,6 +160,7 @@ Content-Type: application/json
 GET http://localhost:9200/users/_search
 ```
 ```js
+/* JSON response */
 {
   "took": 80,
   "timed_out": false,
@@ -200,11 +201,12 @@ GET http://localhost:9200/users/_search
   }
 }
 ```
-* Поиск по конкретному слову (слову `ops`).
+* Поиск по конкретному слову (слову `ops`) во всех полях (и `name`, и `job`).
 ```http
 GET http://localhost:9200/users/_search?q=ops
 ```
 ```js
+/* JSON response */
 {
   "took": 4,
   "timed_out": false,
@@ -229,6 +231,42 @@ GET http://localhost:9200/users/_search?q=ops
         "_source": {
           "name": "Harry Smith",
           "job": "Dev Ops"
+        }
+      }
+    ]
+  }
+}
+```
+* Поиск по конкретному слову (слову `ops`) в конкретном поле (`name`).
+```http
+GET http://localhost:9200/users/_search?q=name:sam
+```
+```js
+/* JSON response */
+{
+  "took": 3,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": 0.6931472,
+    "hits": [
+      {
+        "_index": "users",
+        "_type": "user",
+        "_id": "J3tsi3ABpFL-9AlTdggH",
+        "_score": 0.6931472,
+        "_source": {
+          "name": "Sam Brave",
+          "job": "QA"
         }
       }
     ]

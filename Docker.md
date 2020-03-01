@@ -263,7 +263,7 @@ client:
       - env: production
 ```
 
-## Переменных в Docker Compose
+## Переменные в Docker Compose
 * Передача переменных.
 ```cmd
 ENV=production CLIENT_PORT=3000 docker-compose up --build
@@ -283,4 +283,9 @@ services:
       NODE_ENV: ${ENV}
     ports:
       - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}" # default 3000:3000
+```
+
+## Проферка конфигурации
+```cmd
+docker-compose config
 ```

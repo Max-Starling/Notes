@@ -241,9 +241,7 @@ services:
       - "4000:4000"
 ```
 
-## Передача переменных в Docker
-
-### ENVIRONMENT vs ARGS
+## ENVIRONMENT и ARGS
 
 **Перееменные окружения ENVIRONMENT** передаются в уже запущенные контейнеры.
 ```yaml
@@ -253,7 +251,7 @@ client:
     - SERVER_URL: xxx
 ```
 
-*Docker Compose* поддерживает объявление значений по умолчанию для переменных окружения в `.env` файле. 
+<!-- *Docker Compose* поддерживает объявление значений по умолчанию для переменных окружения в `.env` файле. -->
 
 **Переменные ARGS** доступны во время построения образа (build image).
 
@@ -263,4 +261,26 @@ client:
     args:
       - port: 3000
       - env: production
+```
+
+## Переменных в Docker Compose
+* Передача переменных.
+```cmd
+ENV=production CLIENT_PORT=3000 docker-compose up --build
+```
+* Использование переменных.
+```yml
+version: '3.3'
+services: 
+  client:
+    build:
+      context: "./client"
+      dockerfile: Dockerfile
+      args:
+        port: ${CLIENT_PORT}
+        env: ${ENV}
+    environment:
+      NODE_ENV: ${ENV}
+    ports:
+      - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}" # default 3000:3000
 ```

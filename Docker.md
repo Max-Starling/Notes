@@ -78,10 +78,10 @@ docker run
 FROM node:latest
 EXPOSE 3001
 
-COPY ./package.json /app/
-COPY ./src /app/src
-
 WORKDIR /app
+
+COPY ./package.json .
+COPY ./src ./src
 
 RUN npm install
 RUN npm run build
@@ -296,10 +296,20 @@ CMD npm start
 
 ## Рабочая директория WORKDIR
 
-**Инструкция WORKDIR** устанавливает *рабочую директорию* для инструкций `RUN`, `CMD`, `COPY`, `ADD`. Все действия, связанные с этими инструкциями, будут происходить в заданной директории.
+**Инструкция WORKDIR** устанавливает *рабочую директорию* для инструкций `RUN`, `CMD`, `COPY`, `ADD`. Все действия, связанные с перечисленными инструкциями, будут происходить в заданной при помощи `WORKDIR` директории.
 ```dockerfile
 # Dockerfile
 WORKDIR /app
+```
+По умолчанию используется `WORKDIR /`.
+ 
+Инструкция `WORKDIR` может быть использована несколько раз.
+```dockerfile
+WORKDIR /
+COPY ./package.json /app/
+
+WORKDIR /app
+COPY ./src ./src
 ```
 
 ## Аргументы ARG

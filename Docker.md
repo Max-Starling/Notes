@@ -129,7 +129,7 @@ docker images
   mongo                  3.4                 aeaac14e1ffb        5 months ago        429MB
   redis                  4.0                 04c446bf216f        5 months ago        89.2MB
   node                   10.15.3             5a401340b79f        10 months ago       899MB
-/*
+*/
 ```
 
 Образы хранятся в Docker-реестре (Docker registry). 

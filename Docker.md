@@ -416,7 +416,7 @@ RUN NODE_ENV=${env} npm run build
 CMD npm run start
 ```
 ```cmd
-
+docker build --build-arg port=3001 --build-arg env=staging .
 ```
 
 # Docker Compose

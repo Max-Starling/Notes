@@ -115,18 +115,18 @@ Host gitlab.com
 
 ## Git Config
 
-### Обновить 
-* Установить имя пользователя.
-```shell
-git config --global user.name "Your Username"
+### Вывод конфига
 ```
-* Установить электронную почту.
-```shell
-git config --global user.email "your@email"
-```
-* Проверить.
-```shell
 git config -l
+```
+
+### Имя пользователя и почта
+* Установить имя пользователя.
+```js
+/* имя пользователя */
+git config --global user.name "Your Username"
+/* электронная почта */
+git config --global user.email "your@email"
 ```
 
 ## Git Bash

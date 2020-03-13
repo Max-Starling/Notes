@@ -4,6 +4,25 @@
 - [Git Config](#git-config)
 - [Git Bash](#git-bash)
 
+## pull vs fetch
+
+**Команда git fetch** используется для того, чтобы получить информацию о последних изменениях на удалённой ветке (`origin/`) и, таким образом, узнать, были ли изменения вообще. 
+```js
+git fetch
+/*
+From github.com:YourName/RepositoryName
+   2eefe71..ac391ab  develop    -> origin/develop
+   fca7c62..c31477c  feature/1 -> origin/feature/1
+ * [new branch]      feature/2 -> origin/feature/2
+ * [new branch]      feature/3 -> origin/feature/3
+*/
+````
+Выше можно видеть, что ветки `develop` и `feature/` отличаются от веток в `origin` хэшем последних коммитов, а ветки `feature/2` и `feature/3` новые и их нет локально.
+
+**Команда git pull**, помимо получения информации об изменениях, подкачивает также и сами изменения.
+
+По сути, `git pull` объединяет в себе две команды: `git fetch` и `git merge`.
+
 ## Полезные команды Git
 
 ### Команда rebase
@@ -29,7 +48,7 @@ git reset --hard HEAD~N # удаление N коммитов из ветки A
 
 ## Git flow
 
-**Фича** (Feature) - новый функционал на проекте. 
+**Фича** (Feature) — новая функциональность. 
 
 ### Разработка новой фичи
 * Разработка новых фич начинается с ветки `develop`, от которой создаётся новая ветка `feature/name`, где `name` - название фичи.

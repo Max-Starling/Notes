@@ -1,3 +1,4 @@
+- [pull vs fetch](#pull-vs-fetch)
 - [Полезные команды Git](#полезные-команды-git)
 - [Git flow](#git-flow)
 - [SSH Github & Gitlab](#ssh-github--gitlab)
@@ -28,7 +29,7 @@ index abe21d5..e207862 100644
 +++ b/client/Dockerfile
 - Hello
 + Hello, Notes!
-/*
+*/
 ```
 
 Повторный вызов команды `git fetch` ничего не выведет, поскольку изменения уже были подгружены.

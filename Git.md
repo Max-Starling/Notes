@@ -1,6 +1,11 @@
 - [merge](#merge)
+	- [Как работает merge](#как-работает-merge)
+  - [Fast-forward merge](#fast-forward-merge)
+  - [True merge](#true-merge)
 - [pull vs fetch](#pull-vs-fetch)
-- [Полезные команды Git](#полезные-команды-git)
+- [Полезные возможности Git](#полезные-возможности-git)
+	- [Отмена последнего коммита](#отмена-последнего-коммита)
+	- [Перенос коммитов из одной локальной ветки в другую](#перенос-коммитов-из-одной-локальной-ветки-в-другую)
 - [Git flow](#git-flow)
 - [SSH Github & Gitlab](#ssh-github--gitlab)
 - [Git Config](#git-config)
@@ -95,13 +100,12 @@ index abe21d5..e207862 100644
 
 По сути, `git pull` объединяет в себе две команды: `git fetch` и `git merge`.
 
-## Полезные команды Git
+## Полезные возможности Git
 
-### Команда rebase
-
+<!--
 ### Команда reset
-
 ### Команда stash
+-->
 
 ### Отмена последнего коммита
 ```sh
@@ -212,7 +216,6 @@ git config -l
 ```
 
 ### Имя пользователя и почта
-* Установить имя пользователя.
 ```js
 /* имя пользователя */
 git config --global user.name "Your Username"

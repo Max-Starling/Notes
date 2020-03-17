@@ -2,6 +2,7 @@
 	- [Как работает merge](#как-работает-merge)
   - [Fast-forward merge](#fast-forward-merge)
   - [True merge](#true-merge)
+- [rebase vs merge](#rebase-vs-merge)
 - [pull vs fetch](#pull-vs-fetch)
 - [Полезные возможности Git](#полезные-возможности-git)
 	- [Отмена последнего коммита](#отмена-последнего-коммита)
@@ -66,6 +67,8 @@ develop          |           C —— D
 	         |         /       \
 master (current) |   A —— B —— E —— H
 ```
+
+## rebase vs merge
 
 ## pull vs fetch
 

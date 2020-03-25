@@ -21,9 +21,6 @@ process.env.NODE_ENV // 'production'
 ```js
 parseInt(process.env.PORT, 10) // 5001
 ```
-```js
-process.env.NODE_ENV // 'production'
-```
 ### Windows
 ```cmd
 "scripts": {

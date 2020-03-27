@@ -3,9 +3,9 @@
 - [Виды аутентификации](#виды-аутентификации)
   - [Базовая](#basic)
   - [Bearer](#bearer)
-- [Токены](#токены)
-  - [Виды токенов](#виды-токенов)
 - [Сессии](#сессии)
+- [JWT](#jwt)
+  - [Виды токенов](#виды-токенов)
 
 ## Аутентификация vs Авторизация vs Идентификация
 
@@ -72,7 +72,25 @@ const decodedCredentials = atob('YWRtaW46YWRtaW4=');
 console.log(decodedCredentials); // 'admin:admin'
 ```
 
-# Токены
+# Сессии
+
+```js
+         /* Auth request
+         with credentials */
+Client --------------------> Server
+
+          /* Set-Cookie 
+          response header */
+Client <-------------------- Server
+
+          /* Cookie 
+          request header */
+Client --------------------> Server
+```
+
+<!-- Когда появляется внешний сервер аутентификации (другой url), -->
+
+# JWT
 
 ## Виды токенов
 

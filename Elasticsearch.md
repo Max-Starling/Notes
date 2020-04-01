@@ -348,3 +348,34 @@ Elasticsearch проивзодит поиск по словам. Каждый д
 ```http
 GET http://localhost:9200/users/_settings
 ```
+
+```js
+/* JSON response */
+{
+  "users": {
+    "settings": {
+      "index": {
+        "number_of_shards": "1",
+        "blocks": {
+          "read_only_allow_delete": "true"
+        },
+        "provided_name": "users",
+        "creation_date": "1582885295047",
+        "number_of_replicas": "1",
+        "uuid": "cNAP5avkRueTAkUGNxsHew",
+        "version": {
+          "created": "7030299"
+        }
+      }
+    }
+  }
+}
+```
+
+Индексы обычно разредяются на несколько подиндексов (sub-indices), называемые **shards**. Они распределяются между несколькими экземплярами приложения. 
+
+Количество *shards* указано в настройках индекса в свойстве `number_of_shards`.
+
+Резервная копия всех *shards* называется **репликой** (replica). Если один экземпляр приложения падает вместе с данными, которые на нём хранились, реплика позволяет не терять эти данные.
+
+Количество *реплик* указано в настройках индекса в свойстве `number_of_replicas`.

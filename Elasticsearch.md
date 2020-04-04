@@ -312,6 +312,7 @@ GET http://localhost:9200/users/_search?q=name:sam
 отправлять вот так
 ```http
 GET http://localhost:9200/users/_search
+Content-Type: application/json
 
 {
   "query": {
@@ -343,6 +344,7 @@ Elasticsearch позволяет при поиске *сортировать* д
 Создание индекса `films` с полями название, дата, рейтинг.
 ```HTTP
 PUT http://localhost:9200/films
+Content-Type: application/json
 
 {
   "mappings": {
@@ -357,6 +359,7 @@ PUT http://localhost:9200/films
 Вставка трёх фильмов в индекс.
 ```HTTP
 PUT http://localhost:9200/films/_doc/_bulk
+Content-Type: application/json
 
 { "index":{} }
 { "name": "film 1", "date": "2020-05-01T12:10:30Z", "rating": 4.5 }
@@ -370,6 +373,7 @@ PUT http://localhost:9200/films/_doc/_bulk
 Сортировка фильмов по убыванию рейтинга и даты.
 ```HTTP
 GET http://localhost:9200/films/_doc/_search
+Content-Type: application/json
 
 {
   "sort" : [

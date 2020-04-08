@@ -587,7 +587,7 @@ git reset HEAD~
 Например, перенос N коммитов из локальной ветки A и локальную ветку B.
 ```sh
 git checkout B
-git merge from A
+git merge A
 git checkout A
 git reset --hard HEAD~N # удаление N коммитов из ветки A
 ```

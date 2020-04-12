@@ -10,6 +10,38 @@
 
 # GraphQL
 
+## Взаимодействие с сервером
+
+### Отправка query
+```GraphQL
+query Users {
+  users {
+    id
+    username
+    role
+  }
+}
+```
+
+### Отправка query с переменными
+```GraphQL
+query User($userId: ID!) {
+  user(userId: $userId) {
+    id
+    username
+    role
+  }
+}
+```
+В этом случае `query variables`
+```GraphQL
+{
+  "userId": "auth0|72d45e398924235638341891"
+}
+```
+
+
+
 ## Преимущества GraphQL
 
 * *Строгая типизация*. Конкретная схема, полностью описывающая, как можно работать с данными.

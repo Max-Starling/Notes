@@ -10,6 +10,98 @@
 
 # GraphQL
 
+**GraphQL** — *язык запросов* (query language) для API. 
+
+Клиент посылает **запрос** (query) к сервису GraphQL и получает ответ в виде JSON-объекта по указанной в запросе схеме.
+
+Например, клиент может послать запрос.
+```Graphql
+query {
+  currentUser {
+    id
+    username
+    role
+  }
+}
+```
+Если сервер позволяет получить данные по заданной схеме, по клиенту придётся ответ по типу.
+```json
+{
+  "data": {
+    "currentUser": {
+      "id": "1",
+      "username": "Notes",
+      "role": "Admin"
+    }
+  }
+}
+```
+
+## Запросы query и mutation
+
+Существуют два типа запросов (requests): *query* и *mutation*. 
+
+**Запрос query** отвечает за получение данных, он не может их изменять (аналог GET-запроса в REST).
+```Graphql
+query {
+  users {
+    id
+    username
+  }
+}
+```
+
+**Запрос mutation** отвечает за изменение данных (объединяет в себе возможности POST, PUT, DELETE и других в REST).
+```Graphql
+mutation {
+  logOut
+}
+```
+## Схемы и типы
+
+Все поля, которые может получить клиент, должны быть описаны в **типе** (type).
+
+Типы `Query` и `Mutation` являются типами по умолчанию. В них должны быть описаны все возможные запросы.
+
+```Graphql
+type Query {
+  currentUser: User
+}
+
+type Mutation {
+  logOut
+}
+```
+```Graphql
+schema {
+  query: Query
+  mutation: Mutation
+}
+```
+Могут создаваться пользовательские типы.
+```Graphql
+type User {
+  id: ID
+  username: String
+  role: String
+  image: String
+}
+```
+
+Если схема в запросе с клиента не удовлетворяет схеме на сервере, то возникнет валидационная ошибка. Например, поле `age` отсутствует в типе `User`.
+```json
+{
+  "data": null,
+  "errors": [
+    {
+      "...": "...",
+      "message": "Validation error of type FieldUndefined: Field 'age' in type 'User' is undefined
+    }
+  ]
+}
+```
+
+
 ## Взаимодействие с сервером
 
 ### Отправка query

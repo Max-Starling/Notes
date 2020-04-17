@@ -38,6 +38,15 @@
     #set($max = $b)
 #end
 ```
+```js
+#if($counter == 0)
+  #set($str = "zero")
+#elseif($counter == 1)
+  #set($str = "one")
+#else
+  #set($str = "another number")
+#end
+```
 
 ## Цикл
 ```pascal

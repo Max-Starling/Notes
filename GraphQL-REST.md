@@ -115,7 +115,7 @@ query Users {
 }
 ```
 
-### Отправка query с переменными
+### Query с переменными
 ```GraphQL
 query User($userId: ID!) {
   user(userId: $userId) {
@@ -125,10 +125,29 @@ query User($userId: ID!) {
   }
 }
 ```
-В этом случае `query variables`
-```GraphQL
+`Variables`
+```json
 {
   "userId": "auth0|72d45e398924235638341891"
+}
+```
+
+### Query с input
+```graphql
+query QueryLeaders($credentialsInput: Credentials) {
+  login(credentials: $credentialsInput) {
+    auth_token
+  }
+}
+```
+
+`Variables`
+```json
+{
+  "credentialsInput": {
+    "username": "admin",
+    "password": "admin"
+  }
 }
 ```
 

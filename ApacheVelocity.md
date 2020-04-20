@@ -49,8 +49,29 @@
 ```
 
 ## Цикл
-```pascal
+```js
 #foreach($entry in $array)
   #set($prop = $entry.get("property"))
 #end
+```
+
+## Массив
+
+### Объявление
+```js
+#set($array = [42, "a string", $counter])
+```
+### Обращение к элементу
+```js
+$array.get(1)
+$array[1]
+```
+### Проверка на пустоту
+```js
+#if ($myMap.isEmpty()) #end
+#if ($myMap.size() == 0) #end
+```
+### Добавление элементов
+```js
+$array.add(17)
 ```

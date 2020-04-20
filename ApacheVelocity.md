@@ -31,6 +31,8 @@
 ```
 
 ## Условный оператор
+
+## if..else
 ```js
 #if($a > $b)          
     #set($max = $a)
@@ -38,6 +40,9 @@
     #set($max = $b)
 #end
 ```
+
+
+## elseif
 ```js
 #if($counter == 0)
   #set($str = "zero")
@@ -48,6 +53,10 @@
 #end
 ```
 
+## Краткая запись
+```js
+#if($a > $b)it's true!#{else}it's not!#end
+```
 ## Цикл
 ```js
 #foreach($entry in $array)

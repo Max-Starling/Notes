@@ -510,7 +510,7 @@ Content-Type: application/json
 }
 ```
 
-# Поиск
+# Получение документов
 
 * Получение всех документов.
 ```http
@@ -633,7 +633,7 @@ GET <ELASTICSEARCH_URL>/users/_search?q=name:sam
 
 ## Query DSL
 
-Elasticsearch предоставляет **Query DSL** (Domain Specific Language) — предметно-ориентированный язык, позволяющий описывать запрос `query` в формате JSON и отправлять его в теле запроса (request body).
+Elasticsearch предоставляет **Query DSL** (Domain Specific Language) — предметно-ориентированный язык, позволяющий описывать запрос `query` в формате JSON и отправлять его в теле запроса (request body). Тело можно отравлять надо в GET-запросах.
 
 Query DSL позволяет запрос следующего вида
 ```http
@@ -650,6 +650,37 @@ Content-Type: application/json
       "name" : "sam"
     }
   }
+}
+```
+
+## Поиск
+
+### По одному полю
+
+```http
+GET <ELASTICSEARCH_URL>/users/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match" : {
+      "name" : "sam"
+    }
+  }
+}
+```
+
+### По нескольким полям
+```http
+GET <ELASTICSEARCH_URL>/users/_search
+Content-Type: application/json
+
+{
+ "query": {
+   "multi_match": {
+     "query" : "sam",
+     "fields" : ["firstName", "lastName"]
+   }
 }
 ```
 

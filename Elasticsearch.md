@@ -385,10 +385,27 @@ GET <ELASTICSEARCH_URL>/index_name/_mappings
 
 # Работа с данными
 
-# Создание документа
-Создание типа `user` и документа в нём.
+## Создание индекса
 ```http
-POST <ELASTICSEARCH_URL>/users/user
+PUT <ELASTICSEARCH_URL>/index_name
+```
+
+## Создание типа
+```http
+PUT <ELASTICSEARCH_URL>/index_name/type_name
+```
+
+Можно *не создавать тип* и использовать *тип по умолчанию* `_doc` (*предпочтительный* способ).
+
+## Удаление индекса
+```http
+DELETE <ELASTICSEARCH_URL>/index_name
+```
+
+## Создание документа
+Создание документа в нём.
+```http
+POST <ELASTICSEARCH_URL>/index_name/type_name
 Content-Type: application/json
 
 {

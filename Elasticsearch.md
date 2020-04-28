@@ -11,7 +11,10 @@
   - [Мультиполя](#мультиполя)
   - [Получение текущих отображений](#получение-текущих-отображений)
 - [Работа с данными](#работа-с-данными)
-  - [Создание, изменение, удаление документов](#создание-изменение-удаление-документов)
+  - [Создание документа](#создание-документа)
+  - [Обновление документа по ID](#обновление-документа-по-id)
+  - [Удаление документа по ID](#удаление-документа-по-id)
+  - [Группировка нескольких запросов в один (bulk)](#группировка-нескольких-запросов-в-один-bulk)
 - [Поиск документов](#поиск-документов)
   - [Вид запроса, параметры запроса и ответ](#вид-запроса-параметры-запроса-и-ответ)
   - [Query DSL](#query-dsl)
@@ -382,8 +385,8 @@ GET <ELASTICSEARCH_URL>/index_name/_mappings
 
 # Работа с данными
 
-## Создание, изменение, удаление документов
-* Создание типа (`user`) и документа в нём.
+# Создание документа
+Создание типа `user` и документа в нём.
 ```http
 POST <ELASTICSEARCH_URL>/users/user
 Content-Type: application/json
@@ -393,24 +396,9 @@ Content-Type: application/json
   "job": "Full-stack Enginer"
 }
 ```
-```js
-/* response body */
-{
-  "_index": "users",
-  "_type": "user",
-  "_id": "H3tVi3ABpFL-9AlTbAgj",
-  "_version": 1,
-  "result": "created",
-  "_shards": {
-      "total": 2,
-      "successful": 1,
-      "failed": 0
-  },
-  "_seq_no": 0,
-  "_primary_term": 1
-}
-```
-* Обновление документа (типа `user` по id).
+
+## Обновление документа по ID
+Обновление документа типа `user` по id.
 ```http
 PUT <ELASTICSEARCH_URL>/users/user/H3tVi3ABpFL-9AlTbAgj
 Content-Type: application/json
@@ -420,98 +408,32 @@ Content-Type: application/json
   "job": "Full-stack Enginer"
 }
 ```
-```js
-/* response body */
-{
-  "_index": "users",
-  "_type": "user",
-  "_id": "H3tVi3ABpFL-9AlTbAgj",
-  "_version": 3,
-  "result": "updated",
-  "_shards": {
-      "total": 2,
-      "successful": 1,
-      "failed": 0
-  },
-  "_seq_no": 2,
-  "_primary_term": 1
-}
-```
-* Удаление документа (типа `user` по id).
+
+## Удаление документа по ID
+
+Удаление документа типа `user` по id.
 ```http
 DELETE <ELASTICSEARCH_URL>/users/user/H3tVi3ABpFL-9AlTbAgj
 ```
-```js
-/* response body */
-{
-  "_index": "users",
-  "_type": "user",
-  "_id": "H3tVi3ABpFL-9AlTbAgj",
-  "_version": 4,
-  "result": "deleted",
-  "_shards": {
-      "total": 2,
-      "successful": 1,
-      "failed": 0
-  },
-  "_seq_no": 5,
-  "_primary_term": 1
-}
-```
+
+## Группировка нескольких запросов в один (bulk)
+
 * Создание нескольких документов (типа `user`).  
+
+
+
 В конце BODY запроса обязателен переход на новую строку.
+
+### Пример вставки нескольких пользователей
 ```http
-POST <ELASTICSEARCH_URL>/users/user/_bulk
+POST <ELASTICSEARCH_URL>/_bulk
 Content-Type: application/json
 
-{"index":{}}
-{"name":"Harry Smith","job":"Dev Ops"}
-{"index":{}}
-{"name":"Sam Brave","job":"QA"}
+{ "index": { "_index": "users", "_id" : "1" } }
+{ "name": "Harry Smith", "job":"Dev Ops" }
+{ "index": { "_index": "users", "_id" : "2" } }
+{ "name":" Sam Brave", "job":"QA" }
    
-```
-```js
-/* response body */
-{
-  "took": 26,
-  "errors": false,
-  "items": [
-    {
-      "index": {
-          "_index": "users",
-          "_type": "user",
-          "_id": "Jntsi3ABpFL-9AlTdggH",
-          "_version": 1,
-          "result": "created",
-          "_shards": {
-              "total": 2,
-              "successful": 1,
-              "failed": 0
-          },
-          "_seq_no": 7,
-          "_primary_term": 1,
-          "status": 201
-      }
-    },
-    {
-      "index": {
-          "_index": "users",
-          "_type": "user",
-          "_id": "J3tsi3ABpFL-9AlTdggH",
-          "_version": 1,
-          "result": "created",
-          "_shards": {
-              "total": 2,
-              "successful": 1,
-              "failed": 0
-          },
-          "_seq_no": 8,
-          "_primary_term": 1,
-          "status": 201
-      }
-    }
-  ]
-}
 ```
 
 # Поиск документов

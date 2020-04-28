@@ -101,6 +101,72 @@ type User {
 }
 ```
 
+### Динамические объекты в GraphQL
+
+GraphQL не позволяет создавать динамические объекты в качестве `type`.
+
+Примеры динамических объектов.
+```js
+const commentsMap = {
+  123: {
+    id: "123",
+    message: "Hello"
+  },
+  456: {
+    id: "456",
+    message: "Hi"
+  }
+};
+```
+```js
+const reportsInfoMap = {
+  spam: ["id1", "id2"],
+  flood: [],
+  bullying: ["id3"]
+}
+```
+```js
+const flags = {
+  isReviewed: true,
+  isVisited: true,
+  /* ... */
+}
+```
+
+Есть два решения, как это можно обойти
+* Передавать объекты текстовый как JSON и указывать встроенный тип `String` (не лучшая валидация) или подключить библиотеку, которая имеет скалярный тип JSON (например, [эту](https://github.com/taion/graphql-type-json)). Например, *AWS AppSync* имеет встроенный тип `AWSJSON`.
+```GraphQL
+type Res {
+  commentsMap: String
+  reportsMap: JSON
+  flags: AWSJSON
+}
+```
+* Представить объекты в виде массивов (предпочтительный вариант).
+```GraphQL
+
+type Comment {
+  id: ID
+  message: String
+}
+
+type ReportsInfo {
+  name: String
+  values: [ID]
+}
+
+type Flag {
+  name: String
+  value Boolean
+}
+
+type Res {
+  commentsMap: [Comment]
+  reportsMap: [ReportsInfo]
+  flags: [Flag]
+}
+```
+
 
 ## Взаимодействие с сервером
 

@@ -6,7 +6,9 @@
   - [Данные в BODY](#данные-в-body)
   - [Данные в PARAMS](#данные-в-params)
 
+<!--
 # REST
+-->
 
 # GraphQL
 
@@ -309,7 +311,9 @@ GET /route?obj[foo]=1&obj[bar]=7
 * Форма запроса на клиенте.
 ```http
 POST /route
-field=value&anotherField=anotherValue
+Content-Type: application/json
+
+{ "field": "value", "anotherField": "anotherValue" }
 ```
 ```js
 /* axios */
@@ -337,7 +341,7 @@ GET /route/paramValue
 ```
 ```js
 /* axios */
-axios.get(`/route/{paramValue}`);
+axios.get(`/route/${paramValue}`);
 ```
 * Форма запроса на сервере.
 ```http

@@ -992,6 +992,30 @@ DELETE <ELASTICSEARCH_URL>/_search/scroll
 }
 ```
 
+### Псевдокод для работы со scroll
+Получать данные при помощи `scroll` можно рекурсивно примерно следующим образом.
+
+```js
+const getScrollDataRec = (documents, scroll_id) => {
+  const { scroll_id, hits } = POST(`${ELASTICSEARCH_URL}/_search/scroll`, {
+    scroll_id,
+    scroll: '1m',
+  });
+
+  if (hits.hits.length) {
+    documents.push(hits.hits);
+    return getScrollDataRec(documents, scroll_id);
+  }
+  return documents;
+};
+  
+const getAllDocuments = (indexName) => {
+  const { scroll_id, hits } = GET(`${ELASTICSEARCH_URL}/${indexName}/_search?scroll=1m`);
+  const documents = getScrollDataRec(hits.hits, scroll_id);
+  return documents;
+};
+```
+
 # Анализаторы
 
 **Анализаторы** (Analyzers) определяют способ, которым данные будут анализироваться перед индексацией.

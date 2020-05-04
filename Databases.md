@@ -97,8 +97,8 @@
 
 ### Пример работы с курсором в MongoDB
 ```js
-const usersCursor = db.users.find({ type: 2 });
-
+const usersCursor = db.users.find({ role: 'admin' });
+/* последовательный перебор всех документов результирующего набора в цикле while */
 while (usersCursor.hasNext()) {
    const user = usersCursor.next();
    console.log(user);
@@ -107,17 +107,26 @@ while (usersCursor.hasNext()) {
 
 ### Пример работы с курсором в SQL
 ```SQL
-# объявление явного курсора
-DECLARE users_cursor CURSOR FOR SELECT * FROM users
-# открыть курсор (наполнить его данными)
-OPEN users_cursor
-# можно как-то изменить данные курсора, затем следует
-# последовательное извлечение строк из результирующего набора, за который отвечает курсор
-FETCH NEXT FROM users_cursor INTO new_users
+# объявление временных переменных, которые будут использованы для записи данных курсора
+DECLARE @id VARCHAR(50);
+DECLARE @role VARCHAR(50);
+# объявление явного курсора, который будет брать данные столбцов id, role из таблицы users
+DECLARE @users_cursor CURSOR FOR
+  SELECT id, role
+  FROM users
+# открытие курсор (наполнение его данными)
+OPEN @users_cursor
+# последовательное извлечение строк из результирующего набора в цикле WHILTE,
+# запись значений в переменные и вывод этих переменных 
+WHILE @@FETCH_STATUS = 0
+BEGIN
+  FETCH NEXT FROM @users_cursor INTO @id, @role
+  PRINT @id + ' ' + @role
+END
 # после извлечения всех строк следует закрыть курсор и освободить занимаемые им ресурсы
-CLOSE users_cursor
+CLOSE @users_cursor
 # иногда нужно вручную освобождать память курсора (зависит от реализации SQL)
-DEALLOCATE users_cursor
+DEALLOCATE @users_cursor
 ```
 Возможные варианты перемещений с `FETCH` по результирующему набору строк.
 * `FIRST` — первая строка .
@@ -131,7 +140,7 @@ DEALLOCATE users_cursor
 ```SQL
 UPDATE new_users
 SET ...
-WHERE CURRENT OF users_cursor
+WHERE CURRENT OF @sers_cursor
 ```
 Аналогично можно делать с `DELETE`.
 

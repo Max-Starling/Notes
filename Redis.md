@@ -12,8 +12,8 @@
 
 ## Basic commands
 
-* **GET key** - get value by key
-* **SET key value** - save key with value in storage
-* **DEL key** - delete key
-* **Keys \*** - show all keys
-* **FLUSHALL** - drop all keys
+* `GET key` - get value by key
+* `SET key value` - save key with value in storage
+* `DEL key` - delete key
+* `Keys *` - show all keys
+* `FLUSHALL` - drop all keys

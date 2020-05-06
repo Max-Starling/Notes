@@ -393,6 +393,7 @@ GET <ELASTICSEARCH_URL>/index_name/_mappings
 # Работа с данными
 
 ## Создание индекса
+Создание индекса с названием `index_name`.
 ```http
 PUT <ELASTICSEARCH_URL>/index_name
 ```
@@ -402,7 +403,7 @@ PUT <ELASTICSEARCH_URL>/index_name
 PUT <ELASTICSEARCH_URL>/index_name/type_name
 ```
 
-Можно *не создавать тип* и использовать *тип по умолчанию* `_doc` (*предпочтительный* способ).
+В последних версиях Elasticsearch рекомендуется *не создавать тип*, а использовать *тип по умолчанию* `_doc`.
 
 ## Удаление индекса
 ```http
@@ -410,7 +411,7 @@ DELETE <ELASTICSEARCH_URL>/index_name
 ```
 
 ## Создание документа
-Создание документа в нём.
+Создание документа в типе `type_name` индекса `index_name`.
 ```http
 POST <ELASTICSEARCH_URL>/index_name/type_name
 Content-Type: application/json
@@ -422,9 +423,9 @@ Content-Type: application/json
 ```
 
 ## Обновление документа по ID
-Обновление документа типа `user` по id.
+Обновление документа типа `_doc` в индексе `users` по id.
 ```http
-PUT <ELASTICSEARCH_URL>/users/user/H3tVi3ABpFL-9AlTbAgj
+PUT <ELASTICSEARCH_URL>/users/_doc/H3tVi3ABpFL-9AlTbAgj
 Content-Type: application/json
 
 {
@@ -435,9 +436,9 @@ Content-Type: application/json
 
 ## Удаление документа по ID
 
-Удаление документа типа `user` по id.
+Удаление документа типа `_doc` по id.
 ```http
-DELETE <ELASTICSEARCH_URL>/users/user/H3tVi3ABpFL-9AlTbAgj
+DELETE <ELASTICSEARCH_URL>/users/_doc/H3tVi3ABpFL-9AlTbAgj
 ```
 
 ## Группировка нескольких запросов в один (bulk)

@@ -8,6 +8,8 @@ My simple notes about everything related to programming.
 ### [Сравнение Flux, Redux, Vuex и Mobx](./Flux-Redux-Vuex-Mobx.md)
 ### [Продвинутый JavaScript](./JavaScript.md)
 ### [Асинхронность в NodeJS, цикл событий, стек вызовов и многое другое](./NodeJS.md)
+### [Базы данных](./Databases)
+### [Элементы функционального программирования](./FunctionalProgramming.md)
 ### [Всё,что нужно знать о Docker](./Docker.md)
 ### [Elascticsearch и как работает индексация](./Elasticsearch.md)
 ### [Работа браузеров, рендеринг критического пути](./Browsers.md)

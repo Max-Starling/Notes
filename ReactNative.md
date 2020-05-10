@@ -1,4 +1,4 @@
 # Основы React Native
 
-**React Native** — фреймворк, 
+**React Native** — фреймворк, TODO
 

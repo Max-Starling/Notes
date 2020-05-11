@@ -66,6 +66,8 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 - [Обновление]
 - [Уничтожение]
 
+TODO
+
 ## React Hooks
 
 ### Мемоизация с useMemo, useCallback, memo

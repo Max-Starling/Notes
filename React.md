@@ -67,6 +67,14 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 - [Уничтожение]
 
 TODO
+<!-- 
+### Инициализация
+
+При инициализации проиходит установка Props и начального (initial) State.
+
+### Создание (Mounting)
+
+### Обновнение (Updating) -->
 
 ## React Hooks
 
@@ -143,14 +151,6 @@ const onClick = useCallback(
 );
 ```
 `useCallback(callback, [dependencies])`.
-
-### Инициализация
-
-При инициализации проиходит установка Props и начального (initial) State.
-
-### Создание (Mounting)
-
-### Обновнение (Updating)
 
 ## Контролируемые и неконтролируемые компоненты
 

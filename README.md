@@ -55,6 +55,8 @@ My simple notes about everything related to programming.
 - [Символьный тип](./DataTypes.md#символьный-тип)
 - [Целочисленный тип](./DataTypes.md#целочисленный-тип)
 - [Число с плавающей точкой](./DataTypes.md#число-с-плавающей-точкой)
+- [Ссылка](./DataTypes.md#ссылка)
+- [Указатель](./DataTypes.md#указатель)
 
 ### [Структуры данных и алгоритмы]()
 - [Структуры данных](./DataStructures.md#структуры-данных)

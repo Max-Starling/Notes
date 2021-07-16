@@ -101,7 +101,12 @@ My simple notes about everything related to programming.
 
 
 ## Отдельные технологии и языки
-
+  - [CSS](./CSS.md)
+  - [Docker](./Docker.md)
+  - [Elasticsearch](./Elasticsearch.md)
+  - [Git](./Git.md)
+  - [JavaScript](./JavaScript.md)
+  - [Сравнение Flux, Redux, Vuex и Mobx](./Flux-Redux-Vuex-Mobx.md)
 
 
 

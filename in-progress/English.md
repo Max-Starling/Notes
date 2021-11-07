@@ -166,13 +166,21 @@ If <Past Simple/Continuous>, (then) + [would/could/might] + (not)
 ```
 
 ```js
-- If I were at home now, I would probably watch my favorite movie. // Если бы я был сейчас дома, я бы, наверное, смотрел бы свой любимый фильм (но я не дома)
-- If the weather was better, we could walk in the park now // Если бы погода была лучше, мы бы могли сейчас гулять в парке (но погода не очень)
-- If I were you, I would invite her to dance // Если бы я был на твоём месте, я бы пригласил её потанцевать (но я не ты)
+- If I were at home now, I would probably watch my favorite movie. // Если бы я был сейчас дома, я бы, наверное, смотрел бы свой любимый фильм (но я сейчас не дома)
+- If the weather was better, we could walk in the park now // Если бы (сейчас) погода была лучше, мы бы могли сейчас гулять в парке (но погода сейчас не очень)
+- If I were you, I would invite her to dance // Если бы я (сейчас) был на твоём месте, я бы пригласил её потанцевать (но я сейчас не на твоём месте)
 ```
 
 ### Third condition
 
-Добиться *заданного результата можно было бы*, если бы *соблюдались некоторые условия в прошлом*.
+Добиться *заданного результата можно было бы*, если бы были выполнены *некоторые условия в прошлом*, но они *не были выполнены* - *момент упущен*.
 
+В *условии* используется *прошедшее совершённое время*, в *следствии* - `would` (бы), `have` и *третья форма глагола*.
+```jsx
+If <Past Perfect>, (then) + would + (not) + have <Past Participle>
+```
 
+```js
+- He would not have broken his leg if he had followed the safety requirements. // Он бы не сломал ногу, если бы он (тогда) соблюдал технику безопасности (но он не соблюдал)
+- If I had stayed at home then everything would have been fine // Если бы я тогда остался дома, всё было бы (тогда) хорошо (но я не остался)
+```

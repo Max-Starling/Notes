@@ -1,5 +1,6 @@
 - [Времена](#времена)
 - [Условные выражения (Conditionals)](#условные-выражения-conditionals)
+- [Сослагательное наклонение (Subjunctive)](#сослагательное-наклонение-subjunctive)
 # Времена
 
 ## Present Perfect
@@ -185,4 +186,40 @@ If <Past Perfect>, (then) + would + (not) + have <Past Participle>
 ```js
 - He would not have broken his leg if he had followed the safety requirements. // Он бы не сломал ногу, если бы он (тогда) соблюдал технику безопасности (но он не соблюдал)
 - If I had stayed at home then everything would have been fine // Если бы я тогда остался дома, всё было бы (тогда) хорошо (но я не остался)
+```
+
+# Пожелание/желание (конструкция `wish`)
+
+Предложение, содержащее конструкцию `wish`, является сложноподчинённым. Оно состоит из двух частей:
+* Первая часть переводится на русский язык "Я бы хотел", "Мне бы хотелось". Jна имеет *настоящее время* (`Present Simple`).
+* Вторая часть *отражает желание* (*пожелание*). Она *всегда* имеет *прошедшее время* (`Past Simple`).
+
+```js
+I/We/They wish + I (he/...) + <Past Simple>
+He/She/It wishes + He (I/...) + <Past Simple>
+```
+
+##### Примеры
+```js
+- I wish I had a dog // Я бы хотел, чтобы у меня была собака (Как бы мне хотелось, чтобы у меня была собака).
+- I wish you were here. // Я бы хотел, чтобы ты был(а) здесь.
+```
+
+# Предпочтение (конструкция `would rather`)
+
+Конструкция `would rather` (`'d rather`) *используется* в тех *случаях*, когда нужно *отдать предпочтение чему-либо* при *выборе*.
+
+
+```js
+- I would rather not order sushi. I have no desire to eat fish today. // Я бы предпочёл не заказывать суши (а заказать что-то другое). У меня сегодня нет желания есть рыбу.
+- I’d rather not go to the party. I have a hedache. // Я бы предпочёл не пойти на вечеринку (а остаться дома). У меня болит голова.
+```
+
+# Сослагательное наклонение (Subjunctive)
+
+Конструкция:
+
+* `It's (high) time
+```js
+It's (high) time + PAST SUBJUNCTIVE
 ```

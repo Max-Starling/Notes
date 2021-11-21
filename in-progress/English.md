@@ -33,10 +33,10 @@
 – Man has walked on the Moon. /* Человек побывал на луне */
 – We have begun to understand each other better. /* Мы начали лучше понимать друг друга */
 ```
-* *Действия, которые завершились, но упомянутый период времени ещё не окончен* (`today`, `this week`, `this year`).
+<!-- * *Действия, которые завершились, но упомянутый период времени ещё не окончен* (`all day`, `today`, `this week`, `this year`).
 ```css
-– I have read the book ~this week~.
-```
+– I have read the book ~this week~. // Я читал книгу на этой неделе
+``` -->
 * *Жизненный опыт* (`ever`, `never`, `before`).
 ```css
 – Have you ~ever~ eaten pizza ~before~? /* Ты когда-нибудь ел пиццу раньше? */
@@ -84,6 +84,12 @@
 * *Длительные действия* (процесс), которые уже *завершились*, но имеют *результат в момент речи*.
 ```js
 - I have been cooking dinner. /* Я готовил ужин (акцент на длительности действия) */
+```
+* *Повторяемое действие* (*повторившийся жизненный опыт*). Особенно с *временными выражениями* (`all day`, `recently`, `this week`, `this year`), когда *период времени ещё не закончен*.
+```js
+- Have you been reading my diary again? /* Ты снова читал мой дневник ? */
+- It's been raining this week. /* Всю эту неделю идёт дождь */
+- I have been reading the book ~this week~. /* Я читал книгу эту неделю */
 ```
 
 Таким образом, если речь идёт о *незавершённых действиях*, то `Present Perfect Simple` используется с `non-action verbs`, а `Present Perfect Continuous` - с `action verbs`. Причём, *некоторые глаголы* (например, глагол `have`) могут *относиться* как *одной*, так и к *другой группе* в *зависимости* от *контекста*: `have lessons` - заниматься (`action verb`), `have something` - иметь что-то (`non-action verb`).

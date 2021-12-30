@@ -283,7 +283,7 @@ await castStringFieldToDouble(usersCollection, 'joinDate')
 
 ## Оператор $push
 
-*Оператор* `$push` *добавляет один элемент* `newArrayItem` в *массив* `arrayFieldName`.
+*Оператор* `$push` *добавляет один элемент* `<newArrayItem>` в *массив* `<arrayFieldName>`.
 ```js
 { $push: { <arrayFieldName>: <newArrayItem> } }
 ```
@@ -299,6 +299,19 @@ db.favoritePages.updateOne(
    { $push: { pages: 101 } }
 )
 // favoritePages: [{ _id: 17, pages: [3, 21, 73, 101] }]
+```
+Для *добавления нескольких элементов* `<item1>`, `<item2>` в *массив* `<arrayFieldName>`
+
+```js
+{ $push: { <arrayFieldName>: { $each: [<item1>, <item2>] } } }
+```
+
+```js
+db.favoritePages.updateOne(
+   { _id: 17 },
+   { $push: { pages: { $each: [277, 314] } } }
+)
+// favoritePages: [{ _id: 17, pages: [3, 21, 73, 101, 277, 314] }]
 ```
 
 ## Оператор $pull

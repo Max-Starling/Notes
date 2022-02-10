@@ -1,5 +1,7 @@
 # Klavio
 
+Klavio использует Django (Python) в качестве *шаблонизатора* (англ. `template engine`).
+
 ## Переменные
 Обращение к переменной `foo`:
 ```hbs

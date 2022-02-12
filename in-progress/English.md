@@ -619,16 +619,16 @@ It's (high) time + PAST SUBJUNCTIVE
 
 
 # Порядок прилагательных (Order of adjectives)
-1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any, all, many, much, most, some, a few, and a lot of, a little, a large amount of, none; the cardinal numbers: one, two, three, four, ...`)
-2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `cool`, `unusual`, `brilliant`, `awful`)
-3) `Size` - размер (например, `big`, `small`, `tiny`, `large`, `tall`, `short`)
-4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`)
-5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`)
+1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any, all, many, much, most, some, several, a few, and a lot of, a little, a large amount of, none; the cardinal numbers: one, two, three, four, ...`)
+2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`)
+3) `Size` - размер (например, `big`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
+4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`, `cold`, `hot`)
+5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`, `14-year-old`)
 6) `Shape` - форма (например, `round`, `square`, `rectangular`)
 7) `Color` - цвет (например, `white`, `red`, `yellow`, `blue`)
-8) `Origin` - источник происхождения, `Nationality` - национальность (например, `Dutch`, `Japanese`, `Russian`, `Turkish`)
-9) `Material` - материал (например, `gold`, `rubber`, `metal`, `iron`, `tissue`, `wood`, `plastic`) 
-10) `Purpose` - цель (например, `cleaning`, `cooking`, `erasing`, `washing`)
+8) `Origin` - источник происхождения, `Nationality` - национальность (например, `Dutch`, `Japanese`, `Russian`, `Turkish`, `Chinese`)
+9) `Material` - материал (например, `gold`, `rubber`, `metal`, `iron`, `tissue`, `plastic`, `glass`, `silver`, `wooden`) 
+10) `Purpose` - цель, область применения (например, `cleaning`, `cooking`, `erasing`, `washing`, `winter`, `baseball`)
 * Также могут быть использованы `Intensifiers` - *усилители* (например, `pretty`, `fairly`, `really`, `very`, `quite`, `so`, `extremely`).
 Например, `so big`, `really beautiful`, `very long`, `extremely strong`). *Усилители* *стоят прямо перед* тем *прилагательным*, которое следует *усилить*.
 
@@ -636,7 +636,7 @@ It's (high) time + PAST SUBJUNCTIVE
 Хотя во многих других источниках порядок другой:
 https://www.theguardian.com/commentisfree/2016/sep/13/sentence-order-adjectives-rule-elements-of-eloquence-dictionary#:~:text=The%20rule%20is%20that%20multiple,inviolable%2C%20even%20in%20informal%20speech.
 
-Тем не менее, `old round table` звучит лучше, чем `round old table`, *Cambridge* не предоставил *ни одного примера*, где используется и возраст, и форма
+Как по мне, `old round table` звучит лучше, чем `round old table`, *Cambridge* не предоставил *ни одного примера*, где используется и возраст, и форма
 
 Например,
 ```
@@ -653,5 +653,9 @@ You have such a (1) lovely (2) little (3) old (5) rectangular (6) green (7) Fren
 ```
 She was a (1) beautiful (2), tall (3), thin (4), young (5), black-haired (7), Scottish (8) woman.
 I like that (1) really big (*3) old (5) black (7) daddy's (8) jacket.
+There were three (1) imaginary big (3) round (6) yellow (7) plastic (9) balls.
+It was a (1) beautiful (2) cold (4) evening.
+He has lost his (1) awful (2) new (5) baseball (10) cap
+It's my (1) favorite (2) winter (10) coat
 ```
 

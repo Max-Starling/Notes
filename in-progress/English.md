@@ -3,6 +3,7 @@
 - [Предложения](#предложения)
 - [Условные выражения (Conditionals)](#условные-выражения-conditionals)
 - [Сослагательное наклонение (Subjunctive)](#сослагательное-наклонение-subjunctive)
+- [Порядок прилагательных (Order of adjectives)](#порядок-прилагательных-order-of-adjectives)
 # Времена
 
 - [Настоящее совершённое время (Present Perfect)](настоящее-совершённое-время-present-perfect)
@@ -615,3 +616,42 @@ It's (high) time + PAST SUBJUNCTIVE
 ```
 
 <!-- it's (high) time + subject + past simple to say that something should be done now or in the future. -->
+
+
+# Порядок прилагательных (Order of adjectives)
+1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any, all, many, much, most, some, a few, and a lot of, a little, a large amount of, none; the cardinal numbers: one, two, three, four, ...`)
+2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `cool`, `unusual`, `brilliant`, `awful`)
+3) `Size` - размер (например, `big`, `small`, `tiny`, `large`, `tall`, `short`)
+4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`)
+5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`)
+6) `Shape` - форма (например, `round`, `square`, `rectangular`)
+7) `Color` - цвет (например, `white`, `red`, `yellow`, `blue`)
+8) `Origin` - источник происхождения, `Nationality` - национальность (например, `Dutch`, `Japanese`, `Russian`, `Turkish`)
+9) `Material` - материал (например, `gold`, `rubber`, `metal`, `iron`, `tissue`, `wood`, `plastic`) 
+10) `Purpose` - цель (например, `cleaning`, `cooking`, `erasing`, `washing`)
+* Также могут быть использованы `Intensifiers` - *усилители* (например, `pretty`, `fairly`, `really`, `very`, `quite`, `so`, `extremely`).
+Например, `so big`, `really beautiful`, `very long`, `extremely strong`). *Усилители* *стоят прямо перед* тем *прилагательным*, которое следует *усилить*.
+
+Примечание: в *разных источниках* `Age (5)` и `Shape (6)` могут стоять в *другом порядке*. Например, на сайте *Cambridge Dictionary*: https://dictionary.cambridge.org/grammar/british-grammar/adjectives-order.
+Хотя во многих других источниках порядок другой:
+https://www.theguardian.com/commentisfree/2016/sep/13/sentence-order-adjectives-rule-elements-of-eloquence-dictionary#:~:text=The%20rule%20is%20that%20multiple,inviolable%2C%20even%20in%20informal%20speech.
+
+Тем не менее, `old round table` звучит лучше, чем `round old table`, *Cambridge* не предоставил *ни одного примера*, где используется и возраст, и форма
+
+Например,
+```
+You have such a (1) lovely (2) little (3) old (5) rectangular (6) green (7) French (8) whittling (10) knife
+```
+
+Носители языка *стараются избегать использования усилителей* `very` и `really` в пользу *более* **сильных прилагательных** (англ. `strong adjectives`), которым *усилители не нужны*:
+* `very small` - очень маленький - `tiny` - крошечный
+* `very big` - очень большой - `huge` - огромный
+* `very good` - очень хороший - `excellent` - отличный
+* `very tasty` - очень вкусный - `delicious` - изумительно вкусный
+
+Ещё примеры
+```
+She was a (1) beautiful (2), tall (3), thin (4), young (5), black-haired (7), Scottish (8) woman.
+I like that (1) really big (*3) old (5) black (7) daddy's (8) jacket.
+```
+

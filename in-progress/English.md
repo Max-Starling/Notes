@@ -619,7 +619,7 @@ It's (high) time + PAST SUBJUNCTIVE
 
 
 # Порядок прилагательных (Order of adjectives)
-1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any, all, many, much, most, some, several, a few, and a lot of, a little, a large amount of, none; the cardinal numbers: one, two, three, four, ...`)
+1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any`, `all`, `many`, `much`, `most`, `some`, `several`, `a few`, `a lot of`, `a little`, `a large amount of`, `none`; `the cardinal numbers`: `one`, `two`, `three` и так далее)
 2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`)
 3) `Size` - размер (например, `big`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
 4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`, `cold`, `hot`)

@@ -3,7 +3,7 @@
 - [Предложения](#предложения)
 - [Условные выражения (Conditionals)](#условные-выражения-conditionals)
 - [Сослагательное наклонение (Subjunctive)](#сослагательное-наклонение-subjunctive)
-- [Конструкции с `used to`, `to be used to`, `to get used to`](#конструкции-с-used-to-to-be-used-to-to-get-used-to) 
+- [Конструкции с `used to`, `be used to`, `get used to`](#конструкции-с-used-to-be-used-to-get-used-to) 
 - [Порядок прилагательных (Order of adjectives)](#порядок-прилагательных-order-of-adjectives)
 # Времена
 
@@ -619,7 +619,7 @@ It's (high) time + PAST SUBJUNCTIVE
 <!-- it's (high) time + subject + past simple to say that something should be done now or in the future. -->
 
 
-# Конструкции с `used to`, `to be used to`, `to get used to`
+# Конструкции с `used to`, `be used to`, `get used to`
 
 ## Конструкция `used to`
 
@@ -628,6 +628,8 @@ It's (high) time + PAST SUBJUNCTIVE
 Также верно, что конструкция `used to` может *ссылаться только* на *прошедшее время*. Её *можно перевести* на *русский* как `раньше + глагол прошедшего времени`.
 
 Предложение с конструкцией `used to` может состоять как из одной части, так и из двух. Вторая часть, отражающая констраст и начинающаяся обычно со слова "но" (англ. `but`) может иногда опускаться.
+
+*Не перепутайте конструкции* `used to + inifinitive` и `be used to + gerund` (о ней будет дальше)!
 
 Например
 ```cpp
@@ -679,12 +681,39 @@ It's (high) time + PAST SUBJUNCTIVE
 // Мы воображали, что мы руководим правительством и издаём сумашедшие законы, которым все должны подчиняться.
 ```
 
-*В отличии* от `would` конструкция `used to` используется для *описании ситуации*, которая *уже не является правдой сейчас*.
+*В отличии* от `would` конструкция `used to` используется для *описания ситуации*, которая *уже не актуальна*.
 ```cpp
 // Можно сказать:
 - I used to live in Minsk. // Я жил в Минске (а сейчас не живу)
 // Но нельзя сказать
-- I would live in Minsk. // Я бы жил в Минске. (теряется смысл, контраст с настоящим)
+- I would live in Minsk. // Я бы жил в Минске. (теряется смысл, заключающийся в контрасте между прошлым и настоящим)
+```
+
+## Конструкции `be used to` и `get used to`
+
+Be used to means ‘be accustomed to’ or ‘be familiar with’. It can refer to the past, present or future. We follow be used to with a noun phrase, a pronoun or the -ing form of a verb:
+
+Конструкция `be used to + gerund` означает "привыкнуть к чему-то" (англ. `be accustomed to`) или "быть знакомым с чем-то" (англ. `be familiar with`). То есть для вас что-то было вновинку, но теперь вы кое-как привыкли к этому, познакомились, освоились.
+
+Конструкция `get used to + gerund` означает "привыкать к чему-то" (англ. `get accustomed to`) или "знакомиться с чем-то" (англ. `get familiar with`). То есть вы *находитесь в процессе привыкания* к *чему-то новому*, но ещё *не привыкли окончательно*.
+
+В отличии от конструкции `used to` которая может ссылаться лишь на прошлое, конструкции `be used to` и `get used to` *могут применяться* к *любому времени* (настоящему, прошлому и будущему).
+
+Вообще говоря, *разница между* этими *двумя конструкциями не велика*: она *кроется* в *разнице между глаголами* `be` и `get`.
+
+
+```cpp
+- I find it hard to get used to going to bed early. // Я нахожу это сложным привыкнуть ложиться спать рано. (ещё не привык, но пытаюсь)
+- I'm not used to sleeping outdoors. I always sleep under a roof. // Я не привык спать на открытом воздухе. Я всегда сплю под крышей (даже не пытаюсь привыкать)
+- He is used to eating with his left hand. // Он привык есть левой рукой (уже привык)
+- She is getting used to sleeping alone. // Она привыкает спать одна (процесс привыкания)
+- I can't get used to eating only spicy food. // Я не могу привыкнуть есть только острую пищу (но пытаюсь, потому что нет выбора)
+- You will soon get used to it. // Ты скоро привыкнешь (начал делать что-то, но ещё не привык)
+```
+
+Также существует более формальная версия для `get used to`: `become used to`:
+```cpp
+- You will soon become used to it. 
 ```
 
 

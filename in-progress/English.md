@@ -691,14 +691,14 @@ It's (high) time + PAST SUBJUNCTIVE
 
 # Порядок прилагательных (Order of adjectives)
 1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any`, `all`, `many`, `much`, `most`, `some`, `several`, `a few`, `a lot of`, `a little`, `a large amount of`, `none`; `the cardinal numbers`: `one`, `two`, `three` и так далее)
-2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `nice`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`)
+2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `nice`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`, `dirty`)
 3) `Size` - размер (например, `big`, `little`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
-4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`, `cold`, `hot`)
+4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `dry`, `wet`, `cold`, `hot`)
 5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`, `brand new`, `14-year-old`)
-6) `Shape` - форма (например, `round`, `square`, `rectangular`)
-7) `Color` - цвет (например, `white`, `red`, `yellow`, `blue`)
+6) `Shape` - форма (например, `round`, `square`, `rectangular`, `long`, `fat`)
+7) `Color` - цвет (например, `white`, `red`, `yellow`, `blue`, `dark`, `light`)
 8) `Origin` - источник происхождения, `Nationality` - национальность (например, `Dutch`, `Japanese`, `Russian`, `Turkish`, `Chinese`)
-9) `Material` - материал (например, `gold`, `rubber`, `metal`, `iron`, `tissue`, `plastic`, `glass`, `silver`, `wooden`) 
+9) `Material` - материал (например, `gold`, `rubber`, `metal`, `iron`, `tissue`, `plastic`, `glass`, `silver`, `wooden`, `silk`) 
 10) `Purpose` - цель, область применения (например, `cleaning`, `cooking`, `erasing`, `washing`, `winter`, `baseball`)
 * Также могут быть использованы `Intensifiers` - *усилители* (например, `pretty`, `fairly`, `really`, `very`, `quite`, `so`, `extremely`).
 Например, `so big`, `really beautiful`, `very long`, `extremely strong`). *Усилители* *стоят прямо перед* тем *прилагательным*, которое следует *усилить*.
@@ -712,6 +712,11 @@ https://www.theguardian.com/commentisfree/2016/sep/13/sentence-order-adjectives-
 Например,
 ```
 You have such a (1) lovely (2) little (3) old (5) rectangular (6) green (7) French (8) whittling (10) knife
+```
+
+В своём *учебнике по английскому* я также нашёл *ещё один пункт между* `7) Color` и `8) Origin`: `7.5) Pattern` - шаблон, узор (например: полосатый, "в полосочку" - `striped`; клетчатый, "в клеточку" - `checkered`; пунктирный, "в горошик" - dotted).
+```
+an old (5) blue (7) checkered (8.5) shirt ( - старая клетчатая рубашка
 ```
 
 Носители языка *стараются избегать использования усилителей* `very` и `really` в пользу *более* **сильных прилагательных** (англ. `strong adjectives`), которым *усилители не нужны*:

@@ -623,46 +623,78 @@ It's (high) time + PAST SUBJUNCTIVE
 
 ## Конструкция `used to`
 
-Конструкция `used to + infinitive` используется для того, чтобы состаться на наши привычные (повторяющиеся) действия, состояния или ситуации в прошлом, которые сейчас уже не действительны. То есть данная конструкция подразумевает контраст между тем, что было раньше и тем, что есть сейчас.
+Конструкция `used to + infinitive` используется для того, чтобы состаться на наши привычные (повторяющиеся) действия, состояния или ситуации в прошлом, которые сейчас уже не действительны. То есть данная конструкция подразумевает контраст между тем, что было раньше и тем, что есть сейчас. 
 
-Конструкцию `used to` можно перевести на русский как "раньше" + глагол прошедшего времени.
+Также верно, что конструкция `used to` может *ссылаться только* на *прошедшее время*. Её *можно перевести* на *русский* как `раньше + глагол прошедшего времени`.
 
 Предложение с конструкцией `used to` может состоять как из одной части, так и из двух. Вторая часть, отражающая констраст и начинающаяся обычно со слова "но" (англ. `but`) может иногда опускаться.
 
 Например
-```python
+```cpp
 - I used to live with my family, but now I rent an apartment. // Раньше я жил с родителями, но сейчас я снимаю квартиру.
 - I used to date her, but we broke up. // Раньше я встречался с ней, но мы расстались
 - I used to wear jeans. // Раньше я носил джинсы (а сейчас не ношу).
-- I used to play football. // Раньше я играл в футбол.
-- I used to come here often. // Раньше я часто бывал здесь.
-- People used to send letters to each other. // Раньше люди посылали друг другу письма.
+- I used to come here often when I was young. // Раньше я часто бывал здесь, когда был молод (а сейчас бываю редко).
+- People used to send letters to each other. // Раньше люди посылали друг другу письма (а сейчас они так не делают).
+- Before I started cycling, I used to go to work by public transport. // Прежде, чем я начал ездить на велосипеде, я добирался на работу на общественном трансопрте.
 ```
 
 ### Отрицательная форма `used to` - `didn't use to`
 Чаще всего используется отрицательная форма `didn't use to`.
-```python
+```cpp
 - It didn’t use to be so crowded in the shops as it is nowadays. // Раньше магазины не были так переполнены людьми, как в наши дни.
-- You didn't use to smoke. // Раньше ты не курила (а сейчас куришь)
+- You didn’t use to smoke. // Раньше ты не курила (а сейчас куришь)
 ```
 Но также существует и более *формальная версия* `used not to + infinitive`.
-```python
+```cpp
 - He used not to live as poorly as he does now. // Он не привык жить так бедно, как живёт сейчас
+- I used not to play football. // Раньше я не играл в футбол (а сейчас играю).
 ```
 
 ### Вопросительная форма `used to` - `did someone use to`
-```python
+```cpp
 - Did you use to work with her? // Ты раньше работал с ней?
 - Didn’t you used to dance? // Раньше вы не танцевали?
 ```
 
+### Выразительная форма `did used to`
+```cpp
+- We never used to speak a lot with our neighbours, but we did used to say hello to them. // Мы никогда не говорили много с нашими соседями, но мы всегда говорили им "привет".
+```
+
+### Question tags
+Для создания наводящих вопросов с конструкцией `used to` используют вспомогательный глагол `did`.
+```cpp
+- You used to work at home, did you? // Раньше ты работал дома, верно?
+- You used to sleep a lot, didn't you? // Раньше ты много спал, не так ли?
+- She didn't use to live here, did she? // Раньше она не жила здесь, не так ли?
+```
+
+### Различие между `used to` и `would`
+
+И `used to`, и `would` могут *использоваться* для *рассказа* о *привычках прошлого*. *Иногда* они *ипользуются вместе* в *предложении*, тогда обычно `used to` выходит вперёд, чтобы***задать сцену рассказа*.
+> When we were kids, we used to invent amazing games. We would imagine we were the government and we would make crazy laws that everyone had to obey.
+```cpp
+// Раньше, когда мы были деньми, мы изобретали удивительные игры. 
+// Мы воображали, что мы руководим правительством и издаём сумашедшие законы, которым все должны подчиняться.
+```
+
+*В отличии* от `would` конструкция `used to` используется для *описании ситуации*, которая *уже не является правдой сейчас*.
+```cpp
+// Можно сказать:
+- I used to live in Minsk. // Я жил в Минске (а сейчас не живу)
+// Но нельзя сказать
+- I would live in Minsk. // Я бы жил в Минске. (теряется смысл, контраст с настоящим)
+```
+
+
 
 # Порядок прилагательных (Order of adjectives)
 1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any`, `all`, `many`, `much`, `most`, `some`, `several`, `a few`, `a lot of`, `a little`, `a large amount of`, `none`; `the cardinal numbers`: `one`, `two`, `three` и так далее)
-2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`)
-3) `Size` - размер (например, `big`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
+2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `nice`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`)
+3) `Size` - размер (например, `big`, `little`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
 4) `Physical quality` - физическое качество (например, `thin`, `thick`, `soft`, `rough`, `straight`, `wavy`, `dry`, `wet`, `cold`, `hot`)
-5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`, `14-year-old`)
+5) `Age` - возраст (например, `young`, `old`, `youthful`, `new`, `brand new`, `14-year-old`)
 6) `Shape` - форма (например, `round`, `square`, `rectangular`)
 7) `Color` - цвет (например, `white`, `red`, `yellow`, `blue`)
 8) `Origin` - источник происхождения, `Nationality` - национальность (например, `Dutch`, `Japanese`, `Russian`, `Turkish`, `Chinese`)

@@ -3,6 +3,7 @@
 - [Предложения](#предложения)
 - [Условные выражения (Conditionals)](#условные-выражения-conditionals)
 - [Сослагательное наклонение (Subjunctive)](#сослагательное-наклонение-subjunctive)
+- [Конструкции с `used to`, `to be used to`, `to get used to`](#конструкции-с-used-to-to-be-used-to-to-get-used-to) 
 - [Порядок прилагательных (Order of adjectives)](#порядок-прилагательных-order-of-adjectives)
 # Времена
 
@@ -616,6 +617,44 @@ It's (high) time + PAST SUBJUNCTIVE
 ```
 
 <!-- it's (high) time + subject + past simple to say that something should be done now or in the future. -->
+
+
+# Конструкции с `used to`, `to be used to`, `to get used to`
+
+## Конструкция `used to`
+
+Конструкция `used to + infinitive` используется для того, чтобы состаться на наши привычные (повторяющиеся) действия, состояния или ситуации в прошлом, которые сейчас уже не действительны. То есть данная конструкция подразумевает контраст между тем, что было раньше и тем, что есть сейчас.
+
+Конструкцию `used to` можно перевести на русский как "раньше" + глагол прошедшего времени.
+
+Предложение с конструкцией `used to` может состоять как из одной части, так и из двух. Вторая часть, отражающая констраст и начинающаяся обычно со слова "но" (англ. `but`) может иногда опускаться.
+
+Например
+```python
+- I used to live with my family, but now I rent an apartment. // Раньше я жил с родителями, но сейчас я снимаю квартиру.
+- I used to date her, but we broke up. // Раньше я встречался с ней, но мы расстались
+- I used to wear jeans. // Раньше я носил джинсы (а сейчас не ношу).
+- I used to play football. // Раньше я играл в футбол.
+- I used to come here often. // Раньше я часто бывал здесь.
+- People used to send letters to each other. // Раньше люди посылали друг другу письма.
+```
+
+### Отрицательная форма `used to` - `didn't use to`
+Чаще всего используется отрицательная форма `didn't use to`.
+```python
+- It didn’t use to be so crowded in the shops as it is nowadays. // Раньше магазины не были так переполнены людьми, как в наши дни.
+- You didn't use to smoke. // Раньше ты не курила (а сейчас куришь)
+```
+Но также существует и более *формальная версия* `used not to + infinitive`.
+```python
+- He used not to live as poorly as he does now. // Он не привык жить так бедно, как живёт сейчас
+```
+
+### Вопросительная форма `used to` - `did someone use to`
+```python
+- Did you use to work with her? // Ты раньше работал с ней?
+- Didn’t you used to dance? // Раньше вы не танцевали?
+```
 
 
 # Порядок прилагательных (Order of adjectives)

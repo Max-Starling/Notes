@@ -1,11 +1,16 @@
-- [Времена](#времена)
-- [Модальные глаголы](#модальные-глаголы)
+- [Времена (`Tenses`)](#времена-tenses)
+- [Модальные глаголы (`Modal verbs`)](#модальные-глаголы-modal-verbs)
+- [Вспомогательные глаголы (`Auxiliary verbs`)](#вспомогательные-глаголы-auxiliary-verbs)
 - [Предложения](#предложения)
-- [Условные выражения (Conditionals)](#условные-выражения-conditionals)
-- [Сослагательное наклонение (Subjunctive)](#сослагательное-наклонение-subjunctive)
+- [Условные выражения (`Conditionals`)](#условные-выражения-conditionals)
+- [Сожаление (конструкция с `wish`)](#сожаление-конструкция-с-wish)
+- [Сожаление (конструкция с `If only`)](#сожаление-конструкция-с-if-only)
+- [Предпочтение (конструкция с `would rather`)](#предпочтение-конструкция-с-would-rather)
 - [Конструкции с `used to`, `be used to`, `get used to`](#конструкции-с-used-to-be-used-to-get-used-to) 
-- [Порядок прилагательных (Order of adjectives)](#порядок-прилагательных-order-of-adjectives)
-# Времена
+- [Порядок прилагательных (`Order of adjectives`)](#порядок-прилагательных-order-of-adjectives)
+- [Сослагательное наклонение (`Subjunctive`)](#сослагательное-наклонение-subjunctive)
+
+# Времена (`Tenses`)
 
 - [Настоящее совершённое время (Present Perfect)](настоящее-совершённое-время-present-perfect)
 
@@ -109,7 +114,7 @@
 С глаголами `work` и `live` можно использовать в одинаковом смысле как *Present Perfect*, так и *Present Perfect Continuous*.
 
 
-# Модальные глаголы (modal verbs)
+# Модальные глаголы (`Modal verbs`)
 
 **Модальные глаголы** (англ. `modal verbs`) обозначают *возможность, способность, вероятность* или *необходимость совершения действия*, *выраженного смысловым глаголом*.
 
@@ -132,7 +137,7 @@
 * Не имеют временных форм (кроме `can` – `could`, `may` – `might`, `have to` и `be to`) и страдательного загола.
 * После модальных глаголов (кроме `ought to`, `have to`, `be to`) следует голый (bare) инфинитив (без частицы `to`).
 
-# Вспомогательные глаголы (auxiliary verbs)
+# Вспомогательные глаголы (`Auxiliary verbs`)
 
 **Вспомогательный глагол** (англ. `auxiliary verb`) — это глагол, основной *функцией* которого является *передача дополнительной грамматической* и *семантической информации* в *сочетании* со *смысловым* (основным) *глаголом*.
 
@@ -405,7 +410,7 @@
 * 
 * Почему бы тебе не потанцевать со мной? -->
 
-## Условные выражения (Conditionals)
+## Условные выражения (`Conditionals`)
 
 **Условное предложение** (англ. `Conditional sentense`) - это сложное предложение, которое состоит из двух частей: **условия** (англ. `condition`, `if-clause`) и **следствия, результата** (англ. `result`, `other clause`) *выполнения* данного *условия*.
 
@@ -560,7 +565,7 @@ He/She/It wishes + He (I/...) + <Past Simple/Perfect>
 ```
 
 
-# Предпочтение (конструкция `would rather`)
+# Предпочтение (конструкция с `would rather`)
 
 Конструкция `would rather` (`'d rather`) *используется* в тех *случаях*, когда нужно *отдать предпочтение чему-либо* при *выборе*.
 
@@ -604,19 +609,6 @@ SubjectA + would rather + SubjectB + verb
 
 
 Для усиления конструкции можно использовать сочетание `would much rather` (я бы намного больше хотел).
-
-
-
-# Сослагательное наклонение (Subjunctive)
-
-Конструкция:
-
-* `It's (high) time
-```js
-It's (high) time + PAST SUBJUNCTIVE
-```
-
-<!-- it's (high) time + subject + past simple to say that something should be done now or in the future. -->
 
 
 # Конструкции с `used to`, `be used to`, `get used to`
@@ -722,7 +714,7 @@ Be used to means ‘be accustomed to’ or ‘be familiar with’. It can refer 
 
 
 
-# Порядок прилагательных (Order of adjectives)
+# Порядок прилагательных (`Order of adjectives`)
 1) `Determiners` - определители (например, `a/an/the`, `this/that/these/those`, `my/his/her/its/their`) и `Quantifiers` - квантификаторы, число/количество (например, `any`, `all`, `many`, `much`, `most`, `some`, `several`, `a few`, `a lot of`, `a little`, `a large amount of`, `none`; `the cardinal numbers`: `one`, `two`, `three` и так далее)
 2) `Opinion` - качество/мнение (например, `lovely`, `beautiful`, `wonderful`, `nice`, `cool`, `unusual`, `brilliant`, `awful`, `delicious`, `charming`, `dirty`)
 3) `Size` - размер (например, `big`, `little`, `small`, `tiny`, `large`, `huge`, `tall`, `short`)
@@ -767,4 +759,18 @@ It was a (1) beautiful (2) cold (4) evening.
 He has lost his (1) awful (2) new (5) baseball (10) cap
 It's my (1) favorite (2) winter (10) coat
 ```
+
+
+
+# Сослагательное наклонение (`Subjunctive`)
+
+Конструкция:
+
+* `It's (high) time
+```js
+It's (high) time + PAST SUBJUNCTIVE
+```
+
+<!-- it's (high) time + subject + past simple to say that something should be done now or in the future. -->
+
 

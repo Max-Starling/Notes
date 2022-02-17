@@ -76,7 +76,7 @@ My simple notes about everything related to programming.
 - [Компилируемость и интерпретируемость](./ProgrammingLanguageCharacteristics.md#компилируемость-и-интерпретируемость)
 - [Потоки, однопоточность и многопоточность](./ProgrammingLanguageCharacteristics.md#потоки-однопоточность-и-многопоточность)
 - [Синхронность и асинхронность](./ProgrammingLanguageCharacteristics.md#синхронность-и-асинхронность)
-- [Кроссплатформенность и кроссбраузерность](./ProgrammingLanguageCharacteristics.md#кроссплатформенность-и-кроссбраузерность)
+- [Кроссплатформенность и нативность](./ProgrammingLanguageCharacteristics.md#кроссплатформенность-и-нативность)
 - [Поддержка парадигм программирования](./ProgrammingLanguageCharacteristics.md#поддержка-парадигм-программирования)
 
 

@@ -5,7 +5,7 @@
   - [HTTP-методы](#http-методы)
   - [Идемпотентность и безопасность HTTP-методов](#идемпотентность-и-безопасность-http-методов)
   - [Разница между HTTP и HTTP/2](#разница-между-http-и-http2)
-- [REST](#rest)
+  - [REST](#rest)
 
 # HTTP
 
@@ -211,7 +211,20 @@ DELETE более одного раза для одного и того же р�
 
 ## Разница между HTTP и HTTP/2
 
-# REST
+<!--
+https://stackoverflow.com/questions/58498116/why-is-it-said-that-http2-is-a-binary-protocol
+
+Binary is probably a confusing term - everything is ultimately binary at some point in computers!
+
+HTTP/2 has a highly structured format where HTTP messages are formatted into packets (called frames) and where each frame is assigned to a stream. HTTP/2 frames have a specific format, including a length which is declared at the beginning of each frame and various other fields in the frame header. In many ways it’s like a TCP packet. Reading an HTTP/2 frame can follow a defined process (the first 24 bits are the length of this packet, followed by 8 bits which define the frame type... etc.). After the frame header comes the payload (e.g. HTTP Headers, or the Body payload) and these will also be in a specific format that is known in advance. An HTTP/2 message can be sent in one or more frames.
+
+By contrast HTTP/1.1 is an unstructured format made up of lines of text in ASCII encoding - so yes this is transmitted as binary ultimately, but it’s basically a stream of characters rather than being specifically broken into separate pieces/frames (other than lines). HTTP/1.1 messages (or at least the first HTTP Request/Response line and HTTP Headers) are parsed by reading in characters one at a time, until a new line character is reached. This is kind of messy as you don’t know in advance how long each line is so you must process it character by character. In HTTP/1.1 the HTTP Body’s length is handled slightly different as typically is known in advance as a content-length HTTP header will define this. An HTTP/1.1 message must be sent in its entirety as one continuous stream of data and the connection can not be used for anything else but transmitting that message until it is completed.
+
+The advantage that HTTP/2 brings is that, by packaging messages into specific frames we can intermingle the messages: here’s a bit of request 1, here’s a bit of request 2, here’s some more of request 1... etc. In HTTP/1.1 this is not possible as the HTTP message is not wrapped into packets/frames tagged with an id as to which request this belongs to.
+
+I’ve a diagram here and an animated version here that help conceptualise this better. -->
+
+## REST
 
 **REST** (Representational State Transfer) — архитектурный стиль для разработки  
 приложений.

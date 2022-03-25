@@ -998,13 +998,23 @@ const copy = cloneObject({
   c: NaN, // значение заменяется на null
   d: new Date(), // превратится в строку
   e: undefined, // поле опускается
-  а: Symbol(''), // заменяется на null
+  f: Symbol(''), // поле опускается
 });
 console.log(copy); // { b: null, c: null, d: "XXXX-XX-XXTXX:XX:XX.XXXZ" }
 ```
-Более того, некоторые данные вообще не могут быть преобразованы в JSON. Например, циклическая ссылка (circular reference) или `BigInt` вызовут исключение, которое нужно будет где-то обработать.
+Более того, некоторые данные вообще не могут быть преобразованы в JSON. Например, *циклическая ссылка* (англ. `circular reference`) или `BigInt` вызовут исключение (ошибку), которое нужно будет где-то обработать.
 ```js
-JSON.parse({ a: () => {} }); // SyntaxError: Unexpected token o in JSON at position 1
+// циклическая ссылка
+let foo = {};
+foo.foo = foo;
+JSON.stringify(foo); // TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'Object'
+    --- property 'foo' closes the circle
+```
+![image](https://user-images.githubusercontent.com/22237384/160062353-ebe0e4a2-9817-44fa-8c0b-18edd07e234e.png)
+
+```js
+JSON.stringify({ a: BigInt(124) }); // TypeError: Do not know how to serialize a BigInt
 ```
 
 **Клонирование через V8-сериализацию** в Node.js (экспериментальная функциональность).

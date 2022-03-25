@@ -47,7 +47,7 @@ const createError = (message: string): never {
   throw new Error(message);
 };
 ```
-- `Typle` — **кортеж** (`[string, number]`).
+- `Tuple` — **кортеж** (`[string, number]`).
 ```ts
 let foo: [string, number, boolean];
 foo = ['notes', 17, true];

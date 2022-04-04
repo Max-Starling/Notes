@@ -66,7 +66,7 @@ Klavio использует Django (Python) в качестве *шаблони�
 В Django существует только один вид условных операторов: `if..else`. Тернарный оператор `a ? b : c` отсуствует.
 
 ### Оператор if..else
-```django
+```klaviyo
 {% if unit_list and unit_list|length > 1 %}
     Number of units: {{ unit_list|length }}
 {% elif unit_list|length == 1 %}

@@ -69,12 +69,12 @@ Klavio использует Django (Python) в качестве *шаблони�
 ```klaviyo
 {% if unit_list and unit_list|length > 1 %}
     Number of units: {{ unit_list|length }}
-{% elif unit_list|length == 1 %}
-    There is only one unit left.
 {% else %}
     There are no units.
 {% endif %}
 ```
+<!-- elif unit_list|length == 1
+    There is only one unit left. -->
 
 
 ## Массивы и их методы

@@ -1524,16 +1524,16 @@ CSS-in-JS — подход написания CSS при помощи JavaScript
 Встроенные стили в React (атрибут style).
 ```jsx
 /* isHovered, activeColor - переменные */
-<p style={{ color: isHovered ? #f00 : #000 }} />
+<p style={{ color: isHovered ? '#f00' : '#000' }} />
 <p style={{ color: activeColor }} />
 ```
 
 Встроенные стили во Vue (атрибут style с привязкой данных):
 ```jsx
 /* isHovered, activeColor - переменные */
-<p v-bind:style="{ color: isHovered ? #f00 : #000 }" />
+<p v-bind:style="{ color: isHovered ? '#f00' : '#000' }" />
 /* или короче */
-<p :style="{ color: isHovered ? #f00 : #000 }" />
+<p :style="{ color: isHovered ? '#f00' : '#000' }" />
 <p :style="{ color: activeColor }" />
 ```
 

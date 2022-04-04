@@ -58,11 +58,12 @@ Klavio использует Django (Python) в качестве *шаблони�
 <ul>
 {% for unit in unit_list %}
     <li>{{ unit.name }} {{ unit.price }}</li>
-{% empty %}
-    <li>Sorry, no units in this list.</li>
 {% endfor %}
 </ul>
 ```
+<!-- {% empty %}
+    <li>Sorry, no units in this list.</li> -->
+
 ## Условные операторы
 В Django существует только один вид условных операторов: `if..else`. Тернарный оператор `a ? b : c` отсуствует.
 

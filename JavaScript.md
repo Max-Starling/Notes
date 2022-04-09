@@ -114,7 +114,7 @@ int sum(int a, int b) {
 }
 ```
 
-При **неявной типизации** эта *задание типов* производится *автоматически компиляторами* и *интерпретаторами*.
+При **неявной типизации** *задание типов* производится *автоматически компиляторами* и *интерпретаторами*.
 
 Пример языка с *неявной типизацией*: *JavaScript*.
 
@@ -417,7 +417,7 @@ const ToString = (argument) => {
 Преобразование значения к типу `boolean` производится функцией `ToBoolean(argument)` по следующим правилам.
 * Если `argument` имеет тип `boolean`, то *вернуть значение*.
 * Иначе, если `argument` равно `undefined`, `null`, `0`, `NaN`, `""` (пустая строка), то *вернуть* `false`.
-* В *остальных* случаях (`Object`, `Symbol`, `17`, *числа кроме* `0` и *непустые строки*) *вернуть* `true`.
+* В *остальных* случаях (`Object`, `Symbol`, *числа кроме* `0` и *непустые строки*) *вернуть* `true`.
 ```js
 const ToBoolean = (argument) => {
   if (typeof argument === 'boolean') {
@@ -729,7 +729,7 @@ const onClick = () => void this.setState({ isClicked: true });
 ```js
 const onClick = void () => this.setState({ isClicked: true }); // SyntaxError: Malformed arrow function parameter list
 ```
-Приоритет оператор
+[Приоритеты операторов.](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Operators/Operator_Precedence)
 
 ## Оператор запятая
 
@@ -841,7 +841,7 @@ console.log(bar); // ƒ bar () {}
 
 Метод `Object.keys(obj)` *возвращает массив* названий всех *собственных* (own) *перечисляемых свойств* объекта `obj` в том же *порядке*, в котором они обходились бы *циклом* `for..in`. Поскольку свойства собственные, цепочка прототипов не включается в перечисление.
 
-Метод `Object.getOwnPropertyNames(o)` *возвращает массив* названий всех собственных свойств объекта `obj`.
+Метод `Object.getOwnPropertyNames(obj)` *возвращает массив* названий всех собственных свойств объекта `obj`.
 
 ## Является ли объектом
 ```js
@@ -949,7 +949,7 @@ console.log(obj.field === copy.field); // true (ссылаются на один
 const cloneObject = obj => ({ ...obj });
 ```
 
-**Клонирование при помощи Object.keys()** подразумевает перебор и копирование собственных свйоств оригинального объекта.
+**Клонирование при помощи Object.keys()** подразумевает перебор и копирование собственных свойств оригинального объекта.
 ```js
 const cloneObject = (obj) => {
   const copy = {};
@@ -1191,7 +1191,7 @@ deepEqual(a, b); // false
 В Node.js есть встроенная функция `assert.deepEqual()`, которая также представлена в виде отдельного модуля `deep-equal`.
 
 Глубокое сравнение работает медленнее, чем неглубокое.  
-Не стоит его использовать, если нет в этом необходимости.
+Не стоит его использовать, если в этом нет необходимости.
 
 ## Мутабельность
 
@@ -1358,7 +1358,7 @@ Result: "6" */
 
 *Reflect* не является функциональным объектом, поэтому его нельзя вызвать как функцию или использовать в качестве конструктора. Все его методы статические.
 * `Reflect.get(target, property)` эквивалетно `target[property]`.
-* `Refject.set(target, property, value)` эквивалетно `target[property] = value`.
+* `Reflect.set(target, property, value)` эквивалетно `target[property] = value`.
 и так далее.
 
 Пример создания экземпляра класса при помощи `Reflect.construct`.
@@ -1454,7 +1454,7 @@ console.log(notes.length); // undefined
 - [Сортировка](#сортировка)
 - [Псевдомассивы](#псевдомассивы)
 
-**Массив** (Array) — *встроенный итерируемый объект* (можно перебрать через `for..or`), который хранит элементы по индексам `0, 1, 2, ...`, имеет свойство `length`, а также имеет доступ к методам `Array.prototype` (`find`, `includes`, `reduce` и другие).
+**Массив** (Array) — *встроенный итерируемый объект* (можно перебрать через `for..of`), который хранит элементы по индексам `0, 1, 2, ...`, имеет свойство `length`, а также имеет доступ к методам `Array.prototype` (`find`, `includes`, `reduce` и другие).
 
 ## Создание массива
 
@@ -1491,7 +1491,7 @@ const iterable = 'notes'; /* строка - итерируемый объект 
 const foo = Array.from(iterable);
 console.log(foo); // ['n', 'o', 't', 'e', 's']
 
-const bar = [...iterable);
+const bar = [...iterable];
 console.log(bar); //['n', 'o', 't', 'e', 's']
 ```
 
@@ -1509,7 +1509,7 @@ console.log(baz); // [1, 2, 3, ..., 100]
 
 ## Обращение к элементам массива
 
-Обращение к элементам массива происходит не отличается от обращения к объектам, то есть производится по ключу (`[]`).
+Обращение к элементам массива не отличается от обращения к объектам, то есть производится по ключу (`[]`).
 
 Как и у обычного объекта, ключи массива являются строками.
 ```js
@@ -1611,7 +1611,7 @@ const anotherAscendingComparator = (a, b) => {
 }
 
 /* по убыванию */
-const descendingComparator = (a, b) => b - a; // если a > b, то a - b > 0
+const descendingComparator = (a, b) => b - a; // если a > b, то b - a < 0
 
 const numbers = [11, 1, 8, 10, 9];
 console.log(numbers.sort(ascendingComparator)); // [1, 8, 9, 10, 11]
@@ -1720,8 +1720,8 @@ Bar();
 // Window {...}
 // Arguments [...]
 new Bar();
-// Foo {...}
-// Foo {...}
+// Bar {...}
+// Bar {...}
 // Arguments [...]
 ```
 *Отсутствие* своего `this` влечёт за собой другую особенность: *стрелочная функция* *не может* быть использована как *функция-конструктор*, то есть *не может* быть вызвана с *конструкцией* `new`.
@@ -1850,7 +1850,7 @@ const promise = new Promise(executor);
 const onResolved = value => { /* ... */ };
 const onRejected = reason => { /* ... */ };
 
-// функция onFulfilled сработает при успешном выполнении
+// функция onResolved сработает при успешном выполнении
 promise.then(onResolved);
 // функция onRejected – при выполнении с ошибкой
 promise.then(onResolved, onRejected);
@@ -1866,14 +1866,14 @@ promise.then(() => console.log('resolved!'));
 ```
 Пример с *передачей значения* в `resolve`.
 ```js
-const executor = resolve => void resolve('resolved!');
+const executor = resolve => void setTimeout(() => resolve('resolved!'), 3000);
 const promise = new Promise(executor);
 promise.then(console.log);
 // через ~3 секунды выведется 'resolved!'
 ```
 Пример с *передачей причины* в `reject`.
 ```js
-const executor = (resolve, reject) => void reject('rejected!');
+const executor = (resolve, reject) => void setTimeout(() => reject('rejected!'), 3000);
 const promise = new Promise(executor);
 promise.catch(console.log);
 // через ~3 секунды выведется 'rejected!'
@@ -1901,7 +1901,7 @@ const promisify = fn => (...args) => new Promise((resolve, reject) => {
 
 Функция `Promise.all(iterable)` *принимает итерируемый объект* (обычно массив), содержащий промисы (элементы, не являющиеся промисами, помещаются в `Promise.resolve()`), *дожидается выполнения каждого из промисов* и *возвращает массив*, состоящий из их *значений*.
 
-Несмотря на то, что *промисы выполняются асинхронно*, *порядок в результирующем массиве значений совпадает* с *порядком промисов* в *ачальном итерируемом объекте* благодаря *внутреннему свойству [[Index]]*:
+Несмотря на то, что *промисы выполняются асинхронно*, *порядок в результирующем массиве значений совпадает* с *порядком промисов* в *начальном итерируемом объекте* благодаря *внутреннему свойству [[Index]]*:
 ```js
 const slow = new Promise(resolve => setTimeout(resolve, 250, 'slow'));
 const instant = 'instant'; // тип не Promise , поэтому преобразуется в Promise.resolve('instant')
@@ -2028,12 +2028,12 @@ object()
 *Аргументы*: *список аргументов оператора* и *объект*, к которому изначально был *применён оператор new*.  
 
 
-### Инстанциирование функционального объекта 
+### Инстанцирование функционального объекта 
 
 **Инстанцирование** (instantiation) — *создание экземпляра класса* (instance).  
-Слово *инстанционарование* применяется *к классу*, *создание* (creation) - *к объекту*.  
+Слово *инстанционирование* применяется *к классу*, *создание* (creation) - *к объекту*.  
 
-Несмотря на то, что *функции* в JavaScript являются *объектами*, в то же время они могут быть и *классами*, поэтому к ним и *применяется* слово *инстанционарование*.
+Несмотря на то, что *функции* в JavaScript являются *объектами*, в то же время они могут быть и *классами*, поэтому к ним и *применяется* слово *инстанционирование*.
 
 *Функциональные объекты инстанционируются* при помощи:
 ```js
@@ -2045,7 +2045,7 @@ InstantiateFunctionObject(scope)
 function BindingIdentifier ( FormalParameters ) { FunctionBody }
 ```
 #### I этап интерпретации - инстанционирование
-1) Положить в переменную *strick* *true*, если к коду функции *применён strict мод*, *false иначе*.  
+1) Положить в переменную *strict* *true*, если к коду функции *применён strict мод*, *false иначе*.  
 2) Положить в переменную *name строку BindingIdentifier* или строку *"default"*, если *значение не задано*.
 3) Положить в переменную *F результат* выполнения `FunctionCreate(Normal, FormalParameters, FunctionBody, scope, strict)`.  
 4) *Создать конструктор* с помощью `MakeConstructor(F)`.  
@@ -2064,7 +2064,7 @@ function ( FormalParameters ) { FunctionBody }
 Отсутствует.
 
 #### II этап интерпретации - оценка (Evaluation)
-1) Положить в переменную *strick* *true*, если к коду функции *применён strict мод*, *false иначе*.  
+1) Положить в переменную *strict* *true*, если к коду функции *применён strict мод*, *false иначе*.  
 2) Положить в переменную *scope* *LexicalEnvironment* из *контекста выполнения*.
 3) Положить в переменную *closure результат выполнения* `FunctionCreate(Normal, FormalParameters, FunctionBody, scope, strict)`.  
 4) *Создать конструктор* с помощью  `MakeConstructor(F)`.  

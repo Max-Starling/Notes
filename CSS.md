@@ -678,7 +678,7 @@ div.element {
 *Ваши рукописные стили добавляются* в *новый файл* `inspector-stylesheet`, который *создаёт* сам *Chrome*.
 ![image](https://user-images.githubusercontent.com/22237384/164485009-991603ce-d03c-49e8-9316-8a7dabe21700.png)
 
-*Стили*, *добавленные* в *блок* `element.style {}` в *Chrome Dev Tools* также считаются *стилями автора* и *задаются напрямую* в *атрибуте* `style` *выбранного HTML-элемента*.  
+*Стили*, *добавленные* в *блок* `element.style {}` в *Chrome Dev Tools*, также считаются *стилями автора* и *задаются напрямую* в *атрибуте* `style` *выбранного HTML-элемента*.  
 ![image](https://user-images.githubusercontent.com/22237384/164488974-8ec1189f-01e4-41e7-bdf2-c2ff47a7e2ff.png)
 
 

@@ -38,7 +38,7 @@
 ```
 Рассмотрим *простейшее React-приложение*, *состоящее* всего из *одного файла* с использованием *синтаксиса* `JSX` (расширение `.jsx`):
 ```jsx
-/* App.jsx (корневой файл React-приложения) */
+/* App.jsx - корневой файл React-приложения */
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -53,9 +53,9 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(headerElement, rootElement);
 ```
 
-*Без* `JSX` *код бы выглядел* следующим образом:
+*Без* `JSX` *код приложения бы выглядел* следующим образом:
 ```jsx
-/* App.jsx (корневой файл React-приложения) */
+/* App.js - корневой файл React-приложения */
 import React from 'react';
 import ReactDOM from 'react-dom';
 

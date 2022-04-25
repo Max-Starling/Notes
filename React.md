@@ -69,6 +69,7 @@ const headerElement = React.createElement(
 const rootElement = document.getElementById('root');
 ReactDOM.render(headerElement, rootElement);
 ```
+Мы *сможем ещё раз убедиться* в *таком результате*, когда будем вести речь о `Babel`.
 
 
 ### Поддержка браузерами синтаксических расширений

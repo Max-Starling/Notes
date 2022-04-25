@@ -19,12 +19,15 @@
 
 ## JSX
 
+<!-- Что такое синтаксис, что такое семантика и чем они отличаются -->
+
 **JavaScript XML**, **JSX** - это *синтаксическое расширение языка JavaScript*, которое *позволяет писать HTML в одном файле с JavaScript*.
 
-Пример кода с `JSX`:
+Допустим, мы имеем следующий *HTML-документ* нашего *сайта*. 
 ```html
 <!-- public/index.html -->
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head><!-- метаданные --></head>
   <body>
     <div id="root">
@@ -33,6 +36,7 @@
   </body>
 </html>
 ```
+Рассмотрим *простейшее React-приложение*, *состоящее* всего из *одного файла* с использованием *синтаксиса* `JSX` (расширение `.jsx`):
 ```jsx
 /* App.jsx (корневой файл React-приложения) */
 import React from 'react';
@@ -49,6 +53,24 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(headerElement, rootElement);
 ```
 
+Без `JSX` код выглядел бы следующим образом:
+```jsx
+/* App.jsx (корневой файл React-приложения) */
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const headerElement = React.createElement(
+  "div",
+  { className: "header" },
+  React.createElement("h1", { className: "author" }, "Max-Starling"), 
+  React.createElement("h2", { className: "repository" }, "Notes"), 
+  React.createElement("h3", { className: "topic" }, "React JSX")
+);
+const rootElement = document.getElementById('root');
+ReactDOM.render(headerElement, rootElement);
+```
+
+
 ### Поддержка браузерами синтаксических расширений
 
 Синтаксические расширения могут значительно облегчить жизнь любому разработчику, однако браузеры способны распознавать лишь чистый синтаксис HTML5, CSS3 и JavaScript - они не понимают JSX, TypeScript, SCSS, Handlebars и другие синтаксические расширения.
@@ -63,7 +85,16 @@ ReactDOM.render(headerElement, rootElement);
 
 Такие программы называют по-разному: транспайлеры, компиляторы, препроцессоры, шаблонизаторы и так далее, но результатом их выполнения всегда будет понятный браузеру синтаксис либо ошибка (чаще всего синтаксическая ошибка приводит к ошибке компиляции).
 
-A source-to-source translator, source-to-source compiler, transcompiler, or transpiler is a type of translator that takes the source code of a program written in a programming language as its input and produces an equivalent source code in the same or a different programming language.
+<!-- Babel - это -->
+
+<!-- 
+A source-to-source translator, source-to-source compiler, transcompiler, or transpiler is a type of translator that takes the source code of a program written in a programming language as its input and produces an equivalent source code in the same or a different programming language. -->
+
+
+![image](https://user-images.githubusercontent.com/22237384/165184703-54e45b67-e55f-448c-a87d-ba41bc865629.png)
+Слева то, что видит пользователь, справа то, что видит браузер, а значит и пользователь.
+
+*Проверить* это вы можете сами [здесь](https://babeljs.io/repl#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=3.21&spec=false&loose=false&code_lz=JYWwDg9gTgLgBAJQKYEMDG8BmUIjgcilQ3wG4AoUSWRYmAEQHkBZObXAo9GAWgBNcZcuTQQAdgGd4AC1R8kUAKIAbJCCRj4AXjgAKcnAA8fYADc4aZSgkSAcinVaARLJTyoTgHwGj0gIwWVjb2jk4oAK4w0tBezCgAHjwAyjAoUMrAYgDmhgD0_t5wvgBMgdZ2DkjORJASwDDQAJ5ethAwSBJ50sWFvgDMZcGVzg1gwGheyNxwAFJJABpdfYV5JqbeAJQUopLwOG0qahracAJo4eqaAHRZSDCHlzAAQo0Akny6hBBt-FvkUxgmMwrkQxO5dK53A9jgAaOD7e6qR5bIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.17.9&externalPlugins=&assumptions=%7B%7D).
 
 <!-- Одно -->
 

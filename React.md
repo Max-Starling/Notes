@@ -199,36 +199,48 @@ const Title = React.createFactory(({ text }) => (<span>{text}</span>));
 Данный *подход* может быть *полезен* для тех, кто по каким-то причинам *не может использовать JSX*.
 
 ### Детальнее о React.createElement
-Метод `React.createElement(element, props, children)` *принимает три параметра*.
+Метод `React.createElement(element, props, ...children)` *принимает три параметра*.
 
 Если используется *React-элемент*, то
 * `element` — это *тег элемента*, *переданный* в виде *строки*. Например, `'div'`.
 * `props` — это *атрибуты React-элемента*. В большинстве случаев *совпадают* с *атрибутами HTML-элемента*, но есть исключения: *HTML-атрибут* `class` *заменён* на `className`, *атрибуты* по *типу* `z-index` - на `zIndex`, а *атрибуты* по *типу* `onclick` - на `onClick`.
-* `children` — *список* (*массив*) *дочерних элементов элемента*. 
+* `children` — *список дочерних элементов текущего элемента* (*все параметры, начиная с третьего, относятся* к *списку дочерних компонент*). 
 
 Если используется *React-компонент*, то
 * `element` — *название компоненты* (функции или класса). Например, `Title`.
 * `props` — *атрибуты React-элемента* (в большинстве случаев *совпадают* с *атрибутами HTML-элемента*) или *объект* `props` *компонента*.
-* `children` — *список* (*массив*) *дочерних элементов компонента*.
+* `children` — *список дочерних элементов компонента*.
 
 Итак, *JSX ниже*
 ```jsx
-<Header>
-  <Menu items={['home', 'user']}>
-  <button onClick={logout} />
-</Header>
+const Header = (props) => { /* .... */ };
+const Menu = (props) => { /* .... */ };
+const logout = () =>  { /* .... */ };
+
+const headerElement = (
+  <Header>
+    <Menu items={['home', 'user']} />
+    <button onClick={logout} />
+  </Header>
+);
 ```
 *преобразуется* в
 ```jsx
-React.createElement(
+const Header = (props) => { /* .... */ };
+const Menu = (props) => { /* .... */ };
+const logout = () =>  { /* .... */ };
+
+const headerElement = React.createElement(
   Header,
   {},
-  [
-    React.createElement(Menu, { items: ['home', 'user'] }, null),
-    React.createElement('button', { onClick: logout }, null),
-  ],
+  React.createElement(Menu, { items: ['home', 'user'] }, null),
+  React.createElement('button', { onClick: logout }, null),
 );
 ```
+
+[Полноценный пример](https://babeljs.io/repl#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&corejs=3.21&spec=false&loose=false&code_lz=MYewdgzgLgBAEgUwIYBMECcYF4YAoAO6I-EAlNgHwwDeM6CUArumDADwWHEQB0wAFgEsANinpg2AeioBfANwAoBaEixxadAFkEYRgEkoCALbY8gw0fJYqbYYIrVzxmVLsVFK6DG27TBIiRWVLT0TCzsjMIOXCQ8Tka8Rkj4uOoYPvoWpC6SkbKKyuBewiAA5iCMsDi4QTCeIMIIPCWluADkLRVQAIRtpAWesPzIGgCijUY6VXgKMOyIqBgUs3PsGTDxEFjUANpt_CCTbQA0MG2MEBhtALoyMNIrc2wARpVQ4DDgAMJ2wADW206lTuDyekgWGmW_SUgzoIBAUHGximphQIGAjEmYCgPFKDCRWKgACEAJ56FDtIgIvqKABKyGAUAAIgB5TQ8NLoXDDRboAlTU5UxETKb9IA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.17.9&externalPlugins=&assumptions=%7B%7D).
+
+![image](https://user-images.githubusercontent.com/22237384/165189375-311c7dbf-9db0-45c5-88cf-e5805fd5c08c.png)
 
 # Жизненный цикл компонента (Component life cycle)
 - [О жизненном цикле компонента](#о-жизненном-цикле-компонента)
@@ -271,7 +283,7 @@ React.createElement(
 * `UNSAFE_componentWillUpdate()`
 * `UNSAFE_componentWillReceiveProps()`
 
-### Демонтирование классового компонента
+### Размонтирование классового компонента
 * `componentWillUnmount()`
 
 

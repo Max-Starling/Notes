@@ -53,7 +53,7 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(headerElement, rootElement);
 ```
 
-Без `JSX` код выглядел бы следующим образом:
+*Без* `JSX` *код бы выглядел* следующим образом:
 ```jsx
 /* App.jsx (корневой файл React-приложения) */
 import React from 'react';

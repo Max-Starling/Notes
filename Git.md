@@ -829,7 +829,7 @@ git reset --hard HEAD~N # удаление N коммитов из ветки A
 * Открыть на Gitlab `Settings > SSH keys`.
 * Вставить скопированный ключ, придумать название для него и сохранить.
 
-### Добавление ключа в SSH-agent
+### Добавление SSH-ключа в SSH-agent
 * Добавить SSH-ключ для GitHub в SSH-agent `ssh-add ~/.ssh/id_rsa_github`. Если агент не запущен, то нужно сперва его запустить `eval $(ssh-agent -s)` или `ssh-agent bash`.
 * Добавить SSH-ключ для GitLab в SSH-agent `ssh-add ~/.ssh/id_rsa_gitlab`.
 * Проверить, что ключи добавлены через `ssh-add -L`.
@@ -843,7 +843,7 @@ alias sa="eval `ssh-agent -s` ssh-add ~/.ssh/id_rsa_gitlab"
 ```
 Теперь каждый запуск команды `sa` в любой консоли Bash будет выполнять запуск агента и добавление ключа.
 
-### Конфигурация
+### Конфигурация SSH
 
 * Создать файл `touch ~/.ssh/config`.
 * Вставить туда следующее
@@ -861,20 +861,20 @@ Host gitlab.com
 ```
 * Сохранить изменения.
 
-### Проверка
+### Проверка работоспособности SSH
 * Попробовать сделать `git pull` через SSH.
 * Дополнительная проверка для Github: `ssh -T git@github.com` (режим отладки: `ssh -T git@github.com`).
 * Дополнительная проверка для Gitlab: `ssh -T git@gitlab.com` (режим отладки: `ssh -T git@gitlab.com`).
 
-### Ошибка "Host key verification failed"
+### Ошибка `"Host key verification failed"`
 
-Если при выполнении команды `ssh -T git@github.com` возникает ошибка как на скриншоте ниже:
+Если при *выполнении* команды `ssh -T git@github.com` *возникает ошибка* `"Host key verification failed"` как на скриншоте ниже
 ![image](https://user-images.githubusercontent.com/22237384/167812973-c6076638-5320-411c-a72d-582061f31fc7.png)
-Тогда следует добавить `github.com` в список `known_hosts` следующей командой: 
+Тогда следует *добавить хост* `github.com` в *список известных хостов* `known_hosts` следующей командой: 
 ```
 ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 ```
-И проблема решится
+И *проблема* должна *решиться*.  
 ![image](https://user-images.githubusercontent.com/22237384/167813322-d3914c71-f020-44b5-b229-a0b17a1af693.png)
 
 

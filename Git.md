@@ -866,6 +866,19 @@ Host gitlab.com
 * Дополнительная проверка для Github: `ssh -T git@github.com` (режим отладки: `ssh -T git@github.com`).
 * Дополнительная проверка для Gitlab: `ssh -T git@gitlab.com` (режим отладки: `ssh -T git@gitlab.com`).
 
+### Ошибка "Host key verification failed"
+
+Если при выполнении команды `ssh -T git@github.com` возникает ошибка как на скриншоте ниже:
+![image](https://user-images.githubusercontent.com/22237384/167812973-c6076638-5320-411c-a72d-582061f31fc7.png)
+Тогда следует добавить `github.com` в список `known_hosts` следующей командой: 
+```
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+```
+И проблема решится
+![image](https://user-images.githubusercontent.com/22237384/167813322-d3914c71-f020-44b5-b229-a0b17a1af693.png)
+
+
+
 ## Git Config
 
 ### Вывод конфига

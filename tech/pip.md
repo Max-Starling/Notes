@@ -36,4 +36,30 @@ python -m ensurepip --upgrade
 
 
 ## Установка пакетов при помощи `PIP`
+### Установка пакета последней версии
+```
+pip install package_name
+``` 
+### Установка пакета определённой версии
+Версия пакета указывается через `==` после его названия в формате `MAJOR.MINOR.PATCH`:
+```
+pip install <package_name>==<version>
+```
+Например, установим пакет `WTForms` версии 2.3.3:
+```
+pip install WTForms==2.3.3
+```
+### Установка пакетов из списка
+Имеется возможность передавать список зависимостей для установки в виде текстового файла. В этом случае менеджер поочерёдно установит все зависимости.
+```
+pip install -r ./dependencies.txt
+```
+```css
+/* ./dependencies.txt */
+flask
+flask-cors
+flask-api
+flask-admin
+flask-migrate
+WTForms==2.3.3
 ```

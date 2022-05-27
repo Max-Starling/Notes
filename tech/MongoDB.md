@@ -354,6 +354,6 @@ db.favoritePages.updateOne(
 ```
 Оба query-запроса ниже включат документ выше в выборку:
 ```js
-{ leads: { $elemMatch: { id: 'u19' } } }
-{ leads: { $elemMatch: { name: 'Tom' } } }
+{ users: { $elemMatch: { id: 'u19' } } }
+{ users: { $elemMatch: { name: 'Tom' } } }
 ```

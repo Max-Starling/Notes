@@ -113,14 +113,22 @@ const foo = {};
 foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
 console.log(foo.toString()); // '[object Object]'
 ```
-
+<!-- 
 # Поддержка ООП в TypeScriot
 
-TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку.
+TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку. -->
 
 # Класс (Class)
 
 **Классом** (англ. `class`) называют конструктор (строитель, генератор, создатель) объектов. В теле класса содержится вся информация, которую будет содержать объект после создания.
+
+- [Объявление класса](#объявление-класса)
+- [Создание объектов с помощью класса](#создание-объектов-с-помощью-класса)
+- [Задание свойств в теле класса](#задание-свойств-в-теле-класса)
+- [Передача параметров класса через конструктор и ключевое слово `this`](#передача-параметров-класса-через-конструктор-и-ключевое-слово-this)
+- [Валидация параметров класса](#валидация-параметров-класса)
+- [Задание методов класса](#задание-методов-класса)
+- [Потеря и привязка контекста `this` в классе](#потеря-и-привязка-контекста-this-в-классе)
 
 ## Объявление класса
 *Имена классам* даются с *большой буквы*.
@@ -129,12 +137,14 @@ TypeScript предоставляет полноценную поддержку 
 class Bird {}
 class Person {}
 ```
-## Создание объектов
+## Создание объектов с помощью класса
 Для создания объекта через класс или функцию-конструктор используется оператор `new`. 
 ```ts
 /* создание двух объектов при помощи класса Bird */
 const dove = new Bird();
 const magpie = new Bird();
+/* создание объекта при помощи класса Person */
+const guest = new Person();
 ```
 
 ## Задание свойств в теле класса
@@ -144,8 +154,8 @@ class Person {
   name: string = "He/She"; 
   age: number = 0;
 }
-const p = new Person(); // { name: "He/She", age: 0 }
-console.log(p); // { name: "He/She", age: 0 }
+const p = new Person();
+console.log(p); // Person { name: "He/She", age: 0 }
 ```
 Если *не задать тип* и *значение свойству*, то будет *выдано предупреждение*:
 ```ts
@@ -155,16 +165,19 @@ class Person {
   age; // TS: Member 'name' implicitly has an 'any' type.
 }
 const p = new Person();
-console.log(p); // { name: "He/She" }
+console.log(p); // Person { name: "He/She" }
 ```
 <!-- Как видно на примере выше, свойство `age` не задано, поэтому оно не отображается в объекте `p`.
 Но если задать значение `undefined` явно, то свойство попадёт в объект
 
 со значением `undefined` не отображается в объекте -->
 
-## Передача параметров через конструктор
+## Передача параметров класса через конструктор и ключевое слово `this`
 
 Класс может принимать параметры и использовать их в качестве аргументов внутри конструктора при создании объекта. Как и параметры функции, параметры класса могут быть обязательными и не обязательными (объявляются с `?`).
+
+Чтобы *присвоить значение полю класса*, нужно использовать *ключевое слово* `this`, которое представляет собой *контекст*, то есть *всё, что касается создания или использования текущего объекта*.
+
 ```ts
 /* задание свойств `name` и `age` в теле класса Person */
 class Person {
@@ -180,11 +193,11 @@ const someone = new Person();  // TS: Expected 1-2 arguments, but got 0. An argu
 
 /* инициализация класса с передачей обязательного параметра */
 const max = new Person("Max");
-console.log(max); // { name: "Max", age: 0 }
+console.log(max); // Person { name: "Max", age: 0 }
 
 /* инициализация класса с передачей обязательного и необязательного параметров */
 const dan = new Person("Dan", 21);
-console.log(dan); // { name: "Dan", age: 21 }
+console.log(dan); // Person { name: "Dan", age: 21 }
 ```
 ## Валидация параметров класса
 
@@ -214,8 +227,154 @@ const yo = new Person("Yo", 10);  // [ERR]: Person must be 18 years of age or ol
 /* в примере ниже ошибок нет */
 const ns = new Person("NS", 39);
 ```
-## Методы класса
+## Задание методов класса
 
+Метод в классе можно объявить тремя способами, которые практически ничем не отличаются.
+```ts
+class Animal {
+  name: string;
+  constructor(name?: string) {
+    this.name = name || "It";
+  }
+
+  /* объявление метода как свойства, значением которого является функция `function` (`Function Expression`) */
+  walk = function() {
+    console.log(this);
+  }
+
+  /* объявление метода как свойства, значением которого является стрелочная функция (`Arrow Function Expression`) */
+  fly = () => {
+    console.log(this);
+  }
+  
+  /* объявление метода как метода класса */
+  swim() {
+    console.log(this);
+  }
+}
+const duck = new Animal("Duck");
+duck.swim(); // Animal { name: "Duck" }
+duck.walk(); // Animal { name: "Duck" }
+duck.fly(); // Animal { name: "Duck" }
+```
+Как видно на примере выше, если использовать обращение к методу через `.` и его вызов `()` в одном выражении, то все три объявления работают одинаково.
+
+## Потеря и привязка контекста `this` в классе
+Попробуем теперь *присвоить каждый метод класса* в *отдельные переменные* и *вызвать получившиеся функции* спустя *некоторое время*.
+Чаще всего *такое необходимо* при *передаче метода класса* как *фунцкии обратного вызова* (`callback`) куда-либо. 
+```ts
+class Animal {
+  name: string;
+  constructor(name?: string) {
+    this.name = name || "It";
+  }
+  walk = function() {
+    console.log(this);
+  }
+  fly = () => {
+    console.log(this);
+  }
+  swim() {
+    console.log(this);
+  }
+}
+const duck = new Animal("Duck");
+
+/* потеря контекста */
+const swim = duck.swim;
+swim(); // undefined
+
+/* контекст не потерялся */
+const walk = duck.walk;
+walk(); // Animal { name: "Duck" }
+
+/* контекст утерян */
+const fly = duck.fly;
+fly(); // undefined
+```
+В данном примере *разрывается связь классом* и его *методом*, связь между `.` и `()`, что *приводит* к *потере контекста*. 
+
+Из примера выше видно, что *потеряли контекст методы* `swim()` и `walk = function() {}`, поскольку *нестрелочные функции* могут иметь *свой контекст*. 
+
+В то же время *стрелочная функция не может иметь контекст* и *присваивать его* ей тоже *нельзя*. Вместо этого *контекст задаётся ей в момент объявления* с *уровня выше*. В данном случае для `fly = () => {}` *контекст* взят из класса `Animal`, поэтому её *связь с классом будет сохраняться в любом случае*.
+
+Сущесвует *несколько способов решения проблемы*
+1) *Никогда не разрывать связь между обращением к методу* класса через `.` и его *вызовом* через `()` при присвоении в другую переменную.
+```ts
+const duck = new Animal("Duck");
+
+const swim = () => duck.swim();
+const walk = () => duck.walk();
+const fly = () => duck.fly();
+
+swim(); // Animal { name: "Duck" }
+walk(); // Animal { name: "Duck" }
+fly(); // // Animal { name: "Duck" }
+```
+2) *Явно привязать контекст* в *конструкторе класса* через `bind`
+```ts
+class Animal {
+  name: string;
+  constructor(name?: string) {
+    this.name = name || "It";
+    /* явная привязка контекста через `bind` */
+    this.walk = this.walk.bind(this);
+    this.swim = this.swim.bind(this);
+  }
+  walk = function() {
+    console.log(this);
+  }
+  fly = () => {
+    console.log(this);
+  }
+  swim() {
+    console.log(this);
+  }
+}
+const duck = new Animal("Duck");
+
+const swim = duck.swim;
+const walk = duck.walk;
+const fly = duck.fly;
+
+swim(); // Animal { name: "Duck" }
+walk(); // Animal { name: "Duck" }
+fly(); // Animal { name: "Duck" }
+```
+3) Всегда *использовать только стрелочные функции* в *качестве методов класса* в тех случаях, когда *есть риск потери контекста*.
+
+Доказательство того, что *стрелочной функции нельзя привязать контекст*:
+```ts
+class Animal {
+  name: string;
+  constructor(name?: string) {
+    this.name = name || "It";
+    /* явная привязка контекста пустого объекта через `bind` всем трём методам */
+    this.walk = this.walk.bind({});
+    this.swim = this.swim.bind({});
+    this.fly = this.fly.bind({});
+  }
+  walk = function() {
+    console.log(this);
+  }
+  fly = () => {
+    console.log(this);
+  }
+  swim() {
+    console.log(this);
+  }
+}
+const duck = new Animal("Duck");
+
+const swim = duck.swim;
+const walk = duck.walk;
+const fly = duck.fly;
+
+swim(); // {}
+walk(); // {}
+fly(); // Animal { name: "Duck" }
+```
+ 
 
 ## Интерфейс (Interface)
 

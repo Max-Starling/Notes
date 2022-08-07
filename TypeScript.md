@@ -1,8 +1,8 @@
 - [О TypeScript](#о-typescript)
 - [Типы данных (Data Types)](#типы-данных)
-- [Класс (Class)](#класс)
-- [Интерфейс (Interface)](#интерфейс)
-- [Дженерики (Generics)](#generics)
+- [Класс (Class)](#класс-class)
+- [Интерфейс (Interface)](#интерфейс-interface)
+- [Дженерики (Generics)](#дженерики-generics)
 
 # О TypeScript
 
@@ -114,11 +114,130 @@ foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
 console.log(foo.toString()); // '[object Object]'
 ```
 
-## Класс
+# Поддержка ООП в TypeScriot
 
-## Интерфейс
+TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку.
 
-**Интерфейс** (Interface) является абстрактным описанием того, что должен включать в себя объект, но не содержит никакой реализации. 
+# Класс (Class)
+
+**Классом** (англ. `class`) называют конструктор (строитель, генератор, создатель) объектов. В теле класса содержится вся информация, которую будет содержать объект после создания.
+
+## Объявление класса
+*Имена классам* даются с *большой буквы*.
+```ts
+/* объявление двух классов Bird и Person */
+class Bird {}
+class Person {}
+```
+## Создание объектов
+Для создания объекта через класс или функцию-конструктор используется оператор `new`. 
+```ts
+/* создание двух объектов при помощи класса Bird */
+const dove = new Bird();
+const magpie = new Bird();
+```
+
+## Задание свойств в теле класса
+```ts
+/* задание свойств `name` и `age` в теле класса Person */
+class Person {
+  name: string = "He/She"; 
+  age: number = 0;
+}
+const p = new Person(); // { name: "He/She", age: 0 }
+console.log(p); // { name: "He/She", age: 0 }
+```
+Если *не задать тип* и *значение свойству*, то будет *выдано предупреждение*:
+```ts
+/* задание свойств `name` и `age` в теле класса Person */
+class Person {
+  name: string = "He/She";
+  age; // TS: Member 'name' implicitly has an 'any' type.
+}
+const p = new Person();
+console.log(p); // { name: "He/She" }
+```
+<!-- Как видно на примере выше, свойство `age` не задано, поэтому оно не отображается в объекте `p`.
+Но если задать значение `undefined` явно, то свойство попадёт в объект
+
+со значением `undefined` не отображается в объекте -->
+
+## Передача параметров через конструктор
+
+Класс может принимать параметры и использовать их в качестве аргументов внутри конструктора при создании объекта. Как и параметры функции, параметры класса могут быть обязательными и не обязательными (объявляются с `?`).
+```ts
+/* задание свойств `name` и `age` в теле класса Person */
+class Person {
+  name: string;
+  age: number;
+  constructor(name: string, age?: number) {
+    this.name = name;
+    this.age = age || 0;
+  }
+}
+/* в примере ниже будет ошибка, так как параметр `name` ялвяется обязательным
+const someone = new Person();  // TS: Expected 1-2 arguments, but got 0. An argument for 'name' was not provided.
+
+/* инициализация класса с передачей обязательного параметра */
+const max = new Person("Max");
+console.log(max); // { name: "Max", age: 0 }
+
+/* инициализация класса с передачей обязательного и необязательного параметров */
+const dan = new Person("Dan", 21);
+console.log(dan); // { name: "Dan", age: 21 }
+```
+## Валидация параметров класса
+
+Можно *налагать некоторые условия* на *параметры класса* и *проверять выполнение* этих *условий при *создании объекта* в *конструкторе*, то есть *валидировать параметры класса*. При *несоблюдении заданных условий* будет *выдаваться ошибка*.
+```ts
+/* задание свойств `name` и `age` в теле класса Person */
+class Person {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    /* валидация по параметру `name` */
+    if (name.length < 2) {
+      throw new Error("Name must be at least 2 characters long");
+    }
+    /* валидация по параметру `age` */
+    if (age < 18) {
+      throw new Error("Person must be 18 years of age or older");
+    }
+    this.name = name;
+    this.age = age || 0;
+  }
+}
+/* в примере ниже будет ошибка из-за непрошедшего валидацию поля `name` */
+const g = new Person("G", 27);  // [ERR]: Name must be at least 2 characters long
+/* в примере ниже будет ошибка из-за непрошедшего валидацию поля `age` */
+const yo = new Person("Yo", 10);  // [ERR]: Person must be 18 years of age or older
+/* в примере ниже ошибок нет */
+const ns = new Person("NS", 39);
+```
+## Методы класса
+
+
+## Интерфейс (Interface)
+
+**Интерфейс** (`Interface`) является абстрактным описанием того, что должен включать в себя объект, но *не содержит* никакой *реализации*, то есть *не содержит методов и полей свойств* - *только используемые* в них *типы*.
+
+Сравните
+```ts
+class Person {
+    name: string = "He/she"; 
+    eat(food: string): void {
+        console.log(this.name, "eats", this.food);
+    }
+}
+```
+```ts
+interface IPerson {
+    name: string;
+    eat(food: string): void;
+}
+```
+
+То есть интерфейс представляет собой лишь схему 
 
 *Интерфейс* в *TypeScript* является *виртуальной структурой*: он *существует только* в *контексте языка*. Компилятор при помощи интерфейсов и прочих способов типизации проводит проверку типов, а затем переводит код в JavaScript, куда интерфейсы не попадают.
 
@@ -244,3 +363,173 @@ const translate = (translator: EngRusTranslator) => { /* ... */ }
 Интерфейсы наследуют всё, включая приватные и защищённые члены базового класса.
 
 Если базовый класс содержит приватные или защищённые свойства и методы, то наследующий от него интерфейс может быть реализован только базовым классом или его наследником.
+
+# Дженерики (Generics)
+<!-- 
+/*
+- Допустим, у нас в системе есть пользователи, уникальные идентификаторы
+которых являются числами
+*/
+
+{
+  type Person = {
+    id: number
+    name: string
+  }
+
+  const max: Person = {
+    id: 123,
+    name: 'Max'
+  }
+}
+
+/*
+- В какой-то момент времени появляется требование использовать строковые значения
+вместо числовых, но при этом старых пользователей изменить уже нельзя.
+
+Этого можно достигнуть, создав ещё один тип и объявлять эти типы через "или"
+(либо NumberPerson, либо StringPerson).
+*/
+{
+  type NumberPerson = {
+    id: number
+    name: string
+  }
+
+  type StringPerson = {
+    id: string
+    name: string
+  }
+
+  const max: NumberPerson | StringPerson = {
+    id: 123,
+    name: 'Max',
+  }
+
+  const nastya: NumberPerson | StringPerson = {
+    id: 'fafafa',
+    name: 'Nastya',
+  }
+}
+
+
+/* Таким образом мы имеем два типа, которые отличаются всего лишь
+типом одного параметра. Это может работать, но получается много лишнего кода.
+Представь, что каждый из типов содержал бы 100 строк кода и притом различия
+были бы по-прежнему в одном параметре.
+
+Чтобы не дублировать код и сделать возможным полиморфизм
+(то есть обобщение нескольких типов в один)
+придумали Generics. 
+*/
+
+{
+  // В <> задаём параметр, который можем затем использовать при указании типа свойствам
+  type GenericPerson<ID_TYPE> ={
+    id: ID_TYPE
+    name: string
+  }
+
+  const max: GenericPerson<number> = {
+    id: 123,
+    name: 'Max',
+  }
+
+  const nastya: GenericPerson<string> = {
+    id: 'fafafa',
+    name: 'Nastya',
+  }
+}
+
+/* Это то, как Generics работают с объектами.
+Посмотрим теперь на функции. */
+
+/* просто перенос кода из примера выше, чтобы потом не дублировать */
+type GenericPerson<ID_TYPE> = {
+  id: ID_TYPE
+  name: string
+}
+
+const nastya: GenericPerson<string> = {
+  id: 'fafafa',
+  name: 'Nastya',
+}
+
+const max: GenericPerson<number> = {
+  id: 123,
+  name: 'Max',
+}
+
+{
+  const kissPerson = function <PERSON_ID_TYPE>(person: GenericPerson<PERSON_ID_TYPE>) {
+    console.log('kiss', person.name);
+  }
+
+  // Настя у нас со строковым айди, поэтому мы передаём строку
+  kissPerson<string>(nastya);
+
+  // а вот Максим как старый пользователь с числовым айди, поэтому мы передаём число
+  kissPerson<number>(max);
+}
+
+/* Если бы мы задали тип PERSON_ID_TYPE в параметрах функции напрямую, то поцеловать на ночь можно было
+бы лишь один тип людей - либо строковых, либо числовых, поэтому параметр и выносится на уровень выше,
+то есть на уровень вызова функции. Пример: */
+{
+  const kissPerson = function (person: GenericPerson<string>) {
+    console.log('kiss', person.name);
+  }
+  // Настю поцеловать можно
+  kissPerson(nastya);
+  // а Максима нельзя
+  kissPerson(max);
+}
+
+/* Но я всё же люблю хэппиэнды, поэтому покажу, как решить эту проблему */
+{
+  const kissPerson = function (person: GenericPerson<string | number>) {
+    console.log('kiss', person.name);
+  }
+  // Настю поцеловать можно
+  kissPerson(nastya);
+  // и Максима можно тоже
+  kissPerson(max);
+}
+/* а если вообще без Generics, то (person: NumberPerson | StringPerson) */
+
+/* Рассмотрим пример c двумя разными параметрами на примере функции чата между двумя людьми */
+{
+  const makeChat = function <TYPE_A, TYPE_B>(personA: GenericPerson<TYPE_A>, personB: GenericPerson<TYPE_B>) {
+    console.log(`${personA.name}: - Привет, ${personB.name}!`);
+    console.log(`${personB.name}: - И тебе привет, ${personA.name}!`);
+  }
+  // Настя пишет первой Максиму
+  makeChat<string, number>(nastya, max);
+  // Максим пишет первым Насте
+  makeChat<number, string>(max, nastya);
+}
+
+/* Пример c использованием Generics в теле функции. Представим, что есть некая Лера.
+И она хочет взять кого-то выпить с собой.
+Допустим, что Лера хочет определить себя как личность уже в теле функции. */
+{
+  const leraGoDrinkWith = function <LERA_ID_TYPE, PERSON_ID_TYPE>(
+    leraId: LERA_ID_TYPE,
+    person: GenericPerson<PERSON_ID_TYPE>
+  ) {
+    const lera: GenericPerson<LERA_ID_TYPE> = {
+      id: leraId,
+      name: 'Lera',
+    };
+
+    console.log(`
+    Девушка по имени ${lera.name} с id "${lera.id}" говорит:
+      - Привет, ${person.name}! Пойдём со мной гулять.
+    `);
+    // console.log(`${personB.name}: - И тебе привет, ${personA.name}!`);
+  }
+  // Лера с id 27 зовёт Настю гулять
+  leraGoDrinkWith<number, string>(27, nastya);
+}
+
+ -->

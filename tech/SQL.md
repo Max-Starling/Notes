@@ -316,9 +316,41 @@ SELECT *, COUNT(ID) AS rows_count
 ```
 ![SQL Example](../assets/SQL_groupby.png)
 
+Когда имеет смысл использовать группировку?
+Когда столбец имеет повторяющиеся значения. Например, профессия - мы можем сгруппировать данные средней зарлаты по всем сотрудникам.
+ ```SQL
+SELECT job, AVG(salary) AS job_salary
+  FROM jobs_data
+  WHERE job = "SysAdmin"
+  GROUP BY job;
+```
+В этом случае в выборку попадут строки с уникальными значениями `job`, каждая из которых будет содержать вычисленное значение средней заработной платы `AVG(salary)`.
+
+Если необходимо вычислить зарплату по какой-либо конкретной профессии, то следует добавить условие `WHERE`. Но стоит учесть, что для `WHERE` нельзя указывать выражение, содержащее агрегатную функцию.
+```SQL
+SELECT job, AVG(salary) AS sysadmin_salary
+  FROM jobs_data
+  WHERE job = "SysAdmin"
+  GROUP BY job;
+```
+
+Можно *группировать одновременно* по *нескольким колонкам*: в этом случае в выборку попадут *все существующие комбинации* будут учтены все допустимые значения.
+Например,
+```SQL
+SELECT job, seniority, AVG(salary) AS sysadmin_salary
+  FROM jobs_data
+  GROUP BY job, seniority;
+```
+Запрос выше позволяет сгруппировать данные не только по профессии, но и по стажу работы в соответствии с позициями (`Junior`, `Middle`, `Senior`).
+
+Важно также отметить, что при использовании группировки `GROUP BY` в `SELECT` обычно имеет смысть выбирать только те колонки, которые:  
+1) либо указаны в `GROUP BY` через запятую.  
+2) либо вычисляются в одной из агрегационной функции.  
+Все остальные колонки вернут непредвиденный результат, зависящий от движка SQL: это может быть первое значение из группы, последнее или же вовсе ошибка выполнения запроса с пометкой, что запрашиваемое поле нужно добавить в `GROUP BY`.
+
 ### GROUP BY с условиями HAVING
 
-*Ключевое слово* `WHERE` *не может использоваться* с *агрегатными функциями*, поэтому ввели **ключевое слово HAVING**.
+Как уже отмечалось выше, *ключевое слово* `WHERE` *не может использоваться* с *агрегатными функциями*. Для этих целей ввели **ключевое слово HAVING**, которое должно быть использовано сразу же после `GROUP BY`.
 ```SQL
 -- схема
 SELECT <column_names>
@@ -333,6 +365,26 @@ SELECT *, COUNT(ID) AS rows_count
   GROUP BY description
   HAVING COUNT(description) = 1;
 ```
+Запрос ниже выдаст ошибку:
+```SQL
+-- ошибка
+SELECT *, COUNT(ID) AS rows_count
+  FROM notes
+  WHERE COUNT(description) = 1;
+  GROUP BY description
+```
+
+### Когда использовать WHERE, а когда HAVING
+
+Некоторые сноски со Stackoverflow на английском языке
+
+> The SQL Standard theory says that WHERE restricts the result set before returning rows and HAVING restricts the result set after bringing all the rows. So WHERE is faster. On SQL Standard compliant DBMSs in this regard, only use HAVING where you cannot put the condition on a WHERE (like computed columns in some RDBMSs.)
+
+> The HAVING clause is applied nearly last, just before items are sent to the client, with no optimization. (LIMIT is applied after HAVING.)
+
+> The two queries are equivalent and your DBMS query optimizer should recognise this and produce the same query plan. It may not, but the situation is fairly simple to recognise, so I'd expect any modern system - even Sybase - to deal with it.
+
+> HAVING clauses should be used to apply conditions on group functions, otherwise they can be moved into the WHERE condition. For example. if you wanted to restrict your query to groups that have COUNT(DZIALU) > 10, say, you would need to put the condition into a HAVING because it acts on the groups, not the individual rows.
 
 ## Связь таблиц при помощи JOIN
 

@@ -579,4 +579,17 @@ SELECT <column_name> = (SELECT <column_name> FROM <table_name> WHERE <condition>
 
 # Типы данных в PostgreSQL
 
+## Дата
+
+Приведение текущей даты в формате `YYYY-MM-DD`.
+```sql
+CAST(CURRENT_TIMESTAMP AS DATE)
+-- или
+CURRENT_TIMESTAMP::DATE
+```
+Можно подставить название столбца, чтобы привести его значение в формат `YYYY-MM-DD`.
+```sql
+SELECT created_at::DATE
+  FROM users
+```
 

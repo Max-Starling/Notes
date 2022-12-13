@@ -46,6 +46,7 @@ Defaults env_keep += "POSTGRES_PASSWORD"
 ## Команды
 * `dir` - список файлов и папок в текущей директории (аналог `ls` в Linux).
 * `type` - вывод содержимого файла в консоль (аналог `cat` в Linux).
+* `cls` - очистить консоль (аналог `clear` в Linux)
 * `<disk_name>:` - переход на диск disk_name.
 ```shell
 # переход на диск C

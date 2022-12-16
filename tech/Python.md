@@ -193,39 +193,58 @@ console.log({ ...fileInfo, createdAt: "15/12/2022" }) // { fileName: "test.json"
 ```
 
 ## Аргументы функции и `**kwargs`
+Функции в питоне могут принимать **ключевые аргументы** (англ. `keyword arguments`) в виде `kwarg=value`. В этом случае *порядок передачи параметров* функции *не важен*.
+```py
+def print_user_info(status, name, age): # порядок не важен
+    print("\nUser info:")
+    print("- {} is {}".format("name",name))
+    print("- {} is {}".format("age",age))
+    print("- {} is {}".format("status",status))
+
+print_user_info(name="Alex", age=22, status="married")
+# User info:
+# - name is Alex
+# - age is 22
+# - status is married
+```
+Чтобы функция могла принимать любое количество параметров и при этом было удобно их обрабатывать, можно использовать `**kwards`, который соберёт все параметры функции в `Dictionary`.
 ```py
 def print_user_info(**user_info):
+    # type(user_info) = dict
     print("\nUser info:")
     for key, value in user_info.items():
         print("- {} is {}".format(key,value))
 
-print_user_info(name="Alex", age=22, status="offline")
+print_user_info(name="Alex", age=22, status="married")
 # User info:
 # - name is Alex
 # - age is 22
-# - status is offline
-print_user_info(name="Kate", age=18, status="online")
+# - status is married
+print_user_info(name="Kate", age=18, sex="female", status="single")
 # User info:
 # - name is Kate
 # - age is 18
-# - status is online
+# - sex is female
+# - status is single
 ```
 ```js
+// JavaScript
+// ключевые аргументы не доступны в языке - передаём объект с любым количеством свойств
 function printUserInfo(userInfo) {
   console.log("\nUser info:");
   for (const [key, value] of Object.entries(userInfo)) {
       console.log(`- ${key} is ${value}`);
   }
 }
-
-printUserInfo({ name: "Alex", age: 22, status: "offline" })
+printUserInfo({ name: "Alex", age: 22, status: "married" })
 // User info:
 // - name is Alex
 // - age is 22
-// - status is offline
-printUserInfo({ name: "Kate", age: 18, status: "online" })
+// - status is married
+printUserInfo({ name: "Kate", age: 18, sex: "female", status: "single" })
 // User info:
 // - name is Kate
 // - age is 18
-// - status is online
+// - sex is female
+// - status is single
 ```

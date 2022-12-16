@@ -262,7 +262,7 @@ def print_errors(error_type, *messages, **metadata):
         print("** Metadata: - {} is {} **".format(key,value))
 
 print_errors(
-	"ValidationError",
+    "ValidationError",
     "password is too short",
     "password must contain at least one special character",
     "password must contain at least one capital letter",
@@ -275,4 +275,32 @@ print_errors(
 #  * Error #2: - password must contain at least one capital letter *
 # ** Metadata: - email is test@smail.com **
 # ** Metadata: - browser is Safari **
+```
+```js
+// JavaScript
+// ключевые аргументы в языке отсутствуют, оператор `...` должен быть в конце,
+// значит используем объект в качестве `metadata` и меняем его местами с `messages`
+function printErrors(errorType, metadata, ...messages) {
+    console.log(`${errorType}:`)
+    for (const [index, message] of Object.entries(messages)) {
+    	console.log(` * Error #${index}: - ${message} *`)
+    }
+    for (const [key, value] of Object.entries(metadata)) {
+	console.log(`** Metadata: - ${key} is ${value} **`)
+    }
+}
+
+printErrors(
+    "ValidationError",
+    { email: "test@smail.com", browser: "Safari" },
+    "password is too short",
+    "password must contain at least one special character",
+    "password must contain at least one capital letter"
+)
+// ValidationError:
+//  * Error #0: - password is too short *
+//  * Error #1: - password must contain at least one special character *
+//  * Error #2: - password must contain at least one capital letter *
+// ** Metadata: - email is test@smail.com **
+// ** Metadata: - browser is Safari **
 ```

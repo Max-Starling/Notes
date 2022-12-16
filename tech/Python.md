@@ -100,7 +100,7 @@ const bar = [1, 2];
 const merged = [...bar, ...foo];
 console.log(merged); // [1, 2, 3, 4]
 ```
-Ещё немного слияний массивов для закрепления
+Ещё немного слияний массивов для закрепления.
 ```py
 foo = [1, 2, 3]
 bar = [*foo, 4]
@@ -137,7 +137,7 @@ console.log(sum(...numbers)); // 10
 console.log(sum(3, 7)); // 10
 ```
 ## Аргументы функции и `*args`
-Применим `*args` к аргументами функции, вы получите функцию, которая может обрабатывать любое количество аргументов вплоть до бесконечности.
+Применим `*args` к аргументами функции, вы получите функцию, которая может обрабатывать любое количество аргументов вплоть до бесконечности. Собранные аргументы помещаются в кортеж `tuple`.
 ```python
 def sum(*numbers):
     result = 0
@@ -207,7 +207,7 @@ print_user_info(name="Alex", age=22, status="married")
 # - age is 22
 # - status is married
 ```
-Чтобы функция могла принимать любое количество параметров и при этом было удобно их обрабатывать, можно использовать `**kwards`, который соберёт все параметры функции в `Dictionary`.
+Чтобы функция могла принимать любое количество параметров и при этом было удобно их обрабатывать, можно использовать `**kwards`, который соберёт все параметры функции в словарь `dict` (англ. `dictionary`).
 ```py
 def print_user_info(**user_info):
     # type(user_info) = dict
@@ -247,4 +247,32 @@ printUserInfo({ name: "Kate", age: 18, sex: "female", status: "single" })
 // - age is 18
 // - sex is female
 // - status is single
+```
+## Все виды аргументов сразу в функции
+`error_type` - одиночный позиционный аргумент.
+`*messages` собирает позиционные элементы, начиная со второго и до последнего, в кортеж `tuple`.
+`**metadata` собирает все ключевые аргументы в словарь `dict`.
+```py
+def print_errors(error_type, *messages, **metadata):
+    # type(user_info) = dict
+    print(f"{error_type}:")
+    for index, message in enumerate(messages):
+    	print(f" * Error #{index}: - {message} *")
+    for key, value in metadata.items():
+        print("** Metadata: - {} is {} **".format(key,value))
+
+print_errors(
+	"ValidationError",
+    "password is too short",
+    "password must contain at least one special character",
+    "password must contain at least one capital letter",
+    email="test@smail.com",
+    browser="Safari"
+)
+# ValidationError:
+#  * Error #0: - password is too short *
+#  * Error #1: - password must contain at least one special character *
+#  * Error #2: - password must contain at least one capital letter *
+# ** Metadata: - email is test@smail.com **
+# ** Metadata: - browser is Safari **
 ```

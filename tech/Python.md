@@ -396,3 +396,19 @@ printErrors(
 // ** Metadata: - email is test@smail.com **
 // ** Metadata: - browser is Safari **
 ```
+
+
+## Полезные функции
+
+### `is_json`
+
+```py
+import json
+
+def is_json(myjson):
+  try:
+    json.loads(myjson)
+  except ValueError as e:
+    return False
+  return True
+```

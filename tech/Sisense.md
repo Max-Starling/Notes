@@ -23,6 +23,12 @@ Data Model может быть двух типов:
 
 **Набор данных** (англ. `Dataset`) представляет собой один из источников данных, используемых текущей моделью данных. Например, если модель данных содержит данные из трёх CSV-файлов и двух баз данных SQL, то всего у нас 5 источников, а значит 5 наборов данных.
 
+Например, `connection string` может быть
+```
+Server=ServerName;Database=DatabaseName;User Id=UserName;Password=UserPassword;
+Server=localhost;Database=SisenseNotes;User Id=SuperAdmin;Password=qwerty;
+```
+
 Каждый набор данных содержит информацию о подключении к своему источнику (например, строку подключения к SQL-базе или путь к CSV-файлу)
 
 

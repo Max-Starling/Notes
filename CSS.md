@@ -26,6 +26,8 @@
 - [Препроцессоры и постпроцессоры CSS](#препроцессоры-и-постпроцессоры-css)
   - [Препроцессоры](#препроцессоры)
   - [Постпроцессоры](#постпроцессоры)
+  - [Возможности постпроцессоров в деталях](#возможности-постпроцессоров-в-деталях)
+- [CSS Modules](#css-modules)
 
 # Основы CSS
 **Cascading Style Sheets**, **CSS** — *каскадные таблицы стилей*; *язык таблиц стилей* (stylesheet), используемый для *представления внешнего вида* HTML-документа. 
@@ -1902,16 +1904,14 @@ const renderRedButton = props => (<Button {...props} />);
 ```
 
 # Препроцессоры и постпроцессоры CSS
-
 - [Препроцессоры](#препроцессоры)
 - [Постпроцессоры](#постпроцессоры)
   - [Проблемы, которые помогают решить препроцессоры](#проблемы-которые-помогают-решить-препроцесоры)
 - [Возможности постпроцессоров в деталях](#возможности-постпроцессоров-в-деталях)
-  - [Шаблонный селектор, миксин и их различия](#шаблонный-селектор-миксин-и-их-различия)
   - [Сравнение SCSS и PostSCSS](#сравнение-scss-и-postcss)
+  - [Сравнение переменных в SCSS и CSS](#сравнение-переменных-в-scss-и-css)
+  - [Шаблонный селектор, миксин и их различия](#шаблонный-селектор-миксин-и-их-различия)
   - [Плагины PostCSS](#плагины-postcss)
-
-## Постпроцессоры
 
 ## Препроцессоры
 
@@ -1957,16 +1957,6 @@ const renderRedButton = props => (<Button {...props} />);
 
 ## Возможности постпроцессоров в деталях
 
-### Сравнение переменных в SCSS и CSS
-
-SCSS is a preprocessor. That means it is not CSS, but is converted into CSS at 'compile time'. In the resulting CSS code there is no resemblance to the original SCSS code. Hence you cannot change the variable values at CSS 'runtime'.
-
-Historically SCSS is a fairly old technique. Actually it dates back to as far as 2007. It was invented by the motivation that CSS lacks certain features amongst which are variables (and nesting and loops and mixins etc.).
-
-CSS variables are a quite recent addition to the CSS standard (The last call working draft seams to be from 2014). They didn't render SCSS variables useless, because you can do things to SCSS variables which you can't do with CSS variables (to my knowledge) like color calculations.
-
-On the other hand you can do things with CSS variables that you can't do with SCSS variables like changing at runtime.
-
 ### Сравнение SCSS и PostSCSS
 
 SASS содержит некоторый определённый набор возможностей, которые устанавливаются в виде модуля. Вне зависимости от того, собираетесь вы использовать их все или лишь малую часть из них (например, только переменные или вложенные селекторы), будут установлены все возможности языка.
@@ -1980,6 +1970,17 @@ PostCSS по умолчанию не содержит ничего кроме AP
 С другой стороны, использование PostCSS усложняет настройку проекта, а также приводит к ситуации, что каждый проект содержит свою конфигурацию, что заставляет разработчиков каждый раз привыкать к новому набору плагинов переходя с проекта на проект. Записываем в плюсы SCSS лёгкость настройки и низкий порог вхождения для новых разработчиков на проекте.
 
 Что же выбрать? Выбирайте то, что вам больше подходит на данном проекте в соответствии с плюсами и минусами выше. 
+
+
+### Сравнение переменных в SCSS и CSS
+
+SCSS is a preprocessor. That means it is not CSS, but is converted into CSS at 'compile time'. In the resulting CSS code there is no resemblance to the original SCSS code. Hence you cannot change the variable values at CSS 'runtime'.
+
+Historically SCSS is a fairly old technique. Actually it dates back to as far as 2007. It was invented by the motivation that CSS lacks certain features amongst which are variables (and nesting and loops and mixins etc.).
+
+CSS variables are a quite recent addition to the CSS standard (The last call working draft seams to be from 2014). They didn't render SCSS variables useless, because you can do things to SCSS variables which you can't do with CSS variables (to my knowledge) like color calculations.
+
+On the other hand you can do things with CSS variables that you can't do with SCSS variables like changing at runtime.
 
 ### Шаблонный селектор, миксин и их различия
 
@@ -2134,7 +2135,7 @@ $gray: #24292e;
 
 Таким образом, *PostCSS* изначально *ближе* к *чистому CSS*, но с помощью определённых *плагинов* может обладать *той же* *функциональностью*, что и *препроцессоры*.
 
-### CSS Modules
+## CSS Modules
 
 **CSS Modules** помогают решить *проблему наименования классов* в проекте.
 

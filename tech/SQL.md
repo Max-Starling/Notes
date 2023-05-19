@@ -6,6 +6,7 @@
   - [Вставка в таблицу с помощью `INSERT`](#вставка-в-таблицу-с-помощью-insert)
   - [Запросы `SELECT`](#запросы-select)
   - [Запросы `SELECT` с условиями `WHERE`](#запросы-select-с-условиями-where)
+  - [Приоритет операторов (`Operator Precedence`)](#приоритет-операторов-operator-precedence)
   - [Сортировка при помощи `ORDER BY`](#сортировка-при-помощи-order-by)
   - [Агрегатные функции `AVG`, `COUNT`, `MAX`, `MIN`, `SUM`](#агрегатные-функции-avg-count-max-min-sum)
   - [Группировка значений при помощи `GROUP BY`](#группировка-значений-при-помощи-group-by)
@@ -235,25 +236,150 @@ SELECT *
 ```
 ![SQL Example](../assets/SQL_7.png)
 
-### `BETWEEN`, `IN`, `LIKE`
-С помощью *оператора* `BETWEEN` можно задать *промежуток значений* (*число*, *строка*, *дата*).
+## Логические операторы
+
+**Логические операторы** (англ. `Logical operators`) проверяют заданное выражение на истинность и возвращают логическое значение `TRUE` или `FALSE`.
+
+В SQL имеются следующие логические операторы:
+* `AND` (логическое "И", условное "И") - бинарный логический оператор, который возвращает `TRUE`, если оба операнда (оба условия) выполняются, иначе `FALSE`.
 ```SQL
-SELECT *
-  FROM notes
-  WHERE ID BETWEEN 2 AND 5;
-```
-С помощью *оператора* `IN` можно задать *несколько возможных значений*.
+x AND y
+1 > 0 AND 2 > 1 = TRUE
+1 > 0 AND 2 < 1 = FALSE
+``` 
+* `OR` (логическое "ИЛИ", условное "ИЛИ") - бинарный логический оператор, который возвращает `TRUE`, если хотя бы один операнд (одно из условий) выполняются, иначе `FALSE`.
 ```SQL
-SELECT *
-  FROM notes
-  WHERE ID IN (1, 2, 4);
+x OR y
+1 > 0 OR 2 > 1 = TRUE
+1 > 0 OR 2 < 1 = FALSE
 ```
-С помощью *оператора* `LIKE` можно задать *шаблон для поиска* (`%` — любое количество символов, `_` — один символ).
+* `NOT` (логическое "НЕ", отрицание) - унарный оператор, который возвращает `TRUE`, если значение ложно, и `FALSE`, если значение истино.
+* `IN` (включение, англ. `includes`) - бинарный логический оператор, который возвращает `TRUE`, если операнд содержится в списке выражений.
 ```SQL
-SELECT *
-  FROM notes
-  WHERE title LIKE "Article___" AND description LIKE "DESCRIPTION%";
+x IN (y1, y2, ...)
+0 IN (1, 2, 3) = FALSE
+"bar IN ("foo", "bar, "baz") = TRUE
+WHERE name IN ("Max", "Rob", "Tom")
 ```
+* `BETWEEN` (между) - тернарный логический оператор, который возвращает `TRUE`, если заданное значение (*число*, *строка*, *дата*) находится в промежутке между двумя другими значениями.
+```SQL
+x BETWEEN y AND z
+'20230217' BETWEEN '20221212' AND '20230605' = TRUE
+17 BETWEEN 0 AND 10 = FALSE
+```
+* `LIKE` (подобно) - бинарный логический оператор, который проверяет, удовлетволяет ли указанная строка заданному поисковому шаблону (регулярному выражению). Для поиска используются подстановочные знаки (англ. `wildcards`). Например, знак `%` заменяет *любое количество символов*, `_` — только один символ.
+```SQL
+'abc' LIKE 'a_c' AND 'adc' LIKE 'a_c' = TRUE
+'max.starling' LIKE 'max_' = TRUE
+'max.starling' LIKE '_star_' = TRUE
+```
+ 
+## Приоритет операторов (`Operator Precedence`)
+Когда мы имеем дело со сложным выражением, в котором участвует несколько разных операторов, встаёт вопрос, какие операции выполнятся раньше. Ведь в зависимости от порядка выполнения операций меняется результат.
+
+Например, у умножения приортитет всегда выше, чем у сложения. Но если поставить оператор группировки, то приоритеты поменяются и результат тоже
+```SQL
+5 + 1 * 5 = 30
+(5 + 1) * 5 = 30
+5 + (1 * 5) = 10
+```
+Чем выше приоритет, тем раньше выполняется операция.
+
+Стоит отметить, что в каждой реализации SQL порядок операторов может отличаться.
+
+#### Приоритет операторов в Postgres
+| Operator/Element | Associativity | Description                                 |
+|------------------|---------------|---------------------------------------------|
+| ::               | left          | PostgreSQL-style typecast                   |
+| [ ]              | left          | array element selection                     |
+| .                | left          | table/column name separator                 |
+| -                | right         | unary minus                                 |
+| ^                | left          | exponentiation                              |
+| * / %            | left          | multiplication, division, modulo            |
+| + -              | left          | addition, subtraction                       |
+| IS               |               | test for TRUE, FALSE, UNKNOWN, NULL         |
+| ISNULL           |               | test for NULL                               |
+| NOTNULL          |               | test for NOT NULL                           |
+| (any other)      | left          | all other native and user-defined operators |
+| IN               |               | set membership                              |
+| BETWEEN          |               | containment                                 |
+| OVERLAPS         |               | time interval overlap                       |
+| LIKE ILIKE       |               | string pattern matching                     |
+| < >              |               | less than, greater than                     |
+| =                | right         | equality, assignment                        |
+| NOT              | right         | logical negation                            |
+| AND              | left          | logical conjunction                         |
+| OR               | left          | logical disjunction                         |
+
+#### Приоритет операторов в MySQL
+```MySQL
+INTERVAL
+BINARY, COLLATE
+!
+- (unary minus), ~ (unary bit inversion)
+^
+*, /, DIV, %, MOD
+-, +
+<<, >>
+&
+|
+= (comparison), <=>, >=, >, <=, <, <>, !=, IS, LIKE, REGEXP, IN, MEMBER OF
+BETWEEN, CASE, WHEN, THEN, ELSE
+NOT
+AND, &&
+XOR
+OR, ||
+= (assignment), :=
+```
+
+#### Приоритет операторов в MariaDB
+```SQL
+INTERVAL
+BINARY, COLLATE
+!
+- (unary minus), [[bitwise-not|]] (unary bit inversion)
+|| (string concatenation)
+^
+*, /, DIV, %, MOD
+-, +
+<<, >>
+&
+|
+= (comparison), <=>, >=, >, <=, <, <>, !=, IS, LIKE, REGEXP, IN
+BETWEEN, CASE, WHEN, THEN, ELSE, END
+NOT
+&&, AND
+XOR
+|| (logical or), OR
+= (assignment), :=
+```
+
+#### Приоритет операторов в Oracle
+```SQL
+()
+* /
++ -
+= <> < > <= >=
+IS (IS NULL, IS NOT NULL, IS EMPTY, IS NOT EMPTY)
+BETWEEN
+NOT
+AND
+OR
+```
+
+Как видно, приоритеты могут отличаться, но общие правила есть всегда:
+1) Оператор группировки `()` (англ. `parentheses`, `grouping`) имеет *наивысший приоритет*, в то время, как оператор присваивания `=` - *наинизший*.
+2) Арифметические операторы всегда идут в следующем порядке: *возведение в степень*, *умножение/деление*, затем *сложение/вычитание*.
+3) Логические операторы всегда идут в следующем порядке: сперва отрицание `!`, `NOT`, затем логическое "И" (`AND`, `&&`), затем *логическое "ИЛИ"* (`OR`, `||`).
+4) Сперва идут *арифметические операторы*, затем *операторы сравнения*, затем *логические операторы*.
+
+
+Например, поскольку у `AND` приоритет выше, чем у `OR`, следующие две строчки эквивалентны (то есть оператор группировки можно смело убирать)
+```SQL
+(x < y AND y < z) OR (x > y AND y > z)
+x < y AND y < z OR x > y AND y > z
+```
+
 ## Сортировка при помощи `ORDER BY`
 
 **Ключевое слово ORDER BY** используется для *сортировки результатов запроса* `SELECT`.

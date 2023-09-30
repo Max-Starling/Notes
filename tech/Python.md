@@ -19,12 +19,43 @@ s = str(num)
 print(s) // "17"
 ```
 
-## Массив `array`
-
+## Список `list`
 
 ## Кортеж `tuple`
 
 ## Словарь `dictionary`
+
+## Конкатенация `contatenation` при помощи `join`
+
+Конкатенация при помощи`join`может быть применена к любому перечисляемому типу данных (англ. `iterable`), то есть к:
+* множествам `set`
+* спискам `list`
+* кортежам `tuple`
+* словарям `dict`
+* строкам `str`
+
+Примеры
+```python
+# set
+greeting_set = {"world", "Hello"}
+print(" ".join(greeting_set)) # --> "Hello world" (в обратном порядке)
+
+# list
+vowels_list = ['a', 'e', 'i', 'o', 'u']
+print(", ".join(vowels_list)) # --> "a, e, i, o, u"
+
+# tuple
+country_tuple = ("Ukraine", "Ukrainian", 36.7) # ("country", "language", "population (m)")
+print(" - ".join(country_tuple)) # --> Ukraine - Ukrainian - 36.7
+
+# dict
+users_dict = {"Max": 17, "Frank": 21, "Tom": 13}
+print(" and ".join(users_dict)) # --> Max and Frank and Tom
+
+## str
+nickname = 'starling'
+print("_".join(nickname)) # s_t_a_r_l_i_n_g
+```
 
 ## JSON
 ### Parse JSON to Dictionary

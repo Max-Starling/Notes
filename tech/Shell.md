@@ -10,6 +10,8 @@
 * `cat file_name` - вывод содержимого файла в консоль.
 * `cd directory_name` - переход в папку.
 * `cd ..` - переход в папку выше.
+* `printenv` - вывести все переменные окружения (англ. `environment variables`)
+
 ```shell
 # /app/src
 cd ..
@@ -54,3 +56,5 @@ C:
 # переход на диск D
 D:
 ```
+
+## PowerShell

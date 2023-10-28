@@ -50,6 +50,7 @@ Defaults env_keep += "POSTGRES_PASSWORD"
 * `type` - вывод содержимого файла в консоль (аналог `cat` в Linux).
 * `cls` - очистить консоль (аналог `clear` в Linux)
 * `<disk_name>:` - переход на диск disk_name.
+
 ```shell
 # переход на диск C
 C:

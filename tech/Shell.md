@@ -77,7 +77,8 @@ D:
 
 JavaScript не является таким языком, поскольку комментарии в нём объявляются через `/**/`, `//`. Однако в ES14 (ECMAScript2023) добавили поддержку шебанга.
 ```
-#! interpreter [optional-arg]
+#!/usr/bin/env node
+console.log('Hello JavaScript!');
 ```
 Скриншот из Chrome:
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/c15eeac6-e9d6-495d-b9ad-6a54be56dc22)

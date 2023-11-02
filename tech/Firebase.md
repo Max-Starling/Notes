@@ -137,6 +137,9 @@ pipelines:
 
 # Set up `node-gyp` for Windows (to make `grpc` work)
 
+Firebase may require GRPC module and GRPC requires [node-gyp](https://github.com/nodejs/node-gyp).
+There is a guide how I managed to install it after reading tons of stackoverflows resolving issues one after another.
+
 Download and open `Visual Studio Installer` (https://visualstudio.microsoft.com/downloads/).
 Intall `Visual Studio Build Tools 2022`. Select there:
 * `Desktop development with C++`
@@ -193,4 +196,5 @@ node-gyp configure
 node-gyp build
 node-gyp rebuild
 ```
+now you can do `npm install` without `node-gyp` errors
 

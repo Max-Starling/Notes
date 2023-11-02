@@ -133,3 +133,64 @@ pipelines:
               PROJECT_ID: "PROJECT_ID" # you can find projectId in firebase config
               DEBUG: 'true'
 ```
+
+
+# Set up `node-gyp` for Windows (to make `grpc` work)
+
+Download and open `Visual Studio Installer` (https://visualstudio.microsoft.com/downloads/).
+Intall `Visual Studio Build Tools 2022`. Select there:
+* `Desktop development with C++`
+
+![image](https://github.com/Max-Starling/Notes/assets/22237384/edb4764e-7e59-412d-bce5-477962bbed1c)
+
+* Some `SDK`
+
+![image](https://github.com/Max-Starling/Notes/assets/22237384/f2e17f8b-72e3-48bf-a9de-456db9d52b01)
+
+* `VC++`
+
+![image](https://github.com/Max-Starling/Notes/assets/22237384/f1dc472f-6870-4300-91de-0d8eae83f0a8)
+
+Then install, restart PC.
+
+```
+npm config edit
+
+msbuild_path=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe
+msbuild-path=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe
+msvs_version=2022
+msvs-version=2022
+python=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools
+```
+
+```
+SETX VCINSTALLDIR 'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC'
+SETX VSINSTALLDIR 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools'
+refreshenv
+```
+![image](https://github.com/Max-Starling/Notes/assets/22237384/5dbe6296-09c7-4cf8-aa03-d514e247201a)
+![image](https://github.com/Max-Starling/Notes/assets/22237384/7a892ee6-b4cc-46ea-bd32-bb34dce4c238)
+
+```
+npm i -g node-gyp
+```
+
+Create `binding.gyp` text tile
+```json
+{
+  "targets": [
+    {
+      "target_name": "binding",
+      "sources": [ "./binding.cc" ]
+    }
+  ]
+}
+```
+Create empty `binding.cc` text file.
+
+```
+node-gyp configure
+node-gyp build
+node-gyp rebuild
+```
+

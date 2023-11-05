@@ -174,6 +174,14 @@ env.OS /* ошибка TS: `Property 'OS' does not exist on type '{}'`,
 нет подсказок, какие свойства есть в объекте, но при этом значение `win32` возвращается
 */
 
+// попытка обмануть компилятор тоже ни к чему не приведёт
+env['OS'] /* ошибка TS: `Element implicitly has an 'any' type because expression of type '"OS"' can't be used to index type '{}'.
+Property 'OS' does not exist on type '{}'.` */
+
+// единсвенный способ избежать ошибки, отключить проверку следующей строки при помощи директивы `@ts-ignore`
+// @ts-ignore
+env.OS // 'win32' без ошибки TS
+
 // тот же самый трюк с функцией, возвращающей `{}`
 const getUserData = (): {} => ({ email: '17.max.starling@gmail.com' });
 const user = getUserData();

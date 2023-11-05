@@ -69,7 +69,7 @@ const fn = (param: string): void => {
 ```
 - `never` — **значение**, которое **никогда не наступит** (обычно функции, возвращающие ошибку)
 ```ts
-const createError = (message: string): never {
+const throwError = (message: string): never {
   throw new Error(message);
 };
 ```
@@ -83,7 +83,7 @@ foo = [17, 'notes', true]; // error
 - `Enum` — **перечисление** (более дружелюбные имена для множества числовых значений).
 ```ts
 enum Visibility { Visible, Hidden }
-const state: Visibility = Visibility.Visible;
+const state: Visibility = Visibility.Visible; // 0
 ```
 
 ### object vs Object vs {}
@@ -117,6 +117,85 @@ console.log(foo.toString()); // '[object Object]'
 # Поддержка ООП в TypeScriot
 
 TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку. -->
+
+### Детальный разбор `void`
+
+```typescript
+function a(): void {} // без ошибок
+function b(): void {
+    return undefined; // всё ещё без ошибок (!)
+}
+function c(): void {
+    return (-1 + 1); // ошибка: `Type 'number' is not assignable to type 'void'`
+}
+function d(): void {
+    return void (-1 + 1); // нет ошибки, поскольку оператор `void` выполняет выражение, но возвращает `undefined
+}
+```
+Не путайте тип `void` из TypeScript и оператор `void` из JavaScript :)
+
+### Детальные разбор `never`
+```typescript
+function a(): never {
+    throw new Error();
+}
+
+function b(): never {
+    if (Math.random() > 0.5) {
+         throw new Error(); // ошибка `A function returning 'never' cannot have a reachable end point.`
+    }
+}
+
+function b(): never | void {
+    if (Math.random() > 0.5) {
+         throw new Error(); // нет ошибки
+    }
+}
+```
+
+### Детальный разбор `enum`
+Перечисления - это один из немногих типов в TypeScript, который имеет представление в JavaScript в виде объекта, который можно использовать в ходе выполнения программы.
+
+```ts
+enum Visibility { Visible, Hidden }
+
+console.log(Visibility);
+/* {
+  "0": "Visible",
+  "1": "Hidden",
+  "Visible": 0,
+  "Hidden": 1
+}  */
+console.log(Visibility[0]) // "Visible"
+console.log(Visibility.Hidden) // 1 
+```
+Получили объект, в котором строки соответствуют числовым индексам и наоборот.
+
+Выше показано, что происходит со значениями перечислений по умолчанию, теперь зададим значения явно.
+
+```typescript
+enum Color {
+    RED = 'red',
+    YELLOW = 'yellow',
+    GREEN = 'green'
+}
+console.log(Color);
+/* {
+  "RED": "red",
+  "YELLOW": "yellow",
+  "GREEN": "green"
+}  */
+
+console.log(Color.YELLOW) // 'yellow'
+console.log(Color['yellow']) // `undefined` и ошибка: `Property 'yellow' does not exist on type 'typeof Color'. Did you mean 'YELLOW'?`
+```
+
+Перечислениями также можно манипулировать при помощи `Object`-методов. Это может быть полезно при переборе всех допустимых значений, например, при написании валидации.
+```ts
+Object.values(Color) // ["red", "yellow", "green"]
+Object.keys(Color) // ["RED", "YELLOW", "GREEN"]
+Object.entries(Color) // [["RED", "red"], ["YELLOW", "yellow"], ["GREEN", "green"]] 
+```
 
 # Класс (Class)
 

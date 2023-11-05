@@ -86,7 +86,7 @@ enum Visibility { Visible, Hidden }
 const state: Visibility = Visibility.Visible; // 0
 ```
 
-### object vs Object vs {}
+### `object` vs `Object` vs `{}`
 - `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы)*.
 ```ts
 let foo: object;
@@ -94,7 +94,7 @@ foo = { prop: 'value' };
 foo = ['value'];
 foo = ():void => console.log('notes');
 ```
-- `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, включающему в себя `toString()`, `valueOf()`, `hasOwnProperty()` и другие методы).
+- `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, имеющий методы `toString()`, `valueOf()`, `hasOwnProperty()` и другие).
 ```ts
 let obj: Object;
 obj = {};
@@ -106,17 +106,80 @@ interface Object {
   /* ... */
 }
 ```
+
+Фактически, `object` и `Object` очень похожи, поскольку все непримитивные типы в JavaScript происходят от объектов, так в чём же отличие?
+
+По сути, разница лишь в хайлайтинге:
+```ts
+const foo: Object = function (){}; // ок
+const bar: Object = function (){}; // ок
+
+foo. // покажет доступные методы
+bar. // не покажет ничего
+
+// но при этом
+foo.toString() // нет ошибки
+bar.toString() // нет ошибки
+```
+Проведя больше тестов, я выяснил, что разница в поведении между ними касается лишь типа `Symbol`.
+```ts
+const func1: Object = function (){}; // ок
+const func2: Object = function (){}; // ок
+func1() // ошибка TS: `This expression is not callable. Type 'Object' has no call signatures`
+func2() // ошибка TS: `This expression is not callable. Type '{}' has no call signatures`
+
+const arr1: Object = []; // ок
+const arr2: object = []; // ок
+arr1.fill(2); // `Property 'fill' does not exist on type 'Object'`
+arr2.fill(2); // `Property 'fill' does not exist on type 'object'`
+
+const symbol1: Object = Symbol(''); // ок
+const symbol2: object = Symbol(''); // ошибка TS: `Type 'typeof symbol2' is not assignable to type 'object'`
+
+const boolean1: Object = new Boolean(true); // ок
+const boolean2: object = new Boolean(true); // ок
+
+const promise1: Object = Promise.resolve(true); // ок
+const promise2: object = Promise.resolve(true); // ок
+promise1.then(() => {}); // `Property 'then' does not exist on type 'Object'`
+promise2.then(() => {}); // `Property 'then' does not exist on type 'object'`
+```
+
+
 - `{}` — **пустой тип**, **пустой объект**.
 Обращение к его свойствам приведёт к ошибке, но остаётся возможность использовать все методы `Object`.
 ```ts
 const foo = {};
-foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
+if (true) {
+  foo.a = 'notes'; // Error: Property 'a' does not exist on type '{}'
+}
 console.log(foo.toString()); // '[object Object]'
 ```
-<!-- 
-# Поддержка ООП в TypeScriot
 
-TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку. -->
+Стоит отметить, что тип `{}` задаётся автоматически, если присвоить пустой объект на этапе создания переменной вне зависимости от того, это `let` или `const`.
+```typescript
+const a = {};
+a.foo = 1; // ошибка TS `Property 'foo' does not exist on type '{}'`
+let b = {};
+b.bar = 2; // ошибка TS `Property 'bar' does not exist on type '{}'`
+
+// можно задать тип явно
+const a: {} = {}
+
+// можно сбить пользователя с толку
+const env: {} = { // ошибки при объявлении нет
+  OS: 'win32',
+}
+env.OS /* ошибка TS: `Property 'OS' does not exist on type '{}'`,
+нет подсказок, какие свойства есть в объекте, но при этом значение `win32` возвращается
+*/
+
+// тот же самый трюк с функцией, возвращающей `{}`
+const getUserData = (): {} => ({ email: '17.max.starling@gmail.com' });
+const user = getUserData();
+user.email; /* вернёт '17.max.starling@gmail.com', но подсказки о том, что свойство `email` сущесвует, не будет,
+а также будет ошибка TS `Property 'email' does not exist on type '{}'` */
+```
 
 ### Детальный разбор `void`
 
@@ -198,6 +261,12 @@ Object.entries(Color) // [["RED", "red"], ["YELLOW", "yellow"], ["GREEN", "green
 ```
 
 # Класс (Class)
+
+
+<!-- 
+# Поддержка ООП в TypeScriot
+
+TypeScript предоставляет полноценную поддержку классов из ООП, JavaScript предоставляет лишь частичную поддержку. -->
 
 **Классом** (англ. `class`) называют конструктор (строитель, генератор, создатель) объектов. В теле класса содержится вся информация, которую будет содержать объект после создания.
 

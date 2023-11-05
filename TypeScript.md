@@ -206,11 +206,32 @@ function d(): void {
 ```
 Не путайте тип `void` из TypeScript и оператор `void` из JavaScript :)
 
-Стоит отметить, что тип `void` не сильно отличается от `undefined`.
+Стоит отметить, что тип `void` на первый взгляд не сильно отличается от `undefined` в плане ошибок TS.
 ```ts
+void function a(): undefined {} // ок
 function a(): undefined {} // ок
 function b(): undefined { return undefined; } // ок
 function с(): undefined { return void true; } // ок
+```
+
+Так в чём же разница?
+
+Разница есть, но она больше семантическая. Ещё раз, `void` означает, что значение не будет возвращено, а `undefined` означает, что будет возвращён `undefined`.
+Это важно в опреденеии некоторых функций, например, `Array.prototype.forEach`:
+```ts
+declare function forEach<T>(array: T[], callback: (item: T) => undefined): void;
+let numbers: number[] = [];
+forEach([0, 1, 2], item => numbers.push(item)); // ошибка `Type 'number' is not assignable to type 'undefined'`
+```
+Поскольку `Array.prototype.push` возвращает число, получаем ошибку, поскольку ожидался `undefined`.
+Но если использовать `void`, то такой проблемы не будет, поскольку мы обещаем, что в реализации функции `forEach` не будет использовано возвращаемое значение callback-а.
+
+Таким образом, судя по примеру выше, нельзя с точностью утверждать, что функция, которая возвращает `void`, действительно возвращает `undefined` - возвращаемое знаение может быть любым `any`.
+
+```ts
+declare function forEach<T>(array: T[], callback: (item: T) => void): void;
+let numbers: number[] = [];
+forEach([0, 1, 2], item => numbers.push(item)); // ок
 ```
 
 

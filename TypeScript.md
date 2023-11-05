@@ -86,13 +86,13 @@ enum Visibility { Visible, Hidden }
 const state: Visibility = Visibility.Visible; // 0
 ```
 
-### `object` vs `Object` vs `{}`
+### `object` vs `Object` vs `{}` vs `Record<K, V>`
 - `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы)*.
 ```ts
 let foo: object;
 foo = { prop: 'value' };
 foo = ['value'];
-foo = ():void => console.log('notes');
+foo = () => console.log('notes');
 ```
 - `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, имеющий методы `toString()`, `valueOf()`, `hasOwnProperty()` и другие).
 ```ts
@@ -189,7 +189,8 @@ user.email; /* вернёт '17.max.starling@gmail.com', но подсказки
 а также будет ошибка TS `Property 'email' does not exist on type '{}'` */
 ```
 
-### Детальный разбор `void`
+
+### Детальный разбор `void`, сравнение с типом `undefined`
 
 ```typescript
 function a(): void {} // без ошибок
@@ -204,6 +205,14 @@ function d(): void {
 }
 ```
 Не путайте тип `void` из TypeScript и оператор `void` из JavaScript :)
+
+Стоит отметить, что тип `void` не сильно отличается от `undefined`.
+```ts
+function a(): undefined {} // ок
+function b(): undefined { return undefined; } // ок
+function с(): undefined { return void true; } // ок
+```
+
 
 ### Детальные разбор `never`
 ```typescript

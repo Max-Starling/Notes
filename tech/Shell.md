@@ -80,6 +80,17 @@ JavaScript не является таким языком, поскольку к�
 #!/usr/bin/env node
 console.log('Hello JavaScript!');
 ```
-Скриншот из Chrome:
+Скриншот из Chrome:  
+
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/c15eeac6-e9d6-495d-b9ad-6a54be56dc22)
 
+# Комментарии
+`#`
+
+# Замена символов
+`-replace '<from>','<to>'`
+```powershell
+$foo = 'hi-notes!'
+$bar = $foo -replace '[-]',' ' -replace '!', ''
+echo $bar # hi notes
+```

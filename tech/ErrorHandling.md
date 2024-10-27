@@ -130,7 +130,7 @@ app.use((err, req, res, next) => {
 
 Используйте библиотеки, такие как Joi или express-validator, чтобы валидировать данные до выполнения бизнес-логики:
 
-```
+```js
 const { body, validationResult } = require('express-validator');
 
 app.post('/user', [

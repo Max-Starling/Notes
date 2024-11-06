@@ -951,7 +951,20 @@ Host gitlab.com
    User git
    IdentityFile ~/.ssh/id_rsa_gitlab
 ```
-* Сохранить изменения.
+Например, командой `cat`
+```linux
+cat <<EOF > ~/.ssh/config
+Host github.com
+   HostName github.com
+   User git
+   IdentityFile ~/.ssh/id_rsa_github
+# config for gitlab
+Host gitlab.com
+   HostName gitlab.com
+   User git
+   IdentityFile ~/.ssh/id_rsa_gitlab" >> ~/.ssh/config
+EOF
+```
 
 ### Проверка работоспособности SSH
 * Попробовать сделать `git pull` через SSH.

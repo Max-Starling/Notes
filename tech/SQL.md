@@ -226,7 +226,7 @@ SELECT *
 ```SQL
 SELECT *
   FROM notes
-  WHERE title != "Article #1" AND description NOT NULL;
+  WHERE title != "Article #1" AND description IS NOT NULL;
 ```
 ![SQL Example](../assets/SQL_6.png)
 ```SQL

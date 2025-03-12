@@ -716,7 +716,7 @@ const translate = (translator: EngRusTranslator) => { /* ... */ }
 ```ts
 type User = { id: string; name: string }
 ```
-```
+```ts
 interface User { id: string; name: string }
 ```
 

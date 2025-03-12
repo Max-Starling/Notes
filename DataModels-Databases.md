@@ -120,7 +120,7 @@ COMMIT;
 * **Сериализуемость** (англ. `Serializable`) - полная изолированность, максимальная защита от всех аномалий.
 
 Примеры применения:
-```
+```sql
 -- PostgreSQL
 BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 

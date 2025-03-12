@@ -748,7 +748,7 @@ const user: User = {
 type User = { id: string }
 type User = { name: string } // ❌ Error: Duplicate identifier 'User'
 ```
-* Типы могут работать с примитивами:
+* Типы могут работать с примитивами, интерфейсы - не могут:
 ```ts
 type Pet = 'cat' | 'dog'
 type Pets = `{Pet}s` // 'cats' | 'dogs'

@@ -2,6 +2,7 @@
 - [Типы данных (Data Types)](#типы-данных)
 - [Класс (Class)](#класс-class)
 - [Интерфейс (Interface)](#интерфейс-interface)
+- [Тип и интерфейс(Type vs interface)](#тип-и-интерфейс-type-vs-interface)
 - [Дженерики (Generics)](#дженерики-generics)
 
 # О TypeScript
@@ -709,6 +710,63 @@ const translate = (translator: EngRusTranslator) => { /* ... */ }
 
 Если базовый класс содержит приватные или защищённые свойства и методы, то наследующий от него интерфейс может быть реализован только базовым классом или его наследником.
 
+# Тип и интерфейс(Type vs interface)
+
+И тип (Type), и интерфейс (Interface) описывают объекты, так что в простых случаях будут работать одинаково.
+```ts
+type User = { id: string; name: string }
+```
+```
+interface User { id: string; name: string }
+```
+
+Различия:
+* Интерфейсы поддерживают наследование (англ. `inheretance`) через `extends`, позволяющее создавать новый тип, дополняя уже существующий:
+```ts
+interface Customer extends User { company: string }
+```
+* Типы поддерживают пересечение (англ. `intersection`) с помощью `&` (`AND`), позволяющее комбинировать несколько типов в один, создавая новый тип:
+```ts
+type Customer = User & { company: string }
+```
+* Типы также поддерживают объединение (англ. `union`) с помощью `|` (`OR`):
+```ts
+type A = { foo: string }
+type B = { bar: string }
+type C = A | B // либо тип А, либо тип Б
+```
+* Интерфейсы поддерживают **слияние деклараций** (англ. `Declaration Merging`), типы - не поддерживают (будет ошибка):
+```ts
+interface User { id: string }
+interface User { name: string }
+const user: User = {
+  id: 1,
+  name: "John",
+};
+```
+```ts
+type User = { id: string }
+type User = { name: string } // ❌ Error: Duplicate identifier 'User'
+```
+* Типы могут работать с примитивами:
+```ts
+type Pet = 'cat' | 'dog'
+type Pets = `{Pet}s` // 'cats' | 'dogs'
+type ID = string | number
+```
+* Интерфейсы подходят для имплементации классов (англ. `implementation`) через `implements`:
+```ts
+interface Person {
+  name: string;
+  greet(): void;
+}
+
+class User implements Person {
+  name: string;
+  greet() { console.log('Hi!'); }
+}
+```
+
 # Дженерики (Generics)
 <!-- 
 /*
@@ -878,3 +936,43 @@ const max: GenericPerson<number> = {
 }
 
  -->
+
+# Вернуть тип в зависимости от параметра
+* Определяем типы:
+```ts
+type User = {
+  name: string;
+  age: number;
+};
+
+type Admin = {
+  name: string;
+  permissions: string[];
+};
+```
+* Создаём маппинг
+```ts
+type RoleMap = {
+  user: User;
+  admin: Admin;
+};
+```
+* Создаём функцию и вызываем
+```ts
+function getData<T extends keyof RoleMap>(role: T): RoleMap[T] {}
+const user = getData("user"); // вернёт тип User
+const admin = getData("admin"); // вернёт тип Admin
+```
+Ещё пример
+```ts
+type ResponseMap = {
+  success: { status: "ok"; data: any };
+  loading: { status: "loading" };
+  error: { status: "error"; message: string };
+};
+
+function getResponse<T extends keyof ResponseMap>(status: T): ResponseMap[T] {}
+
+const successResponse = getResponse("success"); // вернется тип { status: "ok"; data: any }
+const errorResponse = getResponse("error");     // вернется тип { status: "error"; message: string }
+```

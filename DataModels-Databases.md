@@ -4,6 +4,7 @@
 - [Масштабирование баз данных](#масштабирование-баз-данных)
 - [Паттерны баз данных](#паттерны-баз-данных)
 - [Движки баз данных](#движки-баз-данных)
+- [Проблема n + 1](#проблема-n-1)
 
 <!--
 - [Резидентные базы данных](#резидентные-базы-данных)
@@ -1605,6 +1606,262 @@ ID | Никнейм | Почта | Возраст | Публикации
 **CRUD** (Create, Read, Update, Delete) — базовый набор операций постоянного хранилища (persistent storage): создание, чтение, обновление, удаление.
 -->
 
+# Оптимизация баз данных
+
 # Паттерны баз данных
 
 # Движки баз данных
+
+
+# Проблема n + 1
+
+N+1 проблема возникает, когда для получения связанных данных делается *1 запрос на основную сущность* и `n` *отдельных запросов на связанные сущности*.
+Рассмотрим эту проблему на примере GraphQL и Prisma.
+
+Например, у нас есть `users` и `posts` в отношении `1:M` (один-ко-многим), мы хотим вытянуть данные о пользователях и их постах.
+При нативной реализации такого запроса на SQL мы сначала возьмём возьмём пользователей
+```sql
+SELECT * FROM users
+```
+а затем для каждого получаем посты по айди пользователя (`n` дополнительных запросов):
+```sql
+SELECT * FROM posts WHERE user_id = 1
+SELECT * FROM posts WHERE user_id = 2
+...
+SELECT * FROM posts WHERE user_i = n
+```
+Отсюда и `n + 1` запросов, что неэффективно.
+
+Проблема решается объединением запросов при помощи `JOIN`. Например, на чистом SQL решение было бы следующим:
+```sql
+SELECT * FROM users u LEFT JOIN posts p WHERE p.user_id = u.id
+```
+И того у нас лишь один запрос к базе вместо `n + 1`.
+
+## Проблема n + 1 в Prisma
+Допустим, у нас есть следующая схема Prisma.
+```prisma
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
+}
+
+model Post {
+  id     Int    @id @default(autoincrement())
+  title  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
+}
+```
+Тогда проблема n + 1 выглядела бы так на языке JavaScript
+```ts
+const users = await prisma.user.findMany(); // 1 запрос, чтобы получить всех пользователей
+
+const usersWithPosts = await Promise.all(
+  users.map(async (user) => {
+    const posts = await prisma.post.findMany({ where: { userId: user.id } }); // n запросов, по одному для каждого пользователя
+    return { ...user, posts };
+  })
+);
+```
+Решение проблемы - **жадная загрузка** (англ. `eager loading`), подробнее о ней будет ещё далее.
+* через `include`
+```ts
+const usersWithPosts = await prisma.user.findMany({
+  include: {
+    posts: true, // загружаем связанные посты сразу
+  },
+});
+```
+* через `select`
+```ts
+const usersWithPosts = await prisma.user.findMany({
+  select: {
+    id: true,
+    name: true,
+    posts: {
+      select: {
+        id: true,
+        title: true,
+      },
+    },
+  },
+});
+```
+
+## Проблема n + 1 в GraphQL
+Пример проблемы n + 1 запроса в GraphQL
+```graphql
+query {
+  users {
+    id
+    name
+    posts {
+      id
+      title
+    }
+  }
+}
+```
+```js
+const resolvers = {
+  Query: {
+    users: () => prisma.user.findMany(), // 1 запрос
+  },
+  User: {
+    posts: (parent) => prisma.post.findMany({ where: { userId: parent.id } }), // дополнительные n запросов
+  },
+};
+```
+Решение
+* через `include` в корневом запросе (если ORM предоставляет такую возможность)
+```js
+const resolvers = {
+  Query: {
+    users: () => prisma.user.findMany({ include: { posts: true } }), // ✔️ Один запрос
+  },
+};
+```
+тогда GraphQL схема будет
+```graphql
+type User {
+  id: ID!
+  name: String!
+  posts: [Post!]!
+}
+```
+* через `DataLoader`
+```js
+const postLoader = new DataLoader(async (userIds) => {
+  const posts = await prisma.post.findMany({
+    where: { userId: { in: userIds } },
+  });
+
+  // Группируем посты по userId
+  return userIds.map(userId => posts.filter(post => post.userId === userId));
+});
+```
+```js
+const resolvers = {
+  User: {
+    posts: (parent) => postLoader.load(parent.id), // одно обращение к DataLoader вместо n запросов
+  },
+};
+```
+
+
+## Проблема n + 1 в MongoDB (NoSQL)
+Оставляем задачу с пользователями и постами, имеем 1 запрос для пользователей `n` запросов постов для каждого из `n` пользователей.
+```js
+const users = await db.collection('users').find().toArray(); // 1 запрос
+
+const usersWithPosts = await Promise.all(
+  users.map(async (user) => {
+    const posts = await db.collection('posts').find({ user_id: user._id }).toArray(); // n запросов
+    return { ...user, posts };
+  })
+);
+```
+Почему плохо:
+* большая нагрузка на сервер (много запросов)
+* медленное выполнение
+* бОльшие траты из-за бОльшего количества облачных вычислений
+
+Решение:
+* Денормализация. Хранить вложенные объекты (объекты постов вложены в объекты пользователей), не вынося их в разные коллекции.
+```js
+{
+  "_id": "123",
+  "name": "Alice",
+  "posts": [
+    { "title": "Post 1" },
+    { "title": "Post 2" }
+  ]
+}
+```
+* Агрегации и `$lookup` (Аналог `JOIN` в MongoDB)
+```js
+const usersWithPosts = await db.collection('users').aggregate([
+  {
+    $lookup: {
+      from: "posts",
+      localField: "_id",
+      foreignField: "user_id",
+      as: "posts"
+    }
+  }
+]).toArray();
+```
+* Запрос `$in`. Передаём список айдишек пользователей и имеем `1 + 1` запрос вместо `n + 1`:
+```
+const users = await db.collection('users').find().toArray();
+const userIds = users.map(u => u._id);
+const posts = await db.collection('posts').find({ user_id: { $in: userIds } }).toArray();
+```
+
+## Проблема n + 1 в elasticsearch
+Опять же, пользователи и посты.
+
+Получаем пользователей.
+```http
+GET /users/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+```
+Получаем посты для каждого из пользователей, `n` пользователей = `n` дополнительных запросов
+```http
+GET /posts/_search
+{
+  "query": {
+    "term": { "user_id": "1" }
+  }
+}
+```
+...
+```http
+GET /posts/_search
+{
+  "query": {
+    "term": { "user_id": "n" }
+  }
+}
+```
+Решения:
+* **Денормализация**. Поскльку Elasticsearch не реляционная база, то лучший способ оптимизировать запросы — избегать JOIN-подобных операций, вкладывать нужные данные сразу в документ (хранить вложенные (англ. `nested`) объекты).
+* Вложенные документы (англ. `Nested fields`).Если данные часто меняются и денормализация невозможна, то можно использовать тип `nested`. Тогда можно искать и фильтровать вложенные объекты без отдельного запроса.
+```js
+{
+  "mappings": {
+    "properties": {
+      "posts": {
+        "type": "nested"
+      }
+    }
+  }
+}
+```
+* Multi-search, batch-запросы. Если предыдущие опции не подходят, батчим запросы и отправляем их вместе
+```http
+POST /_msearch
+{ }
+{ "query": { "term": { "user_id": "123" } } }
+{ }
+{ "query": { "term": { "user_id": "124" } } }
+...
+```
+* Запрос `terms` позволяет передать списком id пользователей. Таким образом вместо n + 1 запросов имеем 1 + 1 запрос (один на пользователей, один на посты):
+```
+GET /posts/_search
+{
+  "query": {
+    "terms": {
+      "user_id": [ "123", "124", "125", "126" ] // список всех id пользователей
+    }
+  }
+}
+```
+## Mongoose, проблема n + 1 и populate

@@ -1943,8 +1943,76 @@ GET /posts/_search
   }
 }
 ```
-## Mongoose, проблема n + 1 и populate
+## Mongoose, проблема `n + 1` и `populate`
 
+Проблема `n + 1` запросов в Mongoose часто возникает при использовании `populate()`, особенно в ситуациях, когда у нас есть список сущностей, и для каждой из них мы подгружаем связанные данные. Это может приводить к выполнению большого количества отдельных запросов к базе, что существенно замедляет приложение.
+```js
+const UserSchema = new mongoose.Schema({
+  name: String,
+});
+
+const PostSchema = new mongoose.Schema({
+  title: String,
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+});
+```
+### Проблемы `n + 1` в Mongoose
+* Проблема `n + 1`:
+```js
+const posts = await Post.find();
+for (const post of posts) {
+  post.author = await User.findById(post.author);
+}
+```
+* Проблема `n + 1` с `populate` в цикле:
+```js
+const posts = await Post.find();
+for (const post of posts) {
+  await post.populate('author');
+}
+```
+### Решение проблемы 
+* Многоуровневый `populate`:
+```js
+const posts = await Post.find().populate({
+  path: 'author',
+  populate: { path: 'profile' }
+});
+```
+* `populate` на уровне поста (без цикла):
+```js
+const posts = await Post.find().populate('author').lean();
+```
+* Использование `$in`:
+```js
+const posts = await Post.find();
+const authorIds = posts.map(post => post.author);
+const authors = await User.find({ _id: { $in: authorIds } }).lean();
+const authorsMap = new Map();
+authors.forEach(author => {
+  authorsMap.set(author._id.toString(), author);
+});
+const postsWithAuthors = posts.map(post => ({
+  ...post.toObject(),
+  author: authorsMap.get(post.author.toString()) || null
+}));
+```
+
+## Сравнение жадной загрузки и `populate`
+
+**Жадная загрузка** (англ. `eager loading`) — это общий подход для загрузки связанных данных сразу, а `populate` — конкретный механизм в Mongoose/MongoDB для подстановки связанных данных, который может вести себя как “ленивая” или “жадная” загрузка в зависимости от реализации.
+* Eager loading — архитектурный подход загрузки данных сразу (в SQL, Prisma и др.).
+```js
+const users = await prisma.user.findMany({
+  include: {
+    posts: true, // жадная загрузка постов
+  },
+});
+```
+* Populate — специфическая реализация этого подхода в MongoDB (но часто через дополнительные запросы, если не “optimized populate”).
+```js
+const users = await User.find().populate('posts');
+```
 
 # Оптимизация SQL-запросов
 

@@ -20,7 +20,7 @@
 
 # Flux
 
-**Flux** — *архитетура построения пользовательских интерфейсов*, основанная на *шаблоне "Наблюдатель"* (observer pattern, EventEmitter).  
+**Flux** — *архитектура построения пользовательских интерфейсов*, основанная на *шаблоне "Наблюдатель"* (observer pattern, EventEmitter).  
 Изначально разработана компанией *Facebook* для *React* и *React Native* приложений.  
  
 ## Особенности Flux
@@ -581,7 +581,7 @@ MobX сам заботится, чтобы все изменения State, пр
 * `action(name, fn)`
 * `@action classMethod()`
 
-В этом случае так же следует запретить любые изменения State (то есть изменения любого Observable) вне Actions.
+В этом случае также следует запретить любые изменения State (то есть изменения любого Observable) вне Actions.
 ```js
 import { configure } from 'mobx';
 
@@ -715,7 +715,7 @@ render(<App />, document.getElementById('root'));
 - `register(callback: function): string` — регистрирует Callback, возвращает его идентификатор id.
 - `dispatch(action: object): void` — отправляет Action во все зарегистрированные Callbacks.
 - `isDispatching(): boolean` — возвращает true, если происходит отправка (dispatching) в данный момент, false иначе.
-- `waitFor(ids: string[]): void` — ожидает выполения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
+- `waitFor(ids: string[]): void` — ожидает выполнения Callbacks, имеющих идентификаторы ids, прежде, чем продолжать выполнять текущий Callback.
 - `unregister(id): void` — разрегистрирует Callback по id.
 
 *Функционал ReduceStore*:

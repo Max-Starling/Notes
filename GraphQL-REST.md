@@ -1,6 +1,6 @@
 - [REST](#rest)
 - [GraphQL](#graphql)
-  - [Преимущества GraphQL](преимущества-graphql)
+  - [Преимущества GraphQL](#преимущества-graphql)
 - [REST на практике](#rest-на-практике)
   - [Данные в QUERY](#данные-в-query)
   - [Данные в BODY](#данные-в-body)

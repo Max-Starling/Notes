@@ -29,7 +29,7 @@
 Action создаётся при взаимодействии пользователя со View, но может создаваться и самим приложением.
 * Может быть *несколько Stores*.
 * *Store* может быть как *изменяемым* (mutable), так и *неизменяемым* (immutable).
-* В приложении может быть только *один Dispatcher*, *региструющий все Callbacks*.
+* В приложении может быть только *один Dispatcher*, *регистрирующий все Callbacks*.
 
 ## Структура Flux
 
@@ -80,7 +80,7 @@ const itemCallback = (action) => {
 ```
 Каждый Callback должен быть зарегистрирован при помощи Dispatcher.
 
-**Dispatcher** — это модуль или класс, который позволяет регистировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
+**Dispatcher** — это модуль или класс, который позволяет регистрировать (register) Callbacks и вызывать их всех с параметром Action каждый раз, когда вызывается функция dispatch. 
 
 <!-- Под капотом лежит шаблон "Наблюдатель" (Observer pattern, EventEmmiter) и происходит подписка на события (subscription). -->
 
@@ -220,7 +220,7 @@ const itemCallback = (action) => {
 };
 ```
 
-В Redux отсутствует Dispatcher, его работу берёт на Store, предоставляя функцию **dispatch**.
+В Redux отсутствует Dispatcher, его работу берёт на себя Store, предоставляя функцию **dispatch**.
 ```js
 // item's state: { items: [] }
 store.dispatch(addItem(7));
@@ -334,7 +334,7 @@ store.commit({ type: ADD_ITEM, item: 7 });
 this.$store.commit(ADD_ITEM, { item: 7 });
 ```
 
-**Action** — *функция*, которые *совершает* (commit) в своём теле *Mutations* и может выполнять *асинхронные операции*.  
+**Action** — *функция*, которая *совершает* (commit) в своём теле *Mutations* и может выполнять *асинхронные операции*.  
 *Параметры Action*: `(context, payload)`, `context` — объект, который содержит:
 * `state` — то же, что и `store.state`
 * `commit(type, payload)` — функция для *совершения Mutation*

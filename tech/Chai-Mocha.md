@@ -14,7 +14,7 @@ npm install --save-dev mocha
 }
 ```
 * Create `your-filename-here.spec.js` file in the test folder
-* Start using chai сhai `expect` or chai `should`
+* Start using chai `expect` or chai `should`
 ```js
 const expect = require('chai').expect;
 // or

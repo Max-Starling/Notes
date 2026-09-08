@@ -7,7 +7,7 @@ npm install --save-dev mocha
 ```
 * Set up the test script in the package.json
   * --timeout <default it block timeout in ms> (number, default: 2000)
-  * --recursive <path regexp to test files> (string, dafault: './test/*.js')
+  * --recursive <path regexp to test files> (string, default: './test/*.js')
 ```JSON
 "scripts": {
   "test": "mocha --timeout 10000 --recursive './test/**/*.spec.js'"

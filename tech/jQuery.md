@@ -1,6 +1,6 @@
 
 ## Обращение к элементу
-Обращение к элементу при помощи `jQuery` работает аналогино методу `document.querySelector`:
+Обращение к элементу при помощи `jQuery` работает аналогично методу `document.querySelector`:
 ```js
 document.querySelector('#element-id') // обращение к элементу по атрибуту id
 document.querySelector('.element-class') // обращение к элементу по атрибуту class 

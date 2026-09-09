@@ -48,7 +48,7 @@ const firebaseConfig = {
   appId: "..."
 };
 ```
-* Now open index.html file and post this two scripts at the end of the body tag:
+* Now open index.html file and paste these two scripts at the end of the body tag:
 ```HTML
 <body>
   <!-- /* ... */ -->
@@ -63,7 +63,7 @@ const firebaseConfig = {
  </body>
 ```
 * Create firebase.json in the root project folder and set up Firebase hosting:  
-  * public - path to the build folder (the only one required attribure for hosting)
+  * public - path to the build folder (the only required attribute for hosting)
   * ignore - files to ignore on deploy
   * rewrites - serve index.html for requests to files or directories that do not exist
 ```json
@@ -138,10 +138,10 @@ pipelines:
 # Set up `node-gyp` for Windows (to make `grpc` work)
 
 Firebase may require GRPC module and GRPC requires [node-gyp](https://github.com/nodejs/node-gyp).
-There is a guide how I managed to install it after reading tons of stackoverflows resolving issues one after another.
+Here is a guide on how I managed to install it after reading tons of stackoverflows resolving issues one after another.
 
 Download and open `Visual Studio Installer` (https://visualstudio.microsoft.com/downloads/).
-Intall `Visual Studio Build Tools 2022`. Select there:
+Install `Visual Studio Build Tools 2022`. Select there:
 * `Desktop development with C++`
 
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/edb4764e-7e59-412d-bce5-477962bbed1c)
@@ -178,7 +178,7 @@ refreshenv
 npm i -g node-gyp
 ```
 
-Create `binding.gyp` text tile
+Create `binding.gyp` text file
 ```json
 {
   "targets": [

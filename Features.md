@@ -15,10 +15,10 @@
 
 # Фичи
 
-## Регистрация, авторизация, аутентицикафия
+## Регистрация, авторизация, аутентификация
 Ключевые слова: `auth`, `authorization`, `authentication`, `registration`, `login`, `signup`, `signin`, `forget password`
 
-Аутентификация чаще всего проводится через сторонние приложения или: например, через Gmail или другую почту, Facebook, иногда через VK, Github, через номер телефона.
+Аутентификация чаще всего проводится через сторонние приложения, например, через Gmail или другую почту, Facebook, иногда через VK, Github, через номер телефона.
 
 ## Работа с формами
 Ключевые слова: `Forms`, `working with forms`, `inputs`.
@@ -34,7 +34,7 @@
 Ключевые расширения файлов: `PDF`, `TXT`, `CSV`, расширения `Excel` и `Word`. 
 
 ## Пагинация
-Ключевые слова: `pagination`, `infinite scroll`, `loading by parts` (by `chanks`)
+Ключевые слова: `pagination`, `infinite scroll`, `loading by parts` (by `chunks`)
 
 Ограничения количества отображаемых на странице элементов.
 
@@ -56,11 +56,11 @@
 
 
 ## Подписка на обновления, новостная рассылка
-Ключевые слова `Subscriptions`, ``subscription`, `email notifications`, `newsletter`
+Ключевые слова: `Subscriptions`, `subscription`, `email notifications`, `newsletter`
 
-Чаще всего присутствует на новостных порталах, на сайтах онлайн-магазинов (условный wildberries), фаст-фуда (Dodo, dominos, McDonnals) 
+Чаще всего присутствует на новостных порталах, на сайтах онлайн-магазинов (условный wildberries), фаст-фуда (Dodo, Domino's, McDonald's) 
 
-## Управление пользователям
+## Управление пользователями
 Ключевые слова: `User Roles`, `User Permissions`, `User Management`, `User Access`, `Users`
 
 Обычно такая фича требуется в приложениях, в которых необходима некоторая иерархия
@@ -85,7 +85,7 @@ If you need custom maps, choose Mapbox
 Payments, Payment Systems
 
 ## Чат
-Ключевые слова: `Messaging`, `Chat`, `Communication`, `Messager`
+Ключевые слова: `Messaging`, `Chat`, `Communication`, `Messenger`
 
 ## Новостная лента
 Ключевые слова: `Feed`, `news`, `news feed`, `news line`
@@ -94,7 +94,7 @@ Payments, Payment Systems
 
 ## Анимации
 
-## Голосовой помошник
+## Голосовой помощник
 
 
 

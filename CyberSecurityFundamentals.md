@@ -1,4 +1,4 @@
-- [Переферия и устройства ввода-вывода](#переферия-и-устройства-ввода-вывода)
+- [Периферия и устройства ввода-вывода](#периферия-и-устройства-ввода-вывода)
 - [Компьютерная сеть](#компьютерная-сеть)
   - [Масштаб компьютерной сети (`LAN`, `WAN`)](#масштаб-компьютерной-сети-lan-wan)
 - [Конечная точка (`endpoint`)](#конечная-точка-endpoint)
@@ -7,7 +7,7 @@
 - [Защита конечных точек (`endpoint protection`)](#защита-конечных-точек-endpoint-protection)
   - [Антивирусные программы (`anti-virus software`)](#антивирусные-программы-anti-virus-software)
   - [`Endpoint Protection Platform` (`EPP`)](#endpoint-protection-platform-epp)
-  - [`Endpoint Detection and Response` (`EDR`)](#endpoint-detection-and-response-EDR)
+  - [`Endpoint Detection and Response` (`EDR`)](#endpoint-detection-and-response-edr)
   - [`Managed Detection and Remediation`, `Managed EDR` (`MDR`)](#)
   - XDR
 

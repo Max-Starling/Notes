@@ -5,7 +5,7 @@
     - [`peerDependenciesMeta`](#peerdependenciesmeta)
  - [Другие свойства `package.json`](#другие-свойства-packagejson)  
     - [Переопределения `overrides`](#переопределения-overrides)
-    - [Скрипты `scripts`](#скрипты-scripts)
+    - [Скрипты `scripts`](#свойство-scripts-скрипты)
       - [Передача параметров скрипту](#передача-параметров-скрипту)
 
 # Зависимости в `package.json`

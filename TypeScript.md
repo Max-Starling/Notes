@@ -88,7 +88,7 @@ const state: Visibility = Visibility.Visible; // 0
 ```
 
 ### `object` vs `Object` vs `{}` vs `Record<K, V>`
-- `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы)*.
+- `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы-данных)*.
 ```ts
 let foo: object;
 foo = { prop: 'value' };

@@ -15,7 +15,7 @@
 * тесты и так далее
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/9b118c4e-8cfa-47ae-b23d-7964764fe698).
 
-Ниже представлен небольшой схематичный пример, как можно было бы использовать свое личное рабочее пространство:
+Ниже представлен небольшой схематичный пример, как можно было бы использовать своё личное рабочее пространство:
 * My workspace
   * Users dashboard Prod
     * Get users - GET https://users-dashboard.com/api/users
@@ -68,7 +68,7 @@ GET {{base_url}}/api/v1.0/users
 
 
 ## Postman pre-request script
-Скрипт, который производит ре-аутентификацию с каждым запросом. Сохраняется в 
+Скрипт, который производит ре-аутентификацию с каждым запросом. Сохраняется в настройках коллекции во вкладке `Pre-request Script`.
 ```js
 const postRequest = {
   url: `${pm.collectionVariables.get("base_url")}${pm.collectionVariables.get("access_token_endpoint")}`,

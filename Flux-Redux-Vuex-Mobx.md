@@ -1,3 +1,5 @@
+<!-- {% raw %} -->
+
 
 * [Flux](#flux)
   * [Особенности Flux](#особенности-flux)
@@ -723,6 +725,7 @@ render(<App />, document.getElementById('root'));
 * `getInitialState(): T` — задание начального состояния текущего Store. Вызывается только один раз: во время создания.
 * `reduce(state: T, action: object)` — изменяет или не изменяет текущее состояние в зависимости от Action. Метод обязательно должен быть переопределён; должен быть чистым (pure), без сайд-эффектов.
 * `areEqual(one: T, two: T): boolean` — проверяет, совпадают ли две версии состояния. Если Store неизменяемый, то не нужно переопределять этот метод.
+
 ```ts
 import { Dispatcher } from 'flux';
 import { ReduceStore } from 'flux/utils';
@@ -944,6 +947,7 @@ function* fetchArticles() {
 ### Настройка
 
 0) Устанавливаем зависимости
+
 ```npm
 npm i redux react-redux redux-thunk
 ```
@@ -989,6 +993,7 @@ const getItemsLength = state => state.item.items.length;
 ```
 
 2) Создаём Store, комбинируя Reducers и добавляя redux-thunk в качестве middleware:
+
 ```js
 /* store.js */
 import {
@@ -1007,6 +1012,7 @@ export default store;
 ```
 
 3) Оборачиваем главную компоненту `<App>` компонентой `<Provider>`, в которую передаём созданный Store.
+
 ```jsx
 import React from 'react'
 import { render } from 'react-dom'
@@ -1056,3 +1062,5 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps);
 ```
+
+<!-- {% endraw %} -->

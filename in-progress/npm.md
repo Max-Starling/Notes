@@ -19,6 +19,7 @@
 Каждая зависимость представлена в виде пары *двух строковых значений*:
 1) *Уникальное название пакета*. Например, [`"explicit"`](https://www.npmjs.com/package/explicit), [`"implicit"`](https://www.npmjs.com/package/implicit).
 2) *Версия пакета*. *Версия пакета* может быть задана *явно* (то есть *тремя конкретными числами*, например, `2.3.21`) или *неявно* (например, в виде *промежутка*: `>= 2.0.0 < 3.0.0`, `>= 2.0.0 < 3.0.0`, `2.x`, `^2.3.21`)
+
 ```json
 {
   "name": "my-project",
@@ -129,6 +130,7 @@ npm WARN angular2@2.0.0-beta.3 requires a peer of zone.js@0.5.11 but none was in
 
 Возможны несколько случаев применения.
 
+<!-- {% comment %} -->
 <!-- Например, необходимо, чтобы в приложении использоваласть только одна версия пакета `foo` безоговорочно, тогда
 ```json
 {
@@ -143,6 +145,7 @@ npm WARN angular2@2.0.0-beta.3 requires a peer of zone.js@0.5.11 but none was in
 Overrides provide a way to replace a package in your dependency tree with another version, or another package entirely. These changes can be scoped as specific or as vague as desired.
 
 To make sure the package foo is always installed as version 1.0.0 no matter what version your dependencies rely on: -->
+<!-- {% endcomment %} -->
 
 https://docs.npmjs.com/cli/v8/configuring-npm/package-json#overrides
 
@@ -155,6 +158,7 @@ https://docs.npmjs.com/cli/v8/configuring-npm/package-json#overrides
 
 #### UNIX (Linux, Mac)
 * *Передача строки*
+
 ```JSON
 "scripts": {
   "start:prod": "NODE_ENV=production npm start"
@@ -164,6 +168,7 @@ https://docs.npmjs.com/cli/v8/configuring-npm/package-json#overrides
 process.env.NODE_ENV // 'production'
 ```
 * *Передача числа*
+
 ```JSON
 "scripts": {
   "start:prod": "PORT=5001 npm start"
@@ -192,6 +197,7 @@ process.env.NODE_ENV // 'production ' (появляется пробел на к
 ```
 #### Кроссплатформенное решение
 * Передача *одной переменной*.
+
 ```cmd
 npm i --save-dev cross-env
 ```
@@ -201,6 +207,7 @@ npm i --save-dev cross-env
 }
 ```
 * Передача *нескольких переменных*.
+
 ```cmd
 "scripts": {
   "start:prod": "cross-env NODE_ENV=production PORT=5001 npm start"

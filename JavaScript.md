@@ -392,6 +392,7 @@ const toPrimitive = (argument, preferredType = 'number') => {
 * Иначе, если `argument` имеет тип `Symbol`, выбросить `TypeError`.
 * Иначе, если `argument` имеет примитивный тип `number`, `boolean`, `undefined`, `null`, обернуть его в строку и вернуть: `"null"`, `"undefined"`, `"1.2"`, `"NaN"`, `"true"`, `"false"`.
 * Иначе, если `argument` имеет тип `Object`, вернуть результат `ToString(ToPrimitive(argument))`.
+
 ```js
 const ToString = (argument) => {
   if (typeof argument === 'string') {
@@ -420,6 +421,7 @@ const ToString = (argument) => {
 * Если `argument` имеет тип `boolean`, то *вернуть значение*.
 * Иначе, если `argument` равно `undefined`, `null`, `0`, `NaN`, `""` (пустая строка), то *вернуть* `false`.
 * В *остальных* случаях (`Object`, `Symbol`, *числа кроме* `0` и *непустые строки*) *вернуть* `true`.
+
 ```js
 const ToBoolean = (argument) => {
   if (typeof argument === 'boolean') {
@@ -443,6 +445,7 @@ const ToBoolean = (argument) => {
 * Иначе, если `argument` равно `undefined`, *вернуть* `NaN`.
 * Иначе, если `argument` равно `null`, *вернуть* `0`.
 * Иначе, если `argument` имеет тип `Object`, вернуть результат `ToNumber(ToPrimitive(argument))`.
+
 ```js
 const ToNumber = (argument) => {
   if (typeof argument === 'number') {
@@ -517,11 +520,13 @@ const ToNumber = (argument) => {
 
 В *любой момент выполнения кода* некоторая *переменная либо доступна*, *либо недоступна*.
 
+<!-- {% comment %} -->
 <!-- Простой пример в переменной `let`: нельзя использовать переменную `let` до её объявления в коде, то есть переменная недоступна в любой момент до объявления кода.
 ```js
 console.log(foo); // Reference Error
 let foo = 17;
 ``` -->
+<!-- {% endcomment %} -->
 
 
 *Видимость* (`visibility`), *доступность* (`accessibility`) *переменных* отражает понятие **область видимости**, **скоуп** (англ. `scope`). 
@@ -578,6 +583,7 @@ var a = 5;
 
 #### Блок кода {}
 
+<!-- {% comment %} -->
 <!-- Самый короткий и эффективный пример для демонстрации того, как работают замыкания:
 ```js
 /* Запуск скрипта */
@@ -616,6 +622,7 @@ print(); // Starling
 
 firstName = "Notes"
 ``` -->
+<!-- {% endcomment %} -->
 
 ## Всплытие (hoisting)
 

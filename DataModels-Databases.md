@@ -1764,6 +1764,7 @@ const usersWithPosts = await Promise.all(
 ```
 Решение проблемы - **жадная загрузка** (англ. `eager loading`), подробнее о ней будет ещё далее.
 * через `include`
+
 ```ts
 const usersWithPosts = await prisma.user.findMany({
   include: {
@@ -1772,6 +1773,7 @@ const usersWithPosts = await prisma.user.findMany({
 });
 ```
 * через `select`
+
 ```ts
 const usersWithPosts = await prisma.user.findMany({
   select: {
@@ -1813,6 +1815,7 @@ const resolvers = {
 ```
 Решение
 * через `include` в корневом запросе (если ORM предоставляет такую возможность)
+
 ```js
 const resolvers = {
   Query: {
@@ -1829,6 +1832,7 @@ type User {
 }
 ```
 * через `DataLoader`
+
 ```js
 const postLoader = new DataLoader(async (userIds) => {
   const posts = await prisma.post.findMany({
@@ -1867,6 +1871,7 @@ const usersWithPosts = await Promise.all(
 
 Решение:
 * Денормализация. Хранить вложенные объекты (объекты постов вложены в объекты пользователей), не вынося их в разные коллекции.
+
 ```js
 {
   "_id": "123",
@@ -1878,6 +1883,7 @@ const usersWithPosts = await Promise.all(
 }
 ```
 * Агрегации и `$lookup` (Аналог `JOIN` в MongoDB)
+
 ```js
 const usersWithPosts = await db.collection('users').aggregate([
   {
@@ -1891,6 +1897,7 @@ const usersWithPosts = await db.collection('users').aggregate([
 ]).toArray();
 ```
 * Запрос `$in`. Передаём список айдишек пользователей и имеем `1 + 1` запрос вместо `n + 1`:
+
 ```
 const users = await db.collection('users').find().toArray();
 const userIds = users.map(u => u._id);
@@ -1930,6 +1937,7 @@ GET /posts/_search
 Решения:
 * **Денормализация**. Поскольку Elasticsearch не реляционная база, то лучший способ оптимизировать запросы — избегать JOIN-подобных операций, вкладывать нужные данные сразу в документ (хранить вложенные (англ. `nested`) объекты).
 * Вложенные документы (англ. `Nested fields`). Если данные часто меняются и денормализация невозможна, то можно использовать тип `nested`. Тогда можно искать и фильтровать вложенные объекты без отдельного запроса.
+
 ```js
 {
   "mappings": {
@@ -1942,6 +1950,7 @@ GET /posts/_search
 }
 ```
 * Multi-search, batch-запросы. Если предыдущие опции не подходят, батчим запросы и отправляем их вместе
+
 ```http
 POST /_msearch
 { }
@@ -1951,6 +1960,7 @@ POST /_msearch
 ...
 ```
 * Запрос `terms` позволяет передать списком id пользователей. Таким образом вместо n + 1 запросов имеем 1 + 1 запрос (один на пользователей, один на посты):
+
 ```
 GET /posts/_search
 {
@@ -1976,6 +1986,7 @@ const PostSchema = new mongoose.Schema({
 ```
 ### Проблемы `n + 1` в Mongoose
 * Проблема `n + 1`:
+
 ```js
 const posts = await Post.find();
 for (const post of posts) {
@@ -1983,6 +1994,7 @@ for (const post of posts) {
 }
 ```
 * Проблема `n + 1` с `populate` в цикле:
+
 ```js
 const posts = await Post.find();
 for (const post of posts) {
@@ -1991,6 +2003,7 @@ for (const post of posts) {
 ```
 ### Решение проблемы 
 * Многоуровневый `populate`:
+
 ```js
 const posts = await Post.find().populate({
   path: 'author',
@@ -1998,10 +2011,12 @@ const posts = await Post.find().populate({
 });
 ```
 * `populate` на уровне поста (без цикла):
+
 ```js
 const posts = await Post.find().populate('author').lean();
 ```
 * Использование `$in`:
+
 ```js
 const posts = await Post.find();
 const authorIds = posts.map(post => post.author);
@@ -2020,6 +2035,7 @@ const postsWithAuthors = posts.map(post => ({
 
 **Жадная загрузка** (англ. `eager loading`) — это общий подход для загрузки связанных данных сразу, а `populate` — конкретный механизм в Mongoose/MongoDB для подстановки связанных данных, который может вести себя как “ленивая” или “жадная” загрузка в зависимости от реализации.
 * Eager loading — архитектурный подход загрузки данных сразу (в SQL, Prisma и др.).
+
 ```js
 const users = await prisma.user.findMany({
   include: {
@@ -2028,6 +2044,7 @@ const users = await prisma.user.findMany({
 });
 ```
 * Populate — специфическая реализация этого подхода в MongoDB (но часто через дополнительные запросы, если не “optimized populate”).
+
 ```js
 const users = await User.find().populate('posts');
 ```

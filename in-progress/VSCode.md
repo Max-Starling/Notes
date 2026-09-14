@@ -4,6 +4,7 @@
 2) > settings
 3)
 For LF (line feed):
+
 ```json
 {
    "files.eol": "\n",

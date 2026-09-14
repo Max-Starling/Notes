@@ -2,10 +2,12 @@
 
 ## Get Started
 * Install Firebase tools:
+
 ```yarn
 npm i -g firebase-tools
 ```
 * Init hosting project:
+
 ```yarn
 firebase init hosting
 ```
@@ -13,18 +15,22 @@ firebase init hosting
 
 ## Basic commands
 * Show all your firebase projects:
+
 ```js
   firebase list
 ```
 * Serve locally
+
 ```js
   firebase serve --only functions, hosting
 ```
 * Deploy
+
 ```js
   firebase deploy
 ```
 * Deploy by using token
+
 ```yml
 firebase deploy --token "$FIREBASE_TOKEN"
 ```
@@ -37,6 +43,7 @@ firebase deploy --token "$FIREBASE_TOKEN"
 * Choose an app name.
 * Select the "Set up  Firebase Hosting" option and go next.
 * Open web app settings -> Configuration and copy object like this:
+
 ```js
 const firebaseConfig = {
   apiKey: "...",
@@ -49,6 +56,7 @@ const firebaseConfig = {
 };
 ```
 * Now open index.html file and paste these two scripts at the end of the body tag:
+
 ```HTML
 <body>
   <!-- /* ... */ -->
@@ -66,6 +74,7 @@ const firebaseConfig = {
   * public - path to the build folder (the only required attribute for hosting)
   * ignore - files to ignore on deploy
   * rewrites - serve index.html for requests to files or directories that do not exist
+
 ```json
 {
   "hosting": {
@@ -85,6 +94,7 @@ const firebaseConfig = {
 }
 ```
 * (optional) Create .firebaserc in the root project folder and set up default:
+
 ```json
 {
   "projects": {
@@ -93,10 +103,12 @@ const firebaseConfig = {
 }
 ```
 * Create a build:
+
 ```NPM
 npm run build
 ```
 * Deploy your app:
+
 ```npm
 firebase deploy
 ```
@@ -105,12 +117,14 @@ firebase deploy
 
 ## Bitbucket Integration
 * Get deployment token:
+
 ```yml
 firebase login:ci
 ```
 * Visit shown URL to confirm your request.
 * Copy generated token.
 * Create *bitbucket-pipelines.yml* file in the root directory:
+
 ```yml
 pipelines:
   default:

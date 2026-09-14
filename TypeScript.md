@@ -38,6 +38,7 @@ JavaScript имеет неявную динамическую слабую ти�
 - `null` — *специальное значение* **null**.
 - `undefined` — *специальное значение* **undefined**.
 - `symbol` — **символ**.
+
 ```ts
 const symbol = Symbol('key');
 const obj = {
@@ -49,6 +50,7 @@ console.log(obj[Symbol('key')]) // undefined
 ```
 ### Остальные типы
 - `Array` — **массив** (`number[]`).
+
 ```ts
 let foo: number[];
 foo = [1, 2, 3];
@@ -56,12 +58,14 @@ let bar: Array<string>;
 bar = ['n', 'o', 't', 'e', 's'];
 ```
 - `any` — **произвольный тип** (используется по умолчанию, если тип не указан).
+
 ```ts
 let foo: any;
 foo = 1;
 foo = '';
 ```
 - `void` — **отсутствие конкретного значения** (обычно возвращаемый тип функции).
+
 ```ts
 const fn = (param: string): void => {
   console.log(param);
@@ -69,12 +73,14 @@ const fn = (param: string): void => {
 }
 ```
 - `never` — **значение**, которое **никогда не наступит** (обычно функции, возвращающие ошибку)
+
 ```ts
 const throwError = (message: string): never {
   throw new Error(message);
 };
 ```
 - `Tuple` — **кортеж** (`[string, number]`).
+
 ```ts
 let foo: [string, number, boolean];
 foo = ['notes', 17, true];
@@ -82,6 +88,7 @@ foo = ['notes', 17, true];
 foo = [17, 'notes', true]; // error
 ```
 - `Enum` — **перечисление** (более дружелюбные имена для множества числовых значений).
+
 ```ts
 enum Visibility { Visible, Hidden }
 const state: Visibility = Visibility.Visible; // 0
@@ -89,6 +96,7 @@ const state: Visibility = Visibility.Visible; // 0
 
 ### `object` vs `Object` vs `{}` vs `Record<K, V>`
 - `object` — **непримитивный тип** (non-primitive); *любой тип*, *кроме [примитивных](#примитивные-типы-данных)*.
+
 ```ts
 let foo: object;
 foo = { prop: 'value' };
@@ -96,6 +104,7 @@ foo = ['value'];
 foo = () => console.log('notes');
 ```
 - `Object` — любой **JavaScript-объект** (соответствует интерфейсу `Object`, имеющему методы `toString()`, `valueOf()`, `hasOwnProperty()` и другие).
+
 ```ts
 let obj: Object;
 obj = {};
@@ -149,6 +158,7 @@ promise2.then(() => {}); // `Property 'then' does not exist on type 'object'`
 
 - `{}` — **пустой тип**, **пустой объект**.
 Обращение к его свойствам приведёт к ошибке, но остаётся возможность использовать все методы `Object`.
+
 ```ts
 const foo = {};
 if (true) {
@@ -487,6 +497,7 @@ fly(); // undefined
 
 Существует *несколько способов решения проблемы*
 1) *Никогда не разрывать связь между обращением к методу* класса через `.` и его *вызовом* через `()` при присвоении в другую переменную.
+
 ```ts
 const duck = new Animal("Duck");
 
@@ -499,6 +510,7 @@ walk(); // Animal { name: "Duck" }
 fly(); // // Animal { name: "Duck" }
 ```
 2) *Явно привязать контекст* в *конструкторе класса* через `bind`
+
 ```ts
 class Animal {
   name: string;
@@ -722,20 +734,24 @@ interface User { id: string; name: string }
 
 Различия:
 * Интерфейсы поддерживают наследование (англ. `inheretance`) через `extends`, позволяющее создавать новый тип, дополняя уже существующий:
+
 ```ts
 interface Customer extends User { company: string }
 ```
 * Типы поддерживают пересечение (англ. `intersection`) с помощью `&` (`AND`), позволяющее комбинировать несколько типов в один, создавая новый тип:
+
 ```ts
 type Customer = User & { company: string }
 ```
 * Типы также поддерживают объединение (англ. `union`) с помощью `|` (`OR`):
+
 ```ts
 type A = { foo: string }
 type B = { bar: string }
 type C = A | B // либо тип А, либо тип Б
 ```
 * Интерфейсы поддерживают **слияние деклараций** (англ. `Declaration Merging`), типы - не поддерживают (будет ошибка):
+
 ```ts
 interface User { id: string }
 interface User { name: string }
@@ -749,12 +765,14 @@ type User = { id: string }
 type User = { name: string } // ❌ Error: Duplicate identifier 'User'
 ```
 * Типы могут работать с примитивами, интерфейсы - не могут:
+
 ```ts
 type Pet = 'cat' | 'dog'
 type Pets = `{Pet}s` // 'cats' | 'dogs'
 type ID = string | number
 ```
 * Интерфейсы подходят для имплементации классов (англ. `implementation`) через `implements`:
+
 ```ts
 interface Person {
   name: string;
@@ -939,6 +957,7 @@ const max: GenericPerson<number> = {
 
 # Вернуть тип в зависимости от параметра
 * Определяем типы:
+
 ```ts
 type User = {
   name: string;
@@ -951,6 +970,7 @@ type Admin = {
 };
 ```
 * Создаём маппинг
+
 ```ts
 type RoleMap = {
   user: User;
@@ -958,6 +978,7 @@ type RoleMap = {
 };
 ```
 * Создаём функцию и вызываем
+
 ```ts
 function getData<T extends keyof RoleMap>(role: T): RoleMap[T] {}
 const user = getData("user"); // вернёт тип User

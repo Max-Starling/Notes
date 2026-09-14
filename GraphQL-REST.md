@@ -137,6 +137,7 @@ const flags = {
 
 Есть два решения, как это можно обойти
 * Передавать объекты текстовый как JSON и указывать встроенный тип `String` (не лучшая валидация) или подключить библиотеку, которая имеет скалярный тип JSON (например, [эту](https://github.com/taion/graphql-type-json)). Например, *AWS AppSync* имеет встроенный тип `AWSJSON`.
+
 ```GraphQL
 type Res {
   commentsMap: String
@@ -145,6 +146,7 @@ type Res {
 }
 ```
 * Представить объекты в виде массивов (предпочтительный вариант).
+
 ```GraphQL
 
 type Comment {
@@ -224,6 +226,7 @@ query QueryLeaders($credentialsInput: Credentials) {
 ## Преимущества GraphQL
 
 * *Строгая типизация*. Конкретная схема, полностью описывающая, как можно работать с данными.
+
 ```gql
 type User {
   id: ID!
@@ -274,6 +277,7 @@ query {
 
 ## Данные в QUERY
 * Форма запроса на клиенте.
+
 ```http
 GET /route?field=value&anotherField=anotherValue
 ```
@@ -287,10 +291,12 @@ axios.get('/route', {
 });
 ```
 * Форма запроса на сервере.
+
 ```http
 GET /route
 ```
 * Получение данных из запроса на сервере.
+
 ```js
 /* Express */
 app.get('/route', (request, response) => {
@@ -309,6 +315,7 @@ GET /route?obj[foo]=1&obj[bar]=7
 
 ## Данные в BODY
 * Форма запроса на клиенте.
+
 ```http
 POST /route
 Content-Type: application/json
@@ -323,10 +330,12 @@ axios.post('/route', {
 });
 ```
 * Форма запроса на сервере.
+
 ```http
 POST /route
 ```
 * Получение данных из запроса на сервере.
+
 ```js
 /* Express */
 app.post('/route', (request, response) => {
@@ -336,6 +345,7 @@ app.post('/route', (request, response) => {
 
 ## Данные в PARAMS
 * Форма запроса на клиенте.
+
 ```http
 GET /route/paramValue
 ```
@@ -344,11 +354,13 @@ GET /route/paramValue
 axios.get(`/route/${paramValue}`);
 ```
 * Форма запроса на сервере.
+
 ```http
 GET /route/:param
 ```
 
 * Получение данных из запроса на сервере.
+
 ```js
 /* Express */
 app.post('/route/:param', (request, response) => {

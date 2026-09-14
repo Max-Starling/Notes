@@ -6,6 +6,7 @@
 * Start nvm-setup.exe
 * Agree with all (even in the case of a huge number of modal windows during installation)
 * Run in cmd as Administrator: 
+
 ```cmd
 C:\Users\<Username>\AppData\Roaming\nvm\nvm.exe
 ```

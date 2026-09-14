@@ -1351,10 +1351,12 @@ const SalaryFactory = (value: number, currency: string): Salary => new Salary(va
 const SalaryFactory = (value: number, currency: string): Salary => new Salary(`${value}${currency}`);
 ```
 
+<!-- {% comment %} -->
 <!-- Также мы теперь можем протестировать `Employee` независимо от `Salary` при помощи следующей заглушки:
 ```ts
 const SalaryFactory = (): object => ({ value: 500, currency: '$', toString() { return this.value + this.currency; } });
 ```-->
+<!-- {% endcomment %} -->
 
 ## Основные принципы ООП
 
@@ -1550,6 +1552,7 @@ console.log(sum(A, B)); // Point { x: 31 }
 ```
 
 * Неявное приведение типов в JavaScript.
+
 ```js
 1 + "7" // 17
 1 + true // 2

@@ -317,18 +317,21 @@ COPY ./src ./src
 **Инструкция ARG** определяет переменную, которую можно передать во время сборки (build-time) контейнера.
 
 * Объявление аргументов в Dockerfile.
+
 ```dockerfile
 # Dockerfile
 ARG argument_name
 ARG another_argument_name=default_value # со значением по умолчанию
 ```
 * Использование аргументов в Dockerfile.
+
 ```dockerfile
 # Dockerfile
 RUN echo ${argument_name}
 RUN echo ${another_argument_name}
 ```
 * Передача аргументов в команду сборки контейнера.
+
 ```cmd
 docker-compose build --build-arg port=3000 --build-arg env="local"
 ```
@@ -342,11 +345,13 @@ ARG env
 
 **Инструкция ENV** сохраняет переменную внутри контейнера. Таким образом переменная в контейнере доступна во время выполнения (run-time).
 * Объявление переменных окружения в Dockerfile. 
+
 ```dockerfile
 # Dockerfile
 ENV env=production
 ```
 * Передача в команду запуска контейнера.
+
 ```cmd
 docker run -e env=production
 ```
@@ -446,6 +451,7 @@ Docker Compose файл состоит из **сервисов** (services). С�
 
 Есть два способа запустить сервис.
 * Можно указать готовый образ в поле `image` (можно скачать его с Docker Hub или создать самому).
+
 ```yaml
 # docker-compose.yml
 version: '3.7'
@@ -454,6 +460,7 @@ services:
     image: image_name
 ```
 * Можно настроить этап построения в поле `build`, указав там путь к Dockerfile, по которому должен быть построен образ.
+
 ```yaml
 # docker-compose.yml
 version: '3.7'
@@ -588,10 +595,12 @@ client:
 
 ## Передача и использование аргументов в Docker Compose
 * Передача любых аргументов осуществляется при запуске Docker Compose в формате `argument=value`.
+
 ```cmd
 CLIENT_PORT=3000 ENV=production docker-compose up --build
 ```
 * Переданные аргументы доступны для использования в YAML-файле в формате`${argument}`. Есть возможность задать значение по умолчанию: `${argument:-defaultValue}`. Без некоторых значений по умолчанию (например, для портов) может возникать ошибка приведения типов.
+
 ```yml
 # docker-compose.yml
 version: '3.7'

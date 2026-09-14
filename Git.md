@@ -795,24 +795,29 @@ $ git tag -d <tagname>
 
 ### Полный флоу релиза и создания версии
 1) Переключаемся на ветку `production`
+
 ```yml
 $ git checkout production
 ```
 2) Делаем мерж из `development` ветки в `production`. Возможно, будет создан `merge commit` в ветке `production`:
+
 ```yml
 $ git merge development
 ```
 3) Смотрим список существующих версий
+
 ```yml
 $ git tag
 v1.0.0
 v1.0.1
 ```
 4) Создаём новый тэг, соответствующий номеру версии в ветке `production`.
+
 ```yml
 $ git tag -a v1.1.0 -m "My version 1.1.0 (Feb, 11 2022)"
 ```
 5) Проверяем, что тэг повесился на самый последний коммит в ветке `production`
+
 ```yml
 $ git log --oneline
 ```
@@ -824,6 +829,7 @@ ccd4b31f Add dark mode
 */
 ```
 6) Пушим тэг в *удалённый репозиторий* (`remote origin`)
+
 ```yml
 $ git push origin v1.1.0
 ```
@@ -930,6 +936,7 @@ git reset --hard
 
 **Псевдоним** (Alias) — аббревиатура, позволяющая избежать написания длинной последовательности команд.
 * Создадим файл `.bashrc` в корневой папке (в Windows: `C:/Users/<USERNAME>/`) и поместим там следующее.
+
 ```bash
 alias sa="eval `ssh-agent -s` ssh-add ~/.ssh/id_rsa_gitlab"
 ```
@@ -939,6 +946,7 @@ alias sa="eval `ssh-agent -s` ssh-add ~/.ssh/id_rsa_gitlab"
 
 * Создать файл `touch ~/.ssh/config`.
 * Вставить туда следующее
+
 ```
 # config for github
 Host github.com

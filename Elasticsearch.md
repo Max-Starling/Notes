@@ -1,5 +1,5 @@
 - [Базовые понятия Elasticsearch](#базовые-понятия-elasticsearch)
-  - [Индекс, тип, документ](#индекс-тип-документ)
+  - [Индекс и документ](#индекс-и-документ)
   - [Полнотекстовый поиск и индексирование](#полнотекстовый-поиск-и-индексирование)
   - [Реплики и шарды](#реплики-и-шарды)
   - [Перевёрнутые индексы](#перевёрнутые-индексы)
@@ -12,7 +12,7 @@
   - [Получение текущих маппингов](#получение-текущих-маппингов)
 - [Работа с данными](#работа-с-данными)
   - [Создание индекса](#создание-индекса)
-  - [Создание типа](#создание-типа)
+  - [Типы (устарели)](#типы-устарели)
   - [Удаление индекса](#удаление-индекса)
   - [Создание документа](#создание-документа)
   - [Обновление документа по ID](#обновление-документа-по-id)
@@ -52,12 +52,10 @@
 
 *Elasticsearch* построен поверх поискового движка **Apache Lucene**, написанного на *Java*.
 
-## Индекс, тип, документ
-**Индекс** (Index) — эквивалент *базы данных* в SQL или NoSQL.
+## Индекс и документ
+**Индекс** (Index) — *набор документов*.
 
-**Тип** (Type) — эквивалент *таблицы* в SQL или *коллекции* в NoSQL.
-
-Имеется *тип по умолчанию*, который *создаётся автоматически* (`_doc`) при *создании индекса*.
+Раньше *индекс* сравнивали с *базой данных* в SQL, а *тип* (Type) — с *таблицей*, но *сами разработчики Elasticsearch* назвали эту *аналогию неудачной*, а *типы* впоследствии *удалили* (подробнее в разделе [Типы (устарели)](#типы-устарели)).
 
 **Документ** (Document) — эквивалент *строки* в SQL или *документа* в NoSQL.
 
@@ -65,7 +63,6 @@
 ```js
  {
     "_index": "notes",
-    "_type": "_doc",
     "_id": "sYKRT3EBYbOH8y9AHDYY",
     "_source": {
       "name": "Elasticsearch",
@@ -158,7 +155,7 @@
 
 *Маппинги задаются* при *создании индекса* в *поле* `mappings`. Они *содержат свойства документов* и *типы* их *значений*.
 
-Поскольку маппинги могут быть разными для разных типов `type` индекса, они привязываются не к самому индексу, а к самим типам (например, к типу по умолчанию `_doc`). Поэтому при создании маппинга нужно всегда указывать тип.
+Маппинг задаётся для *индекса целиком*: *свойства* перечисляются в `mappings.properties` ([документация Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/8.17/indices-create-index.html)). В *версиях до 7.0* маппинги *привязывались к типам*, поэтому в *старых примерах* между `mappings` и `properties` можно встретить *уровень с названием типа* (например, `_doc`).
 
 Если `mappings` не задаётся при создании индекса, то Elasticsearch создаёт его автоматически в режиме реального времени на основании данных индексируемых документов.
 
@@ -204,11 +201,9 @@ Content-Type: application/json
 
 {
   "mappings": {
-    "_doc": {
-      "properties": {
-        "description": {
-          "type":  "text"
-        }
+    "properties": {
+      "description": {
+        "type":  "text"
       }
     }
   }
@@ -228,11 +223,9 @@ Content-Type: application/json
 
 {
   "mappings": {
-    "_doc": {
-      "properties": {
-        "email": {
-          "type":  "keyword"
-        }
+    "properties": {
+      "email": {
+        "type":  "keyword"
       }
     }
   }
@@ -263,15 +256,13 @@ JSON-объекты могут содержать в себе другие JSON-
 ```http
 {
   "mappings": {
-    "_doc": {
-      "properties": {
-        "email": {
-          "name":  { "type": "text"  },
-          "age": { "type": "integer"  },
-          "settings": {
-            "properties": {
-              "theme": { "type": "keyword"  }
-            }
+    "properties": {
+      "email": {
+        "name":  { "type": "text"  },
+        "age": { "type": "integer"  },
+        "settings": {
+          "properties": {
+            "theme": { "type": "keyword"  }
           }
         }
       }
@@ -388,9 +379,9 @@ Content-Type: application/json
 
 ### Получение текущих маппингов
 
-Текущие *маппинги индекса* можно *получить* по *GET-запросу* `_mappings`.
+Текущие *маппинги индекса* можно *получить* по *GET-запросу* `_mapping`.
 ```http
-GET <ELASTICSEARCH_URL>/index_name/_mappings
+GET <ELASTICSEARCH_URL>/index_name/_mapping
 ```
 
 # Работа с данными
@@ -401,12 +392,9 @@ GET <ELASTICSEARCH_URL>/index_name/_mappings
 PUT <ELASTICSEARCH_URL>/index_name
 ```
 
-## Создание типа
-```http
-PUT <ELASTICSEARCH_URL>/index_name/type_name
-```
+## Типы (устарели)
 
-В последних версиях Elasticsearch рекомендуется *не создавать тип*, а использовать *тип по умолчанию* `_doc`.
+В *ранних версиях* Elasticsearch *индекс* мог содержать *документы нескольких типов*. В *версии 7.0* типы объявлены *устаревшими*, а начиная с *версии 8* *указывать тип в запросах больше нельзя* ([документация Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/removal-of-types.html)). Поэтому все запросы в этой заметке написаны *без типов*.
 
 ## Удаление индекса
 ```http
@@ -414,9 +402,9 @@ DELETE <ELASTICSEARCH_URL>/index_name
 ```
 
 ## Создание документа
-Создание документа в типе `type_name` индекса `index_name`.
+Создание документа в индексе `index_name` (идентификатор будет сгенерирован автоматически).
 ```http
-POST <ELASTICSEARCH_URL>/index_name/type_name
+POST <ELASTICSEARCH_URL>/index_name/_doc
 Content-Type: application/json
 
 {
@@ -426,7 +414,7 @@ Content-Type: application/json
 ```
 
 ## Обновление документа по ID
-Обновление документа типа `_doc` в индексе `users` по id.
+Обновление документа в индексе `users` по id.
 ```http
 PUT <ELASTICSEARCH_URL>/users/_doc/H3tVi3ABpFL-9AlTbAgj
 Content-Type: application/json
@@ -439,7 +427,7 @@ Content-Type: application/json
 
 ## Удаление документа по ID
 
-Удаление документа типа `_doc` по id.
+Удаление документа из индекса `users` по id.
 ```http
 DELETE <ELASTICSEARCH_URL>/users/_doc/H3tVi3ABpFL-9AlTbAgj
 ```
@@ -471,7 +459,7 @@ POST <ELASTICSEARCH_URL>/_bulk
 
 Указание `_index` является обязательным, указание `_id` - нет (это поле может быть сгенерировано автоматически).
 
-Можно также указать `type`, но поскольку он не указан, все документы индексируются в `_doc`.
+Указывать тип документа (`_type`) начиная с Elasticsearch 8 нельзя ([документация Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/removal-of-types.html)).
 
 В конце тела запроса обязателен переход на новую строку.
 
@@ -520,7 +508,6 @@ GET <ELASTICSEARCH_URL>/users/_search
     "hits": [
         {
           "_index": "users",
-          "_type": "user",
           "_id": "Jntsi3ABpFL-9AlTdggH",
           "_score": 1.0,
           "_source": {
@@ -530,7 +517,6 @@ GET <ELASTICSEARCH_URL>/users/_search
         },
         {
           "_index": "users",
-          "_type": "user",
           "_id": "J3tsi3ABpFL-9AlTdggH",
           "_score": 1.0,
           "_source": {
@@ -725,7 +711,7 @@ Content-Type: application/json
 ```
 Проиндексируем 3 фильма.
 ```HTTP
-PUT <ELASTICSEARCH_URL>/films/_doc/_bulk
+POST <ELASTICSEARCH_URL>/films/_bulk
 Content-Type: application/json
 
 { "index":{} }
@@ -739,7 +725,7 @@ Content-Type: application/json
 
 Сделаем поисковый запрос к индексу и добавим параметр `size`.
 ```http
-GET <ELASTICSEARCH_URL>/films/_doc/_search
+GET <ELASTICSEARCH_URL>/films/_search
 Content-Type: application/json
 
 {
@@ -760,7 +746,7 @@ Content-Type: application/json
 
 Добавим также параметр `from`.
 ```http
-GET <ELASTICSEARCH_URL>/films/_doc/_search
+GET <ELASTICSEARCH_URL>/films/_search
 Content-Type: application/json
 
 {
@@ -819,6 +805,7 @@ Elasticsearch предоставляет составное предложени
 * Имеет позицию `Software Engineer` И знает технологии `React`, `Vue` (must).
 * Имеет опыт работы более одного года ИЛИ его желаемый уровень заработной платы не превышает 1000$ (should).
 * Его возраст НЕ меньше 25 лет. (must_not).
+
 ```js
 {
   "query" : {
@@ -936,7 +923,7 @@ Elasticsearch также поддерживает сортировку поле�
 
 Сортировка индекса `films` по убыванию рейтинга и даты.
 ```HTTP
-GET <ELASTICSEARCH_URL>/films/_doc/_search
+GET <ELASTICSEARCH_URL>/films/_search
 Content-Type: application/json
 
 {
@@ -1084,36 +1071,43 @@ Content-Type: application/json
 ```
 
 * **Стандартный**: `standard`. Используется по умолчанию. Разбивает текст на слова, переводит их в нижний регистр (`lowercase`), удаляет знаки препинания, при необходимости удаляет стоп-слова.
+
 ```js
 /* terms */
 ["how", "old", "are", "you", "i'm", "17"]
 ```
 * **Простой**: `simple`. Разделяет слова каждый раз, когда встречает не букву. Все термы переводятся в нижний регистр.
+
 ```js
 /* terms */
 ["how", "old", "are", "you", "i", "m"]
 ```
 * **Стоп-анализатор**: `stop`. Как `simple`, но с возможностью удалять стоп-слова. По умолчанию используются стоп-слова английского языка (вспомогательные глаголы, предлоги и так далее).
+
 ```js
 /* terms */
 ["how", "old", "you", "i", "m"]
 ```
 * **Пробельный**: `whitespace`. Разделяет текст, когда находит пробельные символы.
+
 ```js
 /* terms */
 ["-", "How", "old", "are", "you?", "-", "I'm", "17."]
 ```
 * **Анализатор ключевых слов**: `keyword`. Принимает текст и его возвращает как есть.
+
 ```js
 /* terms */
 ["- How old are you? - I'm 17."]
 ```
 * **Языковой**: `english`, `french`. Анализирует текст соответственно специфике языка. Удаляет стоп-слова, характерные для языка. Переводит в нижний регистр.
+
 ```js
 /* terms */
 ["how", "old", "you", "i'm", "17"]
 ```
 * **Шаблонный**: `pattern`. Для разделения текста на термы использует регулярные выражения. По умолчанию используется регулярное выражение `\W+` (всё, что не может быть словом). Переводит в нижний регистр.
+
 ```js
 /* terms */
 ["how", "old", "are", "you", "i", "m", "17"]

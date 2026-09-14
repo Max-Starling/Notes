@@ -1,3 +1,5 @@
+<!-- {% raw %} -->
+
 - [Основы HTML](#основы-html)
   - [Теги](#теги)
   - [Типы HTML-тегов](#типы-html-тегов)
@@ -266,22 +268,27 @@ HTML 4.01 базировался на SGML, поэтому его Doctype ссы
 * *URL документа формата DTD*.
 ### Примеры Doctype
 * HTML 5. Воспринимает все типы документов, DTD не требуется. Рекомендуемый вариант.
+
 ```html
 <!DOCTYPE html>
 ```
 * HTML 4.01
+
 ```html
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 ```
 * XHTML 1.1
+
 ```html
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 ```
 * SVG
+
 ```HTML
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 ```
 * MathML
+
 ```HTML
 <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
 ```
@@ -408,3 +415,5 @@ const html = helloHtmlTemplate({
 });
 console.log(html); // "<!DOCTYPE html>..."
 ```
+
+<!-- {% endraw %} -->

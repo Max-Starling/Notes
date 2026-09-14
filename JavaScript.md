@@ -134,14 +134,17 @@ function fn (arg) { /* .. */ } // неизвестно, какого типа п
 
 *Константы* принято называть в *UPPERCASE*: `ANY_NAME`.  
 
-### 6 примитивных типов и объект
+### 7 примитивных типов и объект
 * **number** `1`, `2.17`, `NaN`, `Infinity`
+* **bigint** `17n`, `BigInt(17)`
 * **string** `'str'`, `"str"`
 * **boolean** `true`, `false`
 * **null** `null`
 * **undefined** `undefined`
 * **symbol** `Symbol(str)`
 * **object** `{}`
+
+Список соответствует [спецификации ECMAScript](https://tc39.es/ecma262/multipage/ecmascript-data-types-and-values.html). Тип `BigInt` появился в её 11-м издании (ES2020).
 
 Значение **null** *не является* «*ссылкой на нулевой адрес/объект*» или чем-то подобным.  
 Значение **null** *специальное* и имеет смысл «*ничего*» или «*значение неизвестно*».  

@@ -582,7 +582,50 @@ var a = 5;
 
 #### Переменная const
 
+`const` и `let` *тоже попадают* в *область видимости* до *выполнения кода*, но *воспользоваться переменной до её объявления нельзя*: она находится во **временной мёртвой зоне** (англ. `temporal dead zone`, `TDZ`). *По спецификации* переменная *создаётся* вместе с *окружением*, но *обратиться* к ней *нельзя*, пока *не выполнено само объявление* ([ECMA-262, объявления `let` и `const`](https://tc39.es/ecma262/multipage/ecmascript-language-statements-and-declarations.html#sec-let-and-const-declarations)).
+
+```js
+/* main.js */
+
+// >>> Global Scope: { b: <недоступна> }
+console.log(b); // ReferenceError: Cannot access 'b' before initialization
+const b = 5;
+// >>> Global Scope: { b: 5 }
+```
+
+*Значение* `const` *нельзя переприсвоить*.
+
+```js
+const b = 5;
+
+b = 7; // TypeError: Assignment to constant variable.
+```
+
+*При этом само значение остаётся изменяемым*: если в `const` *лежит объект*, то *его свойства менять можно* — *запрещено только присваивание самой переменной*.
+
+```js
+const user = { name: 'Max' };
+
+user.name = 'Starling'; // так можно
+user = {}; // TypeError: Assignment to constant variable.
+```
+
 #### Переменная let
+
+`let` *ведёт себя* так же, как `const`: *объявление попадает* в *область видимости заранее*, но *до выполнения объявления переменная недоступна*. *Отличий два*: *значение можно переприсваивать* и *переменную можно объявить без начального значения*.
+
+```js
+/* main.js */
+
+// >>> Global Scope: { c: <недоступна> }
+console.log(c); // ReferenceError: Cannot access 'c' before initialization
+let c;
+// >>> Global Scope: { c: undefined }
+c = 5;
+// >>> Global Scope: { c: 5 }
+```
+
+*Ещё одно отличие* `let` и `const` от `var` — они *ограничены блоком кода*, о чём *следующий раздел*.
 
 #### Блок кода {}
 
@@ -713,6 +756,27 @@ const he = {
 
 ### Глобальный контекст выполнения
 
+**Глобальный контекст выполнения** *создаётся один раз*, *до выполнения кода*, и *живёт*, пока *работает программа*. *В нём выполняется всё*, что *написано вне функций*.
+
+*Вместе с ним создаётся* **глобальный объект** (англ. `global object`): в *браузере* это `window`, в *NodeJS* — `global`. *В обеих средах* до него *можно добраться* через `globalThis` — *это имя описано* в *стандарте языка* ([ECMA-262, `globalThis`](https://tc39.es/ecma262/multipage/global-object.html#sec-globalthis)).
+
+*Объявления* `var` и *функций* на *верхнем уровне скрипта становятся свойствами глобального объекта*, а `let` и `const` — *нет*: они *попадают* в *отдельную запись окружения* ([ECMA-262, глобальная запись окружения](https://tc39.es/ecma262/multipage/executable-code-and-execution-contexts.html#sec-global-environment-records)).
+
+```js
+/* main.js - обычный скрипт */
+var a = 5;
+let c = 5;
+
+console.log(globalThis.a); // 5
+console.log(globalThis.c); // undefined
+```
+
+*В NodeJS это устроено иначе*: *код модуля выполняется не в глобальном контексте*. *NodeJS оборачивает модуль в функцию*, поэтому *переменные модуля* остаются *внутри него*, а `this` на *верхнем уровне* — это `module.exports` ([документация NodeJS](https://nodejs.org/api/modules.html#the-module-wrapper)).
+
+```js
+/* main.js - модуль CommonJS */
+console.log(this === module.exports); // true
+```
 
 # Операторы
 - [Оператор typeof](#оператор-typeof)

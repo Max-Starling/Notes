@@ -398,7 +398,7 @@ SELECT *
   FROM notes
   ORDER BY description;
 ```
-![SQL Example](../assets/SQL_orderby)
+![SQL Example](../assets/SQL_orderby.png)
 ```SQL
 SELECT *
   FROM notes

@@ -1,10 +1,10 @@
 
 ## Установка значения переменной
 
-```js
+```velocity
 #set($size = 10)
 ```
-```js
+```velocity
 #set($title = "Notes")
 ```
 
@@ -25,7 +25,7 @@
 ```
 
 ## Инкремент
-```js
+```velocity
 #set($counter = 0)
 #set($counter = $counter + 1)
 ```
@@ -33,7 +33,7 @@
 ## Условный оператор
 
 ## if..else
-```js
+```velocity
 #if($a > $b)          
     #set($max = $a)
 #else
@@ -43,7 +43,7 @@
 
 
 ## elseif
-```js
+```velocity
 #if($counter == 0)
   #set($str = "zero")
 #elseif($counter == 1)
@@ -54,11 +54,11 @@
 ```
 
 ## Краткая запись
-```js
+```velocity
 #if($a > $b)it's true!#{else}it's not!#end
 ```
 ## Цикл
-```js
+```velocity
 #foreach($entry in $array)
   #set($prop = $entry.get("property"))
 #end
@@ -67,7 +67,7 @@
 ## Массив
 
 ### Объявление
-```js
+```velocity
 #set($array = [42, "a string", $counter])
 ```
 ### Обращение к элементу
@@ -76,7 +76,7 @@ $array.get(1)
 $array[1]
 ```
 ### Проверка на пустоту
-```js
+```velocity
 #if ($myMap.isEmpty()) #end
 #if ($myMap.size() == 0) #end
 ```

@@ -498,7 +498,7 @@ button[disabled] {}
 ### Применение CSS-селекторов в JavaScript (Selectors API)
 
 *Selectors API* предоставляет методы, с помощью которых можно быстро и просто получить список узлов документа путём сопоставления с *группой селекторов*.
-```javascript
+```js
 // возвращает первый найденный Element или null, если совпадений не найдено
 const element = parentNode.querySelector('selectors'); 
 // возвращает NodeList, содержащий все найденные элементы, или пустой NodeList

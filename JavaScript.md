@@ -290,7 +290,7 @@ console.log(String({})); // '[object Object]'
 ```
 
 Пример *явного преобразования* в *Java*.
-```js
+```java
 /* Java */
 class Notes {
   public static void main(String[] args) {

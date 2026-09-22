@@ -16,17 +16,17 @@ firebase init hosting
 ## Basic commands
 * Show all your firebase projects:
 
-```js
+```sh
   firebase list
 ```
 * Serve locally
 
-```js
+```sh
   firebase serve --only functions, hosting
 ```
 * Deploy
 
-```js
+```sh
   firebase deploy
 ```
 * Deploy by using token
@@ -170,7 +170,7 @@ Install `Visual Studio Build Tools 2022`. Select there:
 
 Then install, restart PC.
 
-```
+```sh
 npm config edit
 
 msbuild_path=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe
@@ -188,7 +188,7 @@ refreshenv
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/5dbe6296-09c7-4cf8-aa03-d514e247201a)
 ![image](https://github.com/Max-Starling/Notes/assets/22237384/7a892ee6-b4cc-46ea-bd32-bb34dce4c238)
 
-```
+```sh
 npm i -g node-gyp
 ```
 

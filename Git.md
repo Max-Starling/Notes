@@ -107,13 +107,13 @@ commit ec1b065a072c545ca2849e0c05b60c520bdc39e4
 
 Чтобы добавить файл из рабочей директории в индекс (область подготовленных файлов), используется команда `git add`.
 ```sh
-/* добавить изменённый файл */
+# добавить изменённый файл
 git add <filename>
 
-/* добавить папку с изменёнными файлами */
+# добавить папку с изменёнными файлами
 git add <directory>
 
-/* добавить все изменённые файлы */
+# добавить все изменённые файлы
 git add .
 ```
 
@@ -158,22 +158,22 @@ master (основная)    |   A —— B
 
 Для управления ветками используется команда `branch`.
 ```sh
-/* создание новой ветки */
+# создание новой ветки
 git branch <branch_name>
 
-/* список всех веток */
+# список всех веток
 git branch -a
 
-/* переименование ветки */
+# переименование ветки
 git branch -m <old_name> <new_name>
 
-/* удаление ветки */
+# удаление ветки
 git branch -D <branch_name>
 ```
 
 Для переключения между ветками используется команда `checkout`.
 ```sh
-/* переключение на ветку branch_name */
+# переключение на ветку branch_name
 git checkout <branch_name>
 ```
 
@@ -431,7 +431,7 @@ master (current) |   A —— B —— C —— D —— E*
 Помимо перебазирования команда `rebase` имеет интерактивный режим, который позволяет полностью переписать историю определённого числа коммитов. Для перехода в интерактивный режим используется флаг `-i`. Для выбора `N` последних коммитов используется указатель `HEAD~N`.
 ```sh
 git checkout develop
-git rebase -i HEAD~2 /* изменение истории двух последних коммитов текущей ветки */
+git rebase -i HEAD~2 # изменение истории двух последних коммитов текущей ветки
 ```
 В этом случае будет открыт текстовый редактор со следующим содержимым.
 ```dockerfile
@@ -475,26 +475,22 @@ git commit --amend -m "Updated last commit message"
 **Команда git fetch** используется для того, чтобы получить информацию о последних изменениях на удалённой ветке (`origin/`). Таким образом можно узнать, были ли изменения вообще.
 ```sh
 git fetch
-/*
-From github.com:YourName/RepositoryName
-   2eefe71..ac391ab  develop   -> origin/develop
-   fca7c62..c31477c  feature/1 -> origin/feature/1
- * [new branch]      feature/2 -> origin/feature/2
- * [new branch]      feature/3 -> origin/feature/3
-*/
+# From github.com:YourName/RepositoryName
+#    2eefe71..ac391ab  develop   -> origin/develop
+#    fca7c62..c31477c  feature/1 -> origin/feature/1
+#  * [new branch]      feature/2 -> origin/feature/2
+#  * [new branch]      feature/3 -> origin/feature/3
 ````
 Выше можно видеть, что ветки `develop` и `feature/1` отличаются от своих одноимённых удалённых веток хешем последних коммитов, а ветки `feature/2` и `feature/3` новые и их нет локально.
 
 Команда `git fetch` помимо информации об изменениях скачивает и сами изменения, но их слияние с локальной веткой не происходит. Это можно проверить командой `git diff`.
 ```sh
 git diff origin/develop
-/*
-diff --git a/Git.md b/Git.md
-index abe21d5..e207862 100644
-+++ b/client/Dockerfile
-- Hello
-+ Hello, Notes!
-*/
+# diff --git a/Git.md b/Git.md
+# index abe21d5..e207862 100644
+# +++ b/client/Dockerfile
+# - Hello
+# + Hello, Notes!
 ```
 
 Повторный вызов команды `git fetch` ничего не выведет, поскольку изменения уже были подгружены.
@@ -605,8 +601,8 @@ A ——— B
 
 Примеры
 ```sh
-git reset HEAD~1 /* переставляет указатель HEAD на один коммит */
-git reset HEAD~2 /* переставляет указатель HEAD на два коммита */
+git reset HEAD~1 # переставляет указатель HEAD на один коммит
+git reset HEAD~2 # переставляет указатель HEAD на два коммита
 ```
 
 Команда `git reset` имеет несколько режимов:
@@ -1001,9 +997,9 @@ git config -l
 
 ### Имя пользователя и почта
 ```sh
-/* имя пользователя */
+# имя пользователя
 git config --global user.name "Your Username"
-/* электронная почта */
+# электронная почта
 git config --global user.email "your@email"
 ```
 

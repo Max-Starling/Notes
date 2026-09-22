@@ -52,7 +52,7 @@
 
 С клиента, который называется **Docker-клиент** (Docker client), поступают CLI-команды. 
 ```sh
-/* примеры CLI-команд */
+# примеры CLI-команд
 docker build
 docker ps
 docker run
@@ -103,10 +103,10 @@ CMD npm run start
 Для *построения образа* используется команда `docker build`, которая принимает **контекст** (context) — путь к папке, с которой будет происходить работа в Dockerfile.
 
 ```sh
-/* узнать текущую папку консоли */
+# узнать текущую папку консоли
 ls
 
-/* "." означает, что текущая папка консоли взята в качестве контекста */
+# "." означает, что текущая папка консоли взята в качестве контекста
 docker build . 
 ```
 
@@ -130,22 +130,20 @@ docker build -t your_image_name .
 docker build -t test .
 docker images
 
-/*
-  REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
-  test                   latest              9468e6677939        22 seconds ago      730MB
-  mongo                  3.4                 aeaac14e1ffb        5 months ago        429MB
-  redis                  4.0                 04c446bf216f        5 months ago        89.2MB
-  node                   10.15.3             5a401340b79f        10 months ago       899MB
-*/
+#   REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+#   test                   latest              9468e6677939        22 seconds ago      730MB
+#   mongo                  3.4                 aeaac14e1ffb        5 months ago        429MB
+#   redis                  4.0                 04c446bf216f        5 months ago        89.2MB
+#   node                   10.15.3             5a401340b79f        10 months ago       899MB
 ```
 
 Образы хранятся в Docker-реестре (Docker registry). 
 
 Одним из публичных реестров является Docker Hub. Он используется по умолчанию.
 ```sh
-// загрузить image из реестра
+# загрузить image из реестра
 docker pull <image>
-// загрузить image в реестр
+# загрузить image в реестр
 docker push <image>
 ```
 
@@ -166,9 +164,9 @@ docker run -d --name container_name image_name
 
 Команда `docker run` объединяет в себе две команды: `docker create` и `docker start`.
 ```sh
-/* создание контейнера */
+# создание контейнера
 docker create image_name
-/* запуск ещё не запущенного контейнера */
+# запуск ещё не запущенного контейнера
 docker start container_id
 ```
 
@@ -176,10 +174,8 @@ docker start container_id
 ```sh
 docker ps
 
-/*
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
-b56a528cbe78        test                "docker-entrypoint.s…"   2 days ago          Up About a minute   3001/tcp           fervent_brattain
-*/
+# CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+# b56a528cbe78        test                "docker-entrypoint.s…"   2 days ago          Up About a minute   3001/tcp           fervent_brattain
 ```
 Для просмотра всех контейнеров (в том числе и незапущенных) используется флаг `-a`.
 ```sh
@@ -189,7 +185,7 @@ docker ps -a
 Если есть необходимость посмотреть, что лежит внутри запущенного контейнера, можно зайти в него при помощи команды `docker exec`.
 ```sh
 docker exec -i -t container_id bash
-/* осуществляется переход в интерактивный режим */
+# осуществляется переход в интерактивный режим
 ```
 Пример работы в интерактивном режиме.
 ```text

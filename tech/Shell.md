@@ -34,7 +34,7 @@ sudo: sorry, you are not allowed to set the following environment variables: POS
 Чтобы это исправить, необходимо установить доступ к этим переменным в `sudoers`.
 ```sh
 sudo nano /etc/sudoers.d/ld_preload
-/* или */
+# или
 sudo vim /etc/sudoers.d/ld_preload
 ```
 Нужно дописать переменные в файл.

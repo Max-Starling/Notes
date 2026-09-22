@@ -65,7 +65,7 @@
 base_url = http://localhost:3001
 ```
 и использовать её в запросе:
-```
+```http
 GET {{base_url}}/api/v1.0/users
 ```
 

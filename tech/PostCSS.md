@@ -1,6 +1,6 @@
 # PostCSS Setup
 ## NPM
-```
+```sh
 npm install postcss-cli stylelint stylelint-config-standard postcss-cssnext precss postcss-cssnext cssnano --save-dev
 npm install stylelint -g
 ```

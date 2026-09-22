@@ -51,8 +51,8 @@
 *Docker* использует *клиент-серверную архитектуру*. 
 
 С клиента, который называется **Docker-клиент** (Docker client), поступают CLI-команды. 
-```js
-/* примеры CLI-команд */
+```sh
+# примеры CLI-команд
 docker build
 docker ps
 docker run
@@ -102,11 +102,11 @@ CMD npm run start
 
 Для *построения образа* используется команда `docker build`, которая принимает **контекст** (context) — путь к папке, с которой будет происходить работа в Dockerfile.
 
-```js
-/* узнать текущую папку консоли */
+```sh
+# узнать текущую папку консоли
 ls
 
-/* "." означает, что текущая папка консоли взята в качестве контекста */
+# "." означает, что текущая папка консоли взята в качестве контекста
 docker build . 
 ```
 
@@ -126,26 +126,24 @@ docker build -t your_image_name .
 ```
 
 Найти созданный образ можно среди других образов при помощи команды `docker images`.
-```js
+```sh
 docker build -t test .
 docker images
 
-/*
-  REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
-  test                   latest              9468e6677939        22 seconds ago      730MB
-  mongo                  3.4                 aeaac14e1ffb        5 months ago        429MB
-  redis                  4.0                 04c446bf216f        5 months ago        89.2MB
-  node                   10.15.3             5a401340b79f        10 months ago       899MB
-*/
+#   REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+#   test                   latest              9468e6677939        22 seconds ago      730MB
+#   mongo                  3.4                 aeaac14e1ffb        5 months ago        429MB
+#   redis                  4.0                 04c446bf216f        5 months ago        89.2MB
+#   node                   10.15.3             5a401340b79f        10 months ago       899MB
 ```
 
 Образы хранятся в Docker-реестре (Docker registry). 
 
 Одним из публичных реестров является Docker Hub. Он используется по умолчанию.
-```js
-// загрузить image из реестра
+```sh
+# загрузить image из реестра
 docker pull <image>
-// загрузить image в реестр
+# загрузить image в реестр
 docker push <image>
 ```
 
@@ -154,45 +152,43 @@ docker push <image>
 **Контейнер** (Container) — *запускаемый экземпляр образа*. 
 
 Для создания и последующего запуска контейнера по образу можно использовать команду `docker run`.
-```js
+```sh
 docker run -d image_name
 ```
 Флаг `-d` используется для запуска контейнера в фоновом режиме (in background), таким текущая консоль не будет занята контейнером и можно будет вводить в неё другие команды.
 
 Можно также задать явное имя контейнеру при создании.
-```js
+```sh
 docker run -d --name container_name image_name
 ```
 
 Команда `docker run` объединяет в себе две команды: `docker create` и `docker start`.
-```js
-/* создание контейнера */
+```sh
+# создание контейнера
 docker create image_name
-/* запуск ещё не запущенного контейнера */
+# запуск ещё не запущенного контейнера
 docker start container_id
 ```
 
 Для просмотра списка всех запущенных контейнеров и информации о них используется команда `docker ps`.
-```js
+```sh
 docker ps
 
-/*
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
-b56a528cbe78        test                "docker-entrypoint.s…"   2 days ago          Up About a minute   3001/tcp           fervent_brattain
-*/
+# CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+# b56a528cbe78        test                "docker-entrypoint.s…"   2 days ago          Up About a minute   3001/tcp           fervent_brattain
 ```
 Для просмотра всех контейнеров (в том числе и незапущенных) используется флаг `-a`.
-```js
+```sh
 docker ps -a
 ```
 
 Если есть необходимость посмотреть, что лежит внутри запущенного контейнера, можно зайти в него при помощи команды `docker exec`.
-```js
+```sh
 docker exec -i -t container_id bash
-/* осуществляется переход в интерактивный режим */
+# осуществляется переход в интерактивный режим
 ```
 Пример работы в интерактивном режиме.
-```js
+```text
 /* вывод названий файлов и папок в текущей директории "app" */
 root:/app# ls
 
@@ -209,7 +205,7 @@ root:/app/src# exit
 Флаг `-i` отвечает за переход в интерактивный режим, флаг `-t` позволяет эмулировать терминал.
 
 Для остановки контейнера используется команда `docker stop`.
-```js
+```sh
 docker stop container_id
 ```
 

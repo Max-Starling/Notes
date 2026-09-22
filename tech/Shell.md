@@ -32,13 +32,13 @@ which docker-compose
 sudo: sorry, you are not allowed to set the following environment variables: POSTGRES_USER, POSTGRES_PASSWORD
 ```
 Чтобы это исправить, необходимо установить доступ к этим переменным в `sudoers`.
-```js
+```sh
 sudo nano /etc/sudoers.d/ld_preload
-/* или */
+# или
 sudo vim /etc/sudoers.d/ld_preload
 ```
 Нужно дописать переменные в файл.
-```js
+```text
 /* /etc/sudoers.d/ld_preload */
 Defaults env_keep += "POSTGRES_USER"
 Defaults env_keep += "POSTGRES_PASSWORD"

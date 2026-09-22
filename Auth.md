@@ -85,7 +85,7 @@ Authorization: Basic <encodedCredentials>
 
 # Сессии (`Sessions`) и `Cookie`
 
-```js
+```text
 /* получение Cookie */
        /* Auth request
        with credentials */
@@ -100,7 +100,7 @@ Client <-------------------- Server
 Client --------------------> Server
 ```
 Когда Cookie устаревают, они удаляются и на клиенте, и на сервере, поэтому описанный выше алгоритм повторяется.
-```js
+```text
 /* обновление auth_token */
 
         /* Cookie is
@@ -121,7 +121,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdhcnJ5QGl0ZWNoYXJ0LWdyb3V
 
 ### Токен доступа
 
-```js
+```text
 /* получение или обновление refresh_token */
 
        /* Auth request
@@ -152,7 +152,7 @@ Client --------------------> Server
 
 ### Токен обновления
 
-```js
+```text
 /* обновление auth_token */
 
         /* auth_token is

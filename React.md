@@ -412,7 +412,7 @@ TODO -->
 ### Мемоизация с useMemo, useCallback, memo
 
 Компонент высшего порядка `memo` служит заменой метода `shouldComponentUpdate` и `PureComponent` для функциональных компонент.
-```js
+```jsx
 const Article = ({ title }) => (<div>{title}</div>);
 
 const areEqual = (props, nextProps) => {
@@ -427,7 +427,7 @@ const React.memo(Article, areEqual);
 
 ### useCallback
 Все действия в функциональном компоненте (не считая React Hooks) проделываются каждый раз, когда он рендерится. В том числе и создание переменных.
-```js
+```jsx
 const Form = ({ title }) => {
   /* функция onSubmit пересоздаётся в компоненте Form на каждый рендер */
   const onSubmit = () => console.log('submit', { title });

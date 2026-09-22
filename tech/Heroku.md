@@ -36,11 +36,11 @@ git push heroku master
 ## Basic commands
 * Command list:
 
-```js
+```sh
   heroku help
 ```
 * Open app in a browser:
 
-```js
+```sh
   heroku open
 ```

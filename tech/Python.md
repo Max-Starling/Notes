@@ -251,7 +251,7 @@ another_arr = [1, 2]
 merged = [*another_arr, *arr]
 print(merged) # [1, 2, 3, 4]
 ```
-```javascript
+```js
 // JavaScript
 const foo = [3, 4];
 const bar = [1, 2];
@@ -267,7 +267,7 @@ print(bar) # [1, 2, 3, 4]
 baz = [0, *bar, 5]
 print(baz) # [0, 1, 2, 3, 4, 5]
 ```
-```javascript
+```js
 // JavaScript
 const foo = [1, 2, 3];
 const bar = [...foo, 4];

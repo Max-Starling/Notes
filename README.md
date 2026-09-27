@@ -135,7 +135,7 @@ My simple notes about everything related to programming.
 - [Сравнение](./Architectural-Styles.md#сравнение)
 
 ### [Архитектурные паттерны](./Architectural-Patterns.md)
-*Заметка* о *типовых решениях* для *организации кода внутри приложения*: *семейство MVC* (*MVP*, *MVVM*, *MVPVM*), *EBI*, *трёхуровневая архитектура*, *DDD*, *Порты и Адаптеры*, *Луковая*, *Кричащая* и *Чистая архитектуры* с *правилом зависимостей*, а *в конце* — *Event Sourcing* и *CQRS*.
+*Заметка* о *типовых решениях* для *организации кода внутри приложения*: *семейство MVC* (*MVP*, *MVVM*, *MVPVM*), *EBI*, *трёхуровневая архитектура*, *DDD*, *Порты и Адаптеры*, *Луковая*, *Кричащая* и *Чистая архитектуры* с *правилом зависимостей*, *Event Sourcing* и *CQRS*, а *в конце* — *современные паттерны*: *вертикальные срезы*, *Feature-Sliced Design*, *микрофронтенды*, *BFF* и *API Gateway*.
 - [MVC (1979)](./Architectural-Patterns.md#mvc-1979)
 - [Иерархический MVC (2000), PAC (1987)](./Architectural-Patterns.md#иерархический-mvc-2000-pac-1987)
 - [MVP (1996)](./Architectural-Patterns.md#mvp-1996)
@@ -150,6 +150,10 @@ My simple notes about everything related to programming.
 - [Чистая архитектура (2012)](./Architectural-Patterns.md#чистая-архитектура-2012)
 - [Event Sourcing](./Architectural-Patterns.md#event-sourcing)
 - [CQRS](./Architectural-Patterns.md#cqrs)
+- [Vertical Slice Architecture (2018)](./Architectural-Patterns.md#vertical-slice-architecture-2018)
+- [Feature-Sliced Design](./Architectural-Patterns.md#feature-sliced-design)
+- [Микрофронтенды (2016)](./Architectural-Patterns.md#микрофронтенды-2016)
+- [BFF и API Gateway](./Architectural-Patterns.md#bff-и-api-gateway)
 
 ### [Паттерны проектирования](./Design-Patterns.md)
 *Заметка* о *23 паттернах «Банды четырёх»* и *внедрении зависимостей*: *порождающих*, *структурных* и *поведенческих*. *Примеры* — *на TypeScript*, а *рядом* — *то*, *что уже встроено* в *JavaScript*: *модули*, `Proxy`, *итераторы*, `EventEmitter`, *промежуточные обработчики Express*. *В конце* — *таблица похожих паттернов* и *чем они отличаются*.

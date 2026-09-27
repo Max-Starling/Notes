@@ -111,6 +111,10 @@
 - [Чистая архитектура (2012)](./Architectural-Patterns.md#чистая-архитектура-2012)
 - [Event Sourcing](./Architectural-Patterns.md#event-sourcing)
 - [CQRS](./Architectural-Patterns.md#cqrs)
+- [Vertical Slice Architecture (2018)](./Architectural-Patterns.md#vertical-slice-architecture-2018)
+- [Feature-Sliced Design](./Architectural-Patterns.md#feature-sliced-design)
+- [Микрофронтенды (2016)](./Architectural-Patterns.md#микрофронтенды-2016)
+- [BFF и API Gateway](./Architectural-Patterns.md#bff-и-api-gateway)
 
 # Паттерны проектирования
 

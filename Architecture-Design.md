@@ -115,6 +115,10 @@
 - [Feature-Sliced Design](./Architectural-Patterns.md#feature-sliced-design)
 - [Микрофронтенды (2016)](./Architectural-Patterns.md#микрофронтенды-2016)
 - [BFF и API Gateway](./Architectural-Patterns.md#bff-и-api-gateway)
+- [Strangler Fig (2004)](./Architectural-Patterns.md#strangler-fig-2004)
+- [Transactional Outbox](./Architectural-Patterns.md#transactional-outbox)
+- [Circuit Breaker и устойчивость](./Architectural-Patterns.md#circuit-breaker-и-устойчивость)
+- [Ячеистая архитектура (2023)](./Architectural-Patterns.md#ячеистая-архитектура-2023)
 
 # Паттерны проектирования
 

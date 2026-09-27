@@ -22,6 +22,7 @@ My simple notes about everything related to programming.
   - [Рендеринг веб-приложений](#рендеринг-веб-приложений)
   - [Как сайт попадает в интернет](#как-сайт-попадает-в-интернет)
   - [Инфраструктура как код](#инфраструктура-как-код)
+  - [API: REST, GraphQL, RPC и gRPC](#api-rest-graphql-rpc-и-grpc)
 - [Технологии, библиотеки, фреймворки и языки программирования](#технологии-библиотеки-фреймворки-и-языки-программирования)
   - [CSS](./CSS.md)
   - [Docker](./Docker.md)
@@ -187,6 +188,15 @@ My simple notes about everything related to programming.
 - [Где хранить состояние](./Infrastructure-as-Code.md#где-хранить-состояние)
 - [Лицензия Terraform и OpenTofu](./Infrastructure-as-Code.md#лицензия-terraform-и-opentofu)
 - [Создать или настроить: альтернативы](./Infrastructure-as-Code.md#создать-или-настроить-альтернативы)
+
+### [API: REST, GraphQL, RPC и gRPC](./GraphQL-REST.md)
+*Заметка* о *способах*, *которыми программы запрашивают друг у друга данные* и *действия*. *Разобраны* *ограничения REST* *по диссертации Филдинга* *и свойства методов HTTP*, *GraphQL* *с его тремя типами операций*, *удалённый вызов процедур* *на примере JSON-RPC* и *gRPC* — *контракт* `.proto`, *Protocol Buffers*, *HTTP/2* и *четыре вида методов*. *В конце* — *сводная таблица* *по семи признакам* и *ориентиры*, *что где уместно*.
+- [REST](./GraphQL-REST.md#rest)
+- [REST на практике](./GraphQL-REST.md#rest-на-практике)
+- [GraphQL](./GraphQL-REST.md#graphql)
+- [RPC](./GraphQL-REST.md#rpc)
+- [gRPC](./GraphQL-REST.md#grpc)
+- [Сравнение](./GraphQL-REST.md#сравнение)
 
 
 

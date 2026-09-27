@@ -91,6 +91,8 @@
 - [Событийная архитектура](./Architectural-Styles.md#событийная-архитектура)
 - [Сервис-ориентированная архитектура](./Architectural-Styles.md#сервис-ориентированная-архитектура)
 - [Микросервисная архитектура](./Architectural-Styles.md#микросервисная-архитектура)
+- [Микрофронтенды](./Architectural-Styles.md#микрофронтенды)
+- [Ячеистая архитектура](./Architectural-Styles.md#ячеистая-архитектура)
 - [Сравнение](./Architectural-Styles.md#сравнение)
 
 # Архитектурные паттерны
@@ -113,12 +115,6 @@
 - [CQRS](./Architectural-Patterns.md#cqrs)
 - [Vertical Slice Architecture (2018)](./Architectural-Patterns.md#vertical-slice-architecture-2018)
 - [Feature-Sliced Design](./Architectural-Patterns.md#feature-sliced-design)
-- [Микрофронтенды (2016)](./Architectural-Patterns.md#микрофронтенды-2016)
-- [BFF и API Gateway](./Architectural-Patterns.md#bff-и-api-gateway)
-- [Strangler Fig (2004)](./Architectural-Patterns.md#strangler-fig-2004)
-- [Transactional Outbox](./Architectural-Patterns.md#transactional-outbox)
-- [Circuit Breaker и устойчивость](./Architectural-Patterns.md#circuit-breaker-и-устойчивость)
-- [Ячеистая архитектура (2023)](./Architectural-Patterns.md#ячеистая-архитектура-2023)
 
 # Паттерны проектирования
 
@@ -128,6 +124,7 @@
 - [Порождающие](./Design-Patterns.md#порождающие): Одиночка, Внедрение зависимостей, Фабричный метод, Абстрактная фабрика, Строитель, Прототип
 - [Структурные](./Design-Patterns.md#структурные): Адаптер, Декоратор, Заместитель, Фасад, Компоновщик, Мост, Приспособленец
 - [Поведенческие](./Design-Patterns.md#поведенческие): Наблюдатель, Стратегия, Состояние, Шаблонный метод, Команда, Хранитель, Итератор, Цепочка обязанностей, Посредник, Посетитель, Интерпретатор
+- [Паттерны устойчивости](./Design-Patterns.md#паттерны-устойчивости): Таймаут, Повтор, Предохранитель, Переборка
 - [Похожие паттерны](./Design-Patterns.md#похожие-паттерны)
 
 # Принципы проектирования

@@ -42,6 +42,54 @@ MVC разделяет приложение на 3 концептуальные 
 
 Связь Model → View — это паттерн [*Наблюдатель*](./Design-Patterns.md#наблюдатель): View *подписывается* на *изменения* Model. Рой Филдинг приводит MVC из Smalltalk-80 как пример [*событийного стиля*](./Architectural-Styles.md#событийная-архитектура).
 
+### Пример MVC
+
+*Счётчик*, который *увеличивается по нажатию кнопки*. View *получает данные напрямую из Model* (особенность 1), а *изменение Model сразу обновляет View* (особенность 2).
+```ts
+/* Model: данные и правила работы с ними, ничего не знает об отображении */
+class CounterModel {
+  private value = 0;
+  private listeners: ((value: number) => void)[] = [];
+
+  subscribe(listener: (value: number) => void): void {
+    this.listeners.push(listener);
+  }
+
+  increment(): void {
+    this.value += 1;
+    this.listeners.forEach(listener => listener(this.value));
+  }
+}
+
+/* View: показывает данные из Model */
+class CounterView {
+  render(value: number): void {
+    console.log(`Счётчик: ${value}`);
+  }
+}
+
+/* Controller: переводит действия пользователя в вызовы Model */
+class CounterController {
+  private model: CounterModel;
+
+  constructor(model: CounterModel) {
+    this.model = model;
+  }
+
+  onButtonClick(): void {
+    this.model.increment();
+  }
+}
+
+const model = new CounterModel();
+const view = new CounterView();
+model.subscribe(value => view.render(value)); /* View следит за изменениями Model */
+
+const controller = new CounterController(model);
+controller.onButtonClick(); /* Счётчик: 1 */
+controller.onButtonClick(); /* Счётчик: 2 */
+```
+
 ### Проблема MVC в клиент-серверных приложениях
 
 Когда MVC появился, протокола HTTP (1991) и клиент-серверных приложений ещё не было.  
@@ -87,6 +135,52 @@ Controller, обрабатывающий основной запрос, пере
 3) Только один Presenter для каждого View.  
 4) Изменение данных в Model не вызывает немедленное обновление View: событие всегда проходит через Presenter, что позволяет в нём перед обновлением View проделывать дополнительную логику, связанную с представлением.
 
+### Пример MVP
+
+*Форма входа*: кнопка «*Войти*» *доступна*, только когда *введён email* и *пароль не короче 6 символов*. *View пассивен*: он лишь *передаёт ввод* в Presenter, а Presenter *сам решает*, *что и когда показать*, и *вызывает методы View*.
+```ts
+/* пассивный View: только методы, которые вызывает Presenter */
+interface ILoginView {
+  setSubmitEnabled(enabled: boolean): void;
+}
+
+class LoginPresenter {
+  private view: ILoginView;
+  private email = '';
+  private password = '';
+
+  constructor(view: ILoginView) {
+    this.view = view;
+  }
+
+  onEmailChange(email: string): void {
+    this.email = email;
+    this.update();
+  }
+
+  onPasswordChange(password: string): void {
+    this.password = password;
+    this.update();
+  }
+
+  private update(): void {
+    this.view.setSubmitEnabled(this.email.includes('@') && this.password.length >= 6);
+  }
+}
+
+/* в браузере здесь менялся бы атрибут disabled у кнопки */
+const consoleView: ILoginView = {
+  setSubmitEnabled(enabled) {
+    console.log(`кнопка «Войти» ${enabled ? 'активна' : 'недоступна'}`);
+  },
+};
+
+const presenter = new LoginPresenter(consoleView);
+presenter.onEmailChange('max@example.com'); /* кнопка «Войти» недоступна */
+presenter.onPasswordChange('secret1'); /* кнопка «Войти» активна */
+```
+Presenter можно *протестировать без браузера*: достаточно передать ему *поддельный View*, как `consoleView` выше.
+
 ### Зависимые Views
 
 Пусть два Views зависят друг от друга.  
@@ -131,6 +225,46 @@ Presenter производит (produce) данные, View потребляет
 2) Вся логика из View перемещается во ViewModel, чтобы упростить View и позволить ему выполнять свою задачу (визуализация).
 3) Отношение один к одному установлено между данными во View и данными во ViewModel.
 4) Изменение данных во ViewModel вызывает немедленное обновление View.
+
+### Пример MVVM
+
+*Та же форма входа*. В MVVM *ViewModel не вызывает View*: она *хранит состояние* и *оповещает подписчиков*, а *View сама подписывается* и *отображает то, что видит*. Логику «*когда кнопка активна*» можно *проверить без интерфейса*: достаточно *создать ViewModel* и посмотреть на `canSubmit`.
+```ts
+/* ViewModel: состояние для View и действия над ним; о View ничего не знает */
+class LoginViewModel {
+  email = '';
+  password = '';
+  private listeners: (() => void)[] = [];
+
+  get canSubmit(): boolean {
+    return this.email.includes('@') && this.password.length >= 6;
+  }
+
+  subscribe(listener: () => void): void {
+    this.listeners.push(listener);
+  }
+
+  setEmail(email: string): void {
+    this.email = email;
+    this.listeners.forEach(listener => listener());
+  }
+
+  setPassword(password: string): void {
+    this.password = password;
+    this.listeners.forEach(listener => listener());
+  }
+}
+
+/* View сам подписывается на ViewModel и отображает её состояние */
+const viewModel = new LoginViewModel();
+viewModel.subscribe(() => {
+  console.log(`кнопка «Войти» ${viewModel.canSubmit ? 'активна' : 'недоступна'}`);
+});
+
+viewModel.setEmail('max@example.com'); /* кнопка «Войти» недоступна */
+viewModel.setPassword('secret1'); /* кнопка «Войти» активна */
+console.log(viewModel.canSubmit); // true
+```
 
 ### Зависимые Views
 
@@ -387,10 +521,113 @@ export interface CreateArticleResponse extends Response {
 
 Пример Value-объекта: В общественном транспорте все места одинаковы: можно сесть куда угодно, нумерация не имеет значения. 
 
+В коде разница видна *по сравнению*: *сущности сравнивают по идентификатору*, а *Value-объекты* — *по значениям*. Value-объект *не меняется*: его операции *возвращают новый объект*.
+```ts
+/* Сущность: две сущности равны, только если совпадают идентификаторы */
+class Seat {
+  readonly id: string;
+  readonly row: number;
+  readonly number: number;
+
+  constructor(id: string, row: number, number: number) {
+    this.id = id;
+    this.row = row;
+    this.number = number;
+  }
+
+  equals(other: Seat): boolean {
+    return this.id === other.id;
+  }
+}
+
+/* Value-объект: неизменяемый, равенство по значениям */
+class Money {
+  readonly amount: number;
+  readonly currency: string;
+
+  constructor(amount: number, currency: string) {
+    this.amount = amount;
+    this.currency = currency;
+  }
+
+  add(other: Money): Money {
+    if (other.currency !== this.currency) {
+      throw new Error('Нельзя складывать разные валюты');
+    }
+    /* возвращаем новый объект, а не меняем старый */
+    return new Money(this.amount + other.amount, this.currency);
+  }
+
+  equals(other: Money): boolean {
+    return this.amount === other.amount && this.currency === other.currency;
+  }
+}
+
+/* первый ряд, первое место — но в разных залах */
+console.log(new Seat('hall-1/1/1', 1, 1).equals(new Seat('hall-2/1/1', 1, 1))); // false
+console.log(new Money(5, 'BYN').add(new Money(5, 'BYN')).equals(new Money(10, 'BYN'))); // true
+```
+
 **Агрегат** (Aggregate) — коллекция объектов, связанных вместе корневой Сущностью — **корнем агрегата** (Aggregate Root). 
 
 Корневой агрегат гарантирует согласованность изменений, вносимых в агрегат, не позволяя внешним объектам хранить ссылки на его элементы. 
 Агрегаты можно рассматривать как ограниченный контекст, предоставляющий корневому объекту и всему графу объектов контекст, в котором они используются.
+
+*Пример агрегата* — *заказ со строками*. Изменить строки можно *только через корень* `Order`, и он *следит за правилами*: *оплаченный заказ не меняется*, *количество больше нуля*.
+```ts
+class OrderLine {
+  readonly product: string;
+  readonly quantity: number;
+
+  constructor(product: string, quantity: number) {
+    this.product = product;
+    this.quantity = quantity;
+  }
+}
+
+/* корень агрегата: все изменения заказа проходят через него */
+class Order {
+  readonly id: string;
+  private lines: OrderLine[] = [];
+  private paid = false;
+
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  addLine(product: string, quantity: number): void {
+    if (this.paid) {
+      throw new Error('Нельзя менять оплаченный заказ');
+    }
+    if (quantity <= 0) {
+      throw new Error('Количество должно быть больше нуля');
+    }
+    this.lines.push(new OrderLine(product, quantity));
+  }
+
+  pay(): void {
+    if (this.lines.length === 0) {
+      throw new Error('Нельзя оплатить пустой заказ');
+    }
+    this.paid = true;
+  }
+
+  get itemCount(): number {
+    return this.lines.reduce((sum, line) => sum + line.quantity, 0);
+  }
+}
+
+const order = new Order('42');
+order.addLine('Маргарита', 2);
+order.pay();
+console.log(order.itemCount); // 2
+
+try {
+  order.addLine('Пепперони', 1);
+} catch (error) {
+  console.log((error as Error).message); // Нельзя менять оплаченный заказ
+}
+```
 
 **Репозиторий** — объект, сохраняющий Сущности или Агрегаты в базовый механизм хранения или извлекающий их из него.  
 
@@ -559,6 +796,21 @@ interface IEmailService {
 * Внутренние слои определяют интерфейсы, внешние слои их реализовывают.  
 * Направление связанности идёт к центру (direction of coupling is toward the center).
 * Ядро приложения (Application Core) может быть запущено отдельно от инфраструктуры.
+
+*Пример структуры проекта*:
+```
+src/
+  domain/
+    order.ts
+  application/
+    place-order.ts
+    order-repository.ts
+  infrastructure/
+    postgres-order-repository.ts
+  ui/
+    order.controller.ts
+```
+*В центре* — `domain`: *модель ни от чего не зависит*. `application` *использует* `domain` и *объявляет интерфейс* `OrderRepository` в файле `order-repository.ts`. `infrastructure` *реализует этот интерфейс* для *конкретной базы данных*, а `ui` *вызывает случаи использования*. *Импорты идут только к центру*: из `domain` *нельзя импортировать ничего снаружи*.
 
 ## Кричащая архитектура (2011)
 

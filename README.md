@@ -146,6 +146,7 @@ My simple notes about everything related to programming.
 - [Событийная архитектура](./Architectural-Styles.md#событийная-архитектура)
 - [Сервис-ориентированная архитектура](./Architectural-Styles.md#сервис-ориентированная-архитектура)
 - [Микросервисная архитектура](./Architectural-Styles.md#микросервисная-архитектура)
+  - [Сага: хореография, оркестрация, сбои и изоляция](./Architectural-Styles.md#сага)
 - [Микрофронтенды](./Architectural-Styles.md#микрофронтенды)
 - [Ячеистая архитектура](./Architectural-Styles.md#ячеистая-архитектура)
 - [Сравнение](./Architectural-Styles.md#сравнение)

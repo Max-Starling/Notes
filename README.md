@@ -134,6 +134,7 @@ My simple notes about everything related to programming.
 - [Подходы к написанию тестов](./Testing.md#подходы-к-написанию-тестов)
 - [Тестовые объекты](./Testing.md#тестовые-объекты)
 - [Паттерны тестирования](./Testing.md#паттерны-тестирования)
+- [Качество тестов](./Testing.md#качество-тестов)
 
 
 ### [Архитектурные стили](./Architectural-Styles.md)
